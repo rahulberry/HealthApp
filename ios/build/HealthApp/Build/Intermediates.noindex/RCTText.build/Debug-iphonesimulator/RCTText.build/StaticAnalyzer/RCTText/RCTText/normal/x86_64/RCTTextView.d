@@ -1,0 +1,26 @@
+dependencies: \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/node_modules/react-native/Libraries/Text/Text/RCTTextView.m \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/node_modules/react-native/Libraries/Text/Text/RCTTextView.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTComponent.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTUtils.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTAssert.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTDefines.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/UIView+React.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/yoga/YGEnums.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/yoga/YGMacros.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/node_modules/react-native/Libraries/Text/Text/RCTTextShadowView.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTShadowView.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTLayout.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/yoga/Yoga.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/yoga/YGValue.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTRootView.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTBridge.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTBridgeDelegate.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTJavaScriptLoader.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTBridgeModule.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTFrameUpdate.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTInvalidating.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/node_modules/react-native/Libraries/Text/BaseText/RCTBaseTextShadowView.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/node_modules/react-native/Libraries/Text/RCTTextAttributes.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTTextDecorationLineType.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/node_modules/react-native/Libraries/Text/RCTTextTransform.h

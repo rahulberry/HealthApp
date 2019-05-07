@@ -1,0 +1,5 @@
+dependencies: \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/node_modules/react-native/Libraries/NativeAnimation/Nodes/RCTMultiplicationAnimatedNode.m \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/node_modules/react-native/Libraries/NativeAnimation/Nodes/RCTMultiplicationAnimatedNode.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/node_modules/react-native/Libraries/NativeAnimation/Nodes/RCTValueAnimatedNode.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/node_modules/react-native/Libraries/NativeAnimation/Nodes/RCTAnimatedNode.h
