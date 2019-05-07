@@ -15,7 +15,6 @@ import {
   NavigationState,
   SafeAreaView,
 } from 'react-navigation';
-import { Button } from '../commonComponents/ButtonWithMargin';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
@@ -79,10 +78,12 @@ export class statsScreen extends React.Component<Props> {
       <View style={{ flex: 1 }}>
         <StatusBar barStyle="default" />
         <SafeAreaView
-          style={{ flex: 1 }}
+          style={{ flex: 1, backgroundColor: '#8ae2ad'}}
           forceInset={{ horizontal: 'always', top: 'always' }}
         >
-          <SimpleTabs navigation={navigation} />
+          <View style={{flex:1, backgroundColor: 'white'}}>
+            <SimpleTabs navigation={navigation} />
+          </View>
         </SafeAreaView>
         {bottom}
       </View>

@@ -72,10 +72,13 @@ class TabNavigator extends React.Component<Props> {
       <View style={{ flex: 1 }}>
         <StatusBar barStyle="default" />
         <SafeAreaView
-          style={{ flex: 1 }}
-          forceInset={{ horizontal: 'always', top: 'always' }}
+          style={{ flex: 1, backgroundColor: "#8ae2ad"}}
+          forceInset={{ horizontal: 'always', top: 'never' }}
         >
+          <View style={{flex:1, backgroundColor:'#fff'}}> 
           <SimpleTabs navigation={navigation} />
+
+          </View>
         </SafeAreaView>
         {bottom}
       </View>

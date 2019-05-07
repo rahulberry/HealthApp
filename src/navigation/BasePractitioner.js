@@ -29,13 +29,14 @@ const SimpleTabs = createMaterialTopTabNavigator({
   Events: EventsScreen,
 },
 {
-    swipeEnabled: true,
+  swipeEnabled: true,
 	tabBarPosition: 'bottom',
-	initialRouteName: 'Home', //Default Tab Location
+  initialRouteName: 'Home', //Default Tab Location
+  headerMode: 'none',
 	tabBarOptions : {
 		labelStyle: {
-			fontSize: 11,
-			fontWeight: "bold"
+      fontSize: 11,
+      fontWeight: "bold",
 		},
 		upperCaseLabel : false,
 		showIcon : true,
@@ -70,10 +71,13 @@ class TabNavigator extends React.Component<Props> {
       <View style={{ flex: 1 }}>
         <StatusBar barStyle="default" />
         <SafeAreaView
-          style={{ flex: 1 }}
-          forceInset={{ horizontal: 'always', top: 'always' }}
+          style={{ flex: 1, backgroundColor: "#8ae2ad"}}
+          forceInset={{ horizontal: 'always', top: 'never' }}
         >
+          <View style={{flex:1, backgroundColor:'#fff'}}> 
           <SimpleTabs navigation={navigation} />
+
+          </View>
         </SafeAreaView>
         {bottom}
       </View>
