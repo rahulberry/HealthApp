@@ -4,21 +4,17 @@ import React from 'react';
 import {
   Alert,
   FlatList,
-  LayoutAnimation,
-  StatusBar,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
-  createMaterialTopTabNavigator,
   NavigationScreenProp,
   NavigationState,
-  SafeAreaView,
 } from 'react-navigation';
 import { Button } from '../commonComponents/ButtonWithMargin';
-//import Modal from "react-native-modal";
+import Dialog from "react-native-dialog";
 import DateTimePicker from "react-native-modal-datetime-picker";
 
 interface Props {
@@ -47,14 +43,20 @@ export class EventsScreen extends React.Component<Props> {
   };
   state = {
     isModalVisible: false,
-    eventsArray: []
+    eventsArray: [],
+    dialogVisible: false,
+    eventName: "",
+    eventTime: ""
   };
 
   constructor(props) {
     super(props);
     this.state = {
       isDateTimePickerVisible: false,
-      eventsArray: []
+      eventsArray: [],
+      dialogVisible: false,
+      eventName: "",
+      eventTime: ""
     };
   }
 
@@ -64,6 +66,40 @@ export class EventsScreen extends React.Component<Props> {
 
   hideDateTimePicker = () => {
     this.setState({ isDateTimePickerVisible: false });
+  };
+
+  showNameDialog = () => {
+    this.setState({ dialogVisible : true} );
+  };
+ 
+  handleCancel = () => {
+    this.setState({ dialogVisible: false });
+  };
+
+  handleInput = (input) => {
+    this.setState({eventName : input.toString()});
+  }
+ 
+  handleDone = () => {
+    var name = this.state.eventName;  
+    if (name == "") {
+      Alert.alert(
+        'Invalid name',
+        'You cannot make an event without a name.',
+        [
+          {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ],
+        { cancelable: false }
+      ); 
+    } else {
+    var newDateAndTime = this.state.eventTime;
+    var events = this.state.eventsArray;
+    var joined = [{time : newDateAndTime, name : name}].concat(events);
+    this.setState({ eventsArray : joined.sort()}); // In Unix Timestamp Mode so that sort works correctly
+    this.hideDateTimePicker();
+
+    this.setState({ eventName : "", eventTime: "", dialogVisible: false });
+    }
   };
 
   handleDatePicked = dateTime => {
@@ -81,11 +117,8 @@ export class EventsScreen extends React.Component<Props> {
       ); 
       this.hideDateTimePicker();
     } else {
-      var newDateAndTime = unixDateAndTime.toString();
-      var events = this.state.eventsArray;
-      var joined = [{key : newDateAndTime}].concat(events);
-      this.setState({ eventsArray : joined.sort()}); // In Unix Timestamp Mode so that sort works correctly
-      this.hideDateTimePicker();
+      this.setState({eventTime : unixDateAndTime.toString()})
+      this.showNameDialog();
     }
   };
 
@@ -95,7 +128,7 @@ export class EventsScreen extends React.Component<Props> {
 
   deleteItem = data => {
     let allItems = this.state.eventsArray;
-    let filteredItems = allItems.filter(item => item.key != data.key);
+    let filteredItems = allItems.filter(item => item.time != data.time);
     this.setState({ eventsArray: filteredItems })
   }
 
@@ -123,13 +156,24 @@ export class EventsScreen extends React.Component<Props> {
         <View style={styles.container}>
         <FlatList
           data={this.state.eventsArray}
+          keyExtractor={(item) => item.time}
           renderItem={({item}) => (
             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Text style={styles.item}>{item.key}</Text>
+              <Text style={styles.item}>{item.name} at {item.time}</Text>
               <Button title="Delete" onPress={() => this.deleteItemAlert(item)} /> 
           </View> )}
-        />
-      </View>
+        />      
+        <Dialog.Container visible={this.state.dialogVisible}>
+          <Dialog.Title>Create Event</Dialog.Title>
+          <Dialog.Description>
+            Please enter a name for your event.
+          </Dialog.Description>
+          <Dialog.Input label = "Event Name" onChangeText = {(name) => this.handleInput(name)} />
+          <Dialog.Button label="Cancel" onPress={this.handleCancel} />
+          <Dialog.Button label="Done" onPress={this.handleDone} />
+        </Dialog.Container>
+
+        </View>
 
         <Button title="Add Event" onPress={this.showDateTimePicker} />
             <DateTimePicker
@@ -155,7 +199,10 @@ const styles = StyleSheet.create({
   },
 })
 
+// To Do:
+// Add location to create event so that when you click on an event, there is a pop up with a map telling you where the event is at
 // Need to save and initialise eventsArray from a server - Also need to account for multiple people using it at the same time?
 // Need to send a notification 1 hour before an event
+// Make it pretty
 
 export default EventsScreen
