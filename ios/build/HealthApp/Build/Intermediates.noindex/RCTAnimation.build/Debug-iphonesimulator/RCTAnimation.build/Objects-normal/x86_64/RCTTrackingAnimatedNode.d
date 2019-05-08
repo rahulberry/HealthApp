@@ -1,0 +1,31 @@
+dependencies: \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/node_modules/react-native/Libraries/NativeAnimation/Nodes/RCTTrackingAnimatedNode.m \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/node_modules/react-native/Libraries/NativeAnimation/Nodes/RCTTrackingAnimatedNode.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/node_modules/react-native/Libraries/NativeAnimation/Nodes/RCTAnimatedNode.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/node_modules/react-native/Libraries/NativeAnimation/Nodes/RCTValueAnimatedNode.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/node_modules/react-native/Libraries/NativeAnimation/RCTNativeAnimatedNodesManager.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTBridgeModule.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTDefines.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTUIManager.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTBridge.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTBridgeDelegate.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTJavaScriptLoader.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTFrameUpdate.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTInvalidating.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTRootView.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTViewManager.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTConvert.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTAnimationType.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTBorderStyle.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTLog.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTAssert.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTUtils.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTPointerEvents.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTTextDecorationLineType.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/yoga/Yoga.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/yoga/YGEnums.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/yoga/YGMacros.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/yoga/YGValue.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTEventDispatcher.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/UIView+React.h \
+  /Users/rahulberry/Documents/ReactNative/HealthApp/ios/build/HealthApp/Build/Products/Debug-iphonesimulator/include/React/RCTComponent.h
