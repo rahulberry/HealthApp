@@ -231,5 +231,6 @@ const styles = StyleSheet.create({
 // Need to save and initialise eventsArray from a server - Also need to account for multiple people using it at the same time?
 // Need to send a notification 1 hour before an event
 // Make it pretty
+// Make it so that delete button isn't pushed off the side if event name is too long
 
 export default EventsScreen
