@@ -31,18 +31,20 @@ const SimpleTabs = createMaterialTopTabNavigator({
   Profile: ProfileScreen
 },
 {
-    swipeEnabled: true,
+  swipeEnabled: true,
 	tabBarPosition: 'bottom',
 	initialRouteName: 'Home', //Default Tab Location
 	tabBarOptions : {
 		labelStyle: {
 			fontSize: 11,
-			fontWeight: "bold"
-		},
+      fontWeight: "bold",
+    },
+    activeTintColor  : "#8ae2ad",
+    inactiveTintColor : "grey",
 		upperCaseLabel : false,
 		showIcon : true,
 		style: {
-			backgroundColor : "#8ae2ad",
+			backgroundColor : "#f9f9f9",
 		}
 	}
 },
