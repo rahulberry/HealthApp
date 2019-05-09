@@ -47,18 +47,21 @@ export class EventsScreen extends React.Component<Props> {
     dialogVisible: false,
     eventName: "",
     eventTime: "",
-    dateTime: ""
+    dateTime: "",
+    currentItem: {}
   };
 
   constructor(props) {
     super(props);
     this.state = {
+      isModalVisible: false,
       isDateTimePickerVisible: false,
       eventsArray: [],
       dialogVisible: false,
       eventName: "",
       eventTime: "",
-      dateTime: ""
+      dateTime: "",
+      currentItem: {}
     };
   }
 
@@ -160,19 +163,34 @@ export class EventsScreen extends React.Component<Props> {
     this.setState({ eventsArray: filteredItems })
   }
 
-  deleteItemAlert = item => {
-    Alert.alert(
-      'Warning',
-      'Are you sure you would like to delete that event?',
-      [
-        {text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-        {text: 'Yes', onPress: () => this.deleteItem(item)},
-      ],
-      { cancelable: false }
-    )
+  handleDelete = item => {
+    this.setState({currentItem : item});
+    this.deleteItemAlert(item);
   }
 
-  render() {
+  deleteItemAlert = item => {
+      Alert.alert(
+        'Warning',
+        'Are you sure you would like to delete that event?',
+        [
+          {text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+          {text: 'Yes', onPress: () => this.deleteItem(item)},
+        ],
+        { cancelable: false }
+      )
+    
+  }
+
+  renderModal = (item) => {
+    return (
+      <View style={{ flex: 1 }}>
+        <Text>{item}</Text>
+        <Button title="Hide modal" onPress={this.toggleModal} />
+      </View>
+    )
+};
+
+  render() { //Turn info and Delete buttons into a dropdown that contains: info, mark as done, delete
     return (
       <View style={{ 
         flex: 1,
@@ -180,14 +198,20 @@ export class EventsScreen extends React.Component<Props> {
         justifyContent: 'flex-end',
         }}>
         <Text>Events:</Text>
-
         <View style={styles.container}>
         <FlatList
           data={this.state.eventsArray}
           renderItem={({item}) => (
-            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Text style={styles.item}>{item.name} at {item.time}</Text>
-              <Button title="Delete" onPress={() => this.deleteItemAlert(item)} /> 
+              <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                <View style={{flex: 1, flexDirection: 'column', padding: 18}}>
+                  <Text style={{fontSize : 18}}>{item.name}</Text>
+                  <Text style={{fontSize : 12}}>{item.time}</Text>
+                </View>
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', padding: 10}}>
+                  <Button title="Info" onPress={() => this.props.navigation.navigate('EventsInformation', {item})} />
+
+                  <Button title="Delete" onPress={() => this.handleDelete(item)} />   
+                </View> 
           </View> )}
         />      
         <Dialog.Container visible={this.state.dialogVisible}>
@@ -199,8 +223,9 @@ export class EventsScreen extends React.Component<Props> {
           <Dialog.Button label="Cancel" onPress={this.handleCancel} />
           <Dialog.Button label="Done" onPress={this.handleDone} />
         </Dialog.Container>
-
         </View>
+
+        
 
         <Button title="Add Event" onPress={this.showDateTimePicker} />
             <DateTimePicker
@@ -209,6 +234,9 @@ export class EventsScreen extends React.Component<Props> {
               onCancel={this.hideDateTimePicker}
               mode={'datetime'}
             />
+        
+        
+        
       </View>
     );
   }
@@ -219,9 +247,9 @@ const styles = StyleSheet.create({
    flex: 1,
    paddingTop: 22
   },
-  item: {
-    padding: 10,
-    fontSize: 18,
+  item1: {
+    padding: 20,
+    fontSize: 16,
     height: 44,
   },
 })

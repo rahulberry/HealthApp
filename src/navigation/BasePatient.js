@@ -18,14 +18,15 @@ interface Props {
 }
 
 import StatsScreen from '../components/PatientNav/Stats';
-import EventsScreen from '../components/PatientNav/Events';
+import EventNavigation from '../components/PatientNav/EventNavigation';
+import App from '../components/PatientNav/EventNavigation'
 import ActivityScreen from '../components/PatientNav/Activities';
 import ChatsScreen from '../components/PatientNav/Chats';
 import ProfileScreen from '../components/PatientNav/Profile';
 
 const SimpleTabs = createMaterialTopTabNavigator({
   Stats: StatsScreen,
-  Events: EventsScreen,
+  Events: EventNavigation,
   Home: ActivityScreen,
   Chats: ChatsScreen,
   Profile: ProfileScreen
