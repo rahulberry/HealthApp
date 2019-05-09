@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Wed May 08 19:29:26 BST 2019
+#Wed May 08 21:25:43 BST 2019
 56.path=fonts/MaterialCommunityIcons.ttf
 5.base=C\:\\Users\\Josh\\Documents\\GitHub\\HealthApp\\android\\app\\build\\intermediates\\transforms\\mergeJniLibs\\debug\\0
 42.base=C\:\\Users\\Josh\\Documents\\GitHub\\HealthApp\\android\\app\\build\\intermediates\\transforms\\mergeJniLibs\\debug\\0

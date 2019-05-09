@@ -46,7 +46,8 @@ export class EventsScreen extends React.Component<Props> {
     eventsArray: [],
     dialogVisible: false,
     eventName: "",
-    eventTime: ""
+    eventTime: "",
+    dateTime: ""
   };
 
   constructor(props) {
@@ -56,7 +57,8 @@ export class EventsScreen extends React.Component<Props> {
       eventsArray: [],
       dialogVisible: false,
       eventName: "",
-      eventTime: ""
+      eventTime: "",
+      dateTime: ""
     };
   }
 
@@ -94,11 +96,12 @@ export class EventsScreen extends React.Component<Props> {
     } else {
     var newDateAndTime = this.state.eventTime;
     var events = this.state.eventsArray;
-    var joined = [{time : newDateAndTime, name : name}].concat(events);
+    var time = this.state.dateTime;
+    var joined = [{key : newDateAndTime, name : name, time : time}].concat(events);
     this.setState({ eventsArray : joined.sort()}); // In Unix Timestamp Mode so that sort works correctly
     this.hideDateTimePicker();
 
-    this.setState({ eventName : "", eventTime: "", dialogVisible: false });
+    this.setState({ eventName : "", eventTime: "", dateTime: "", dialogVisible: false });
     }
   };
 
@@ -117,7 +120,32 @@ export class EventsScreen extends React.Component<Props> {
       ); 
       this.hideDateTimePicker();
     } else {
-      this.setState({eventTime : unixDateAndTime.toString()})
+
+      var today = dateTime;
+      var dd = today.getDate();
+      var mm = today.getMonth() + 1; //January is 0!
+
+      var yyyy = today.getFullYear();
+      if (dd < 10) {
+        dd = '0' + dd;
+      } 
+      if (mm < 10) {
+        mm = '0' + mm;
+      } 
+      
+      var h = today.getHours();
+      var m = today.getMinutes();
+      if (m < 10) {
+        m = '0' + m;
+      }
+      if (h < 10) {
+        h = '0' + h;
+      }
+
+      var today = dd + '/' + mm + '/' + yyyy + ' '+ h + ':' + m;
+
+      this.setState({eventTime : unixDateAndTime.toString()});
+      this.setState({dateTime : today});
       this.showNameDialog();
     }
   };
@@ -128,7 +156,7 @@ export class EventsScreen extends React.Component<Props> {
 
   deleteItem = data => {
     let allItems = this.state.eventsArray;
-    let filteredItems = allItems.filter(item => item.time != data.time);
+    let filteredItems = allItems.filter(item => item.key != data.key);
     this.setState({ eventsArray: filteredItems })
   }
 
@@ -151,12 +179,11 @@ export class EventsScreen extends React.Component<Props> {
         flexDirection: 'column',
         justifyContent: 'flex-end',
         }}>
-        <Text>Note, these times are in Unix time:</Text>
+        <Text>Events:</Text>
 
         <View style={styles.container}>
         <FlatList
           data={this.state.eventsArray}
-          keyExtractor={(item) => item.time}
           renderItem={({item}) => (
             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
               <Text style={styles.item}>{item.name} at {item.time}</Text>

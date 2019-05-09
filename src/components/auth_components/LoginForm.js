@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { StyleSheet, Dimensions } from 'react-native'
 import { Text, View } from 'react-native-animatable'
 
+//import Button from '/src/components/commonComponents'
+
 import CustomButton from './components/CustomButton'
 import CustomTextInput from './components/CustomTextInput'
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
@@ -118,3 +120,41 @@ const styles = StyleSheet.create({
     padding: 20
   }
 })
+
+
+
+
+/*
+
+// Login.js
+
+import React, { Component } from 'react';
+import { View, Text } from 'react-native';
+import { Button } from './commonComponents/ButtonWithMargin';
+
+export class Login extends Component {
+	static navigationOptions = {
+    title: "Login",
+    headerStyle: {
+      backgroundColor: "#8ae2ad"
+    },
+    headerTintColor: "#fff",
+    headerTitleStyle: {
+      fontWeight: "bold"
+    }
+  };
+  render() {
+    return (
+      <View>
+        <Text>Login Screen</Text>
+        <Button onPress={() => this.props.navigation.navigate('HomeScreen')} title="Patient"/>
+		    <Button onPress={() => this.props.navigation.navigate('HomeScreenDoctor')} title="Health Practitioner"/>
+      </View>
+    )
+  }
+};
+
+export default Login;
+
+
+*/
