@@ -7,6 +7,8 @@ import {
   StyleSheet,
   Text,
   View,
+  TouchableOpacity,
+  Dimensions
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
@@ -16,6 +18,7 @@ import {
 import { Button } from '../commonComponents/ButtonWithMargin';
 import Dialog from "react-native-dialog";
 import DateTimePicker from "react-native-modal-datetime-picker";
+import Modal from 'react-native-modal'
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
@@ -45,24 +48,33 @@ export class EventsScreen extends React.Component<Props> {
     isModalVisible: false,
     eventsArray: [],
     dialogVisible: false,
+    doneEventsArray: [],
     eventName: "",
     eventTime: "",
     dateTime: "",
-    currentItem: {}
-  };
+    currentItem: {},
+    isFetching: false  
+    };
 
   constructor(props) {
     super(props);
     this.state = {
       isModalVisible: false,
       isDateTimePickerVisible: false,
-      eventsArray: [],
+      eventsArray: [{key : '1560342934', name : 'Test Event 1', time : '12/06/2019 12:35'},
+                    {key : '1560861334', name : 'Another Test Event', time : '18/06/2019 12:35'}],
       dialogVisible: false,
+      doneEventsArray: [{key : '1525966538', name : 'Test Old Event', time : '12/06/2019 12:35'}],
       eventName: "",
       eventTime: "",
       dateTime: "",
-      currentItem: {}
+      currentItem: {},
+      isFetching: false
     };
+  }
+
+  onRefresh() {
+    this.setState({ isFetching: true }, function() { this.filterByTime });
   }
 
   showDateTimePicker = () => {
@@ -101,7 +113,7 @@ export class EventsScreen extends React.Component<Props> {
     var events = this.state.eventsArray;
     var time = this.state.dateTime;
     var joined = [{key : newDateAndTime, name : name, time : time}].concat(events);
-    this.setState({ eventsArray : joined.sort()}); // In Unix Timestamp Mode so that sort works correctly
+    this.setState({ eventsArray : joined.sort((a, b) => (a.key > b.key) ? 1 : -1)}); // In Unix Timestamp Mode so that sort works correctly
     this.hideDateTimePicker();
 
     this.setState({ eventName : "", eventTime: "", dateTime: "", dialogVisible: false });
@@ -181,37 +193,88 @@ export class EventsScreen extends React.Component<Props> {
     
   }
 
-  renderModal = (item) => {
-    return (
-      <View style={{ flex: 1 }}>
-        <Text>{item}</Text>
-        <Button title="Hide modal" onPress={this.toggleModal} />
-      </View>
-    )
-};
+  filterByTime = () => {
+    var currentTime = Math.round((new Date()).getTime() / 1000);
+    var done = this.state.doneEventsArray;
+    let allItems = this.state.eventsArray;
+    let filteredItems = allItems.filter(item => item.key > currentTime);
+    let doneItems = allItems.filter(item => item.key <= currentTime);
+    var joined = done.concat(doneItems);
+    this.setState({ eventsArray: filteredItems })
+    this.setState({doneEventsArray : joined.sort((a, b) => (a.key > b.key) ? 1 : -1)})
+    this.setState({isFetching : false})
+  }
+
+  loadModal = (item) => {
+    this.setState({ isModalVisible: !this.state.isModalVisible });
+    this.props.navigation.navigate('EventsInformation', {item})
+  }
+
+  onPress = (item) => {
+    this.props.navigation.navigate('EventsInformation', {item})
+  }
+
+  onLongPress = (item) => {
+    this.handleDelete(item)
+  }
 
   render() { //Turn info and Delete buttons into a dropdown that contains: info, mark as done, delete
     return (
       <View style={{ 
         flex: 1,
         flexDirection: 'column',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         }}>
-        <Text>Events:</Text>
-        <View style={styles.container}>
-        <FlatList
-          data={this.state.eventsArray}
-          renderItem={({item}) => (
-              <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                <View style={{flex: 1, flexDirection: 'column', padding: 18}}>
+        <Modal 
+          isVisible={this.state.isModalVisible}
+          onBackdropPress={() => this.setState({ isVisible: false })}
+          onBackButtonPress={() => this.setState({ isVisible: false })}
+          backdropOpacity = {1}
+          backdropColor = {'white'}
+          coverScreen = {true}
+          >
+          <View style={{ flex: 1 }}>
+          <Text style={{width : Dimensions.get('window').width, fontSize : 28, fontWeight : 'bold', paddingTop : 20, paddingLeft : 10 }} >Completed Events:</Text>
+          <FlatList
+            data={this.state.doneEventsArray}
+            renderItem={({item}) => (
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                  <TouchableOpacity
+                  style={{alignItems: 'center', backgroundColor: 'transparent', padding: 10}}
+                  onPress={() => this.loadModal(item)}
+                  onLongPress={() => this.handleDelete(item)}
+                >
+                <View style={{flex: 1, flexDirection: 'column', paddingTop: 20, width : Dimensions.get('window').width}}>
                   <Text style={{fontSize : 18}}>{item.name}</Text>
                   <Text style={{fontSize : 12}}>{item.time}</Text>
                 </View>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', padding: 10}}>
-                  <Button title="Info" onPress={() => this.props.navigation.navigate('EventsInformation', {item})} />
+                </TouchableOpacity>
+            </View> )}
+          />  
+          <Button title="Back" onPress={this.toggleModal} />
+      </View>
+        </Modal>
+        <Text style={{fontSize : 40, fontWeight : 'bold', paddingTop : 20, paddingBottom : 20, paddingLeft : 20, backgroundColor : '#f9f9f9' }} >Upcoming Events:</Text>
+        <View style={styles.container}>
+        <FlatList
+          onRefresh={() => this.filterByTime()}
+          refreshing={this.state.isFetching}
+          data={this.state.eventsArray}
+          renderItem={({item}) => (
+              <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                
+                <TouchableOpacity
+                  style={{alignItems: 'center', backgroundColor: 'transparent', paddingBottom: 20}}
+                  onPress={() => this.onPress(item)}
+                  onLongPress={() => this.onLongPress(item)}
+                >
+                <View style={{flex: 1, flexDirection: 'column', paddingLeft: 18, width : Dimensions.get('window').width}}>
+                  <Text style={{fontSize : 18}}>{item.name}</Text>
+                  <Text style={{fontSize : 12}}>{item.time}</Text>
+                </View>
+                </TouchableOpacity>
 
-                  <Button title="Delete" onPress={() => this.handleDelete(item)} />   
-                </View> 
+                
           </View> )}
         />      
         <Dialog.Container visible={this.state.dialogVisible}>
@@ -224,9 +287,8 @@ export class EventsScreen extends React.Component<Props> {
           <Dialog.Button label="Done" onPress={this.handleDone} />
         </Dialog.Container>
         </View>
-
-        
-
+        <View style = {{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <Button title="Completed" onPress={this.toggleModal} />
         <Button title="Add Event" onPress={this.showDateTimePicker} />
             <DateTimePicker
               isVisible={this.state.isDateTimePickerVisible}
@@ -234,7 +296,7 @@ export class EventsScreen extends React.Component<Props> {
               onCancel={this.hideDateTimePicker}
               mode={'datetime'}
             />
-        
+        </View>
         
         
       </View>
@@ -255,10 +317,10 @@ const styles = StyleSheet.create({
 })
 
 // To Do:
-// Add location to create event so that when you click on an event, there is a pop up with a map telling you where the event is at
-// Need to save and initialise eventsArray from a server - Also need to account for multiple people using it at the same time?
+// 
+// Add a location picker modal and show location in view on the EventInfo page
+// Need to save and initialise eventsArray from a server
 // Need to send a notification 1 hour before an event
 // Make it pretty
-// Make it so that delete button isn't pushed off the side if event name is too long
 
 export default EventsScreen
