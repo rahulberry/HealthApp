@@ -39,8 +39,7 @@ export class EventsScreen extends React.Component<Props> {
       <Ionicons
         name={focused ? 'ios-calendar' : 'ios-calendar'}
         size={horizontal ? 20 : 26}
-        style={{ color: tintColor }}
-      />
+        style={{ color: tintColor }}/>
     ),
     
   };
@@ -53,7 +52,8 @@ export class EventsScreen extends React.Component<Props> {
     eventTime: "",
     dateTime: "",
     currentItem: {},
-    isFetching: false  
+    isFetching: false,
+    account: ""  
     };
 
   constructor(props) {
@@ -61,17 +61,52 @@ export class EventsScreen extends React.Component<Props> {
     this.state = {
       isModalVisible: false,
       isDateTimePickerVisible: false,
-      eventsArray: [{key : '1560342934', name : 'Test Event 1', time : '12/06/2019 12:35'},
-                    {key : '1560861334', name : 'Another Test Event', time : '18/06/2019 12:35'}],
+      eventsArray: [{key : '1560342934', name : 'Test Event 1', time : '12/06/2019 12:35', going : ['gary', 'john', 'amy'], colour : 'red'},
+                    {key : '1560861334', name : 'Another Test Event', time : '18/06/2019 12:35', going : ['gary', 'bill', 'amy'], colour : 'red'}],
       dialogVisible: false,
-      doneEventsArray: [{key : '1525966538', name : 'Test Old Event', time : '12/06/2019 12:35'}],
+      doneEventsArray: [{key : '1525966538', name : 'Test Old Event', time : '12/06/2019 12:35', going : ['amy', 'sam'], colour : 'red'}],
       eventName: "",
       eventTime: "",
       dateTime: "",
       currentItem: {},
-      isFetching: false
+      isFetching: false,
+      account: "josh"
     };
   }
+
+  invalidNameAlert = () => {
+    Alert.alert(
+      'Invalid name',
+      'You cannot make an event without a name.',
+      [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ],
+      { cancelable: false }
+    );
+  };
+
+  invalidTimeAlert = () => {
+    Alert.alert(
+      'Invalid time and date',
+      'You cannot make an event in the past.',
+      [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ],
+      { cancelable: false }
+    );
+  };
+
+  deleteItemAlert = item => {
+    Alert.alert(
+      'Warning',
+      'Are you sure you would like to delete that event?',
+      [
+        {text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+        {text: 'Yes', onPress: () => this.deleteItem(item)},
+      ],
+      { cancelable: false }
+    )
+  };
 
   onRefresh() {
     this.setState({ isFetching: true }, function() { this.filterByTime });
@@ -88,34 +123,68 @@ export class EventsScreen extends React.Component<Props> {
   showNameDialog = () => {
     this.setState({ dialogVisible : true} );
   };
- 
-  handleCancel = () => {
-    this.setState({ dialogVisible: false });
-  };
 
   handleInput = (input) => {
     this.setState({eventName : input.toString()});
-  }
- 
+  };
+
+  toggleModal = () => {
+    this.setState({ isModalVisible: !this.state.isModalVisible });
+  };
+
+  loadModal = (item) => {
+    this.setState({ isModalVisible: !this.state.isModalVisible });
+    this.props.navigation.navigate('EventsInformation', {item})
+  };
+
+  deleteItem = data => {
+    let allItems = this.state.eventsArray;
+    let filteredItems = allItems.filter(item => item.key != data.key);
+    this.setState({ eventsArray: filteredItems })
+  };
+
+  handleDelete = item => {
+    this.setState({currentItem : item});
+    this.deleteItemAlert(item);
+  };
+
+  onPress = (item) => {
+    this.props.navigation.navigate('EventsInformation', {item})
+  };
+
+  onLongPress = (item) => {
+    this.handleDelete(item)
+  };
+
+  onGoingPress = (item) => {
+    var goingArray = item.going;
+    var name = this.state.account;
+    if (goingArray.includes(name) == true) {
+      let filteredItems = goingArray.filter(item => item != name);
+      item.going = filteredItems;
+    } else {
+      var joined = goingArray.concat(name);
+      item.going = joined;
+    }
+    this.setState({isFetching : this.state.isFetching});
+  };
+
+  handleCancel = () => {
+    this.hideDateTimePicker();
+    this.setState({ eventName : "", eventTime: "", dateTime: "", dialogVisible: false });
+  };
+
   handleDone = () => {
     var name = this.state.eventName;  
     if (name == "") {
-      Alert.alert(
-        'Invalid name',
-        'You cannot make an event without a name.',
-        [
-          {text: 'OK', onPress: () => console.log('OK Pressed')},
-        ],
-        { cancelable: false }
-      ); 
+      this.invalidNameAlert();
     } else {
     var newDateAndTime = this.state.eventTime;
     var events = this.state.eventsArray;
     var time = this.state.dateTime;
-    var joined = [{key : newDateAndTime, name : name, time : time}].concat(events);
+    var joined = [{key : newDateAndTime, name : name, time : time, going : []}].concat(events);
     this.setState({ eventsArray : joined.sort((a, b) => (a.key > b.key) ? 1 : -1)}); // In Unix Timestamp Mode so that sort works correctly
     this.hideDateTimePicker();
-
     this.setState({ eventName : "", eventTime: "", dateTime: "", dialogVisible: false });
     }
   };
@@ -125,29 +194,19 @@ export class EventsScreen extends React.Component<Props> {
     var unixDateAndTime = Math.floor(dateTime.getTime() / 1000);
     var currentTime = Math.round((new Date()).getTime() / 1000);
     if (unixDateAndTime < currentTime) {
-      Alert.alert(
-        'Invalid time and date',
-        'You cannot make an event in the past.',
-        [
-          {text: 'OK', onPress: () => console.log('OK Pressed')},
-        ],
-        { cancelable: false }
-      ); 
+      this.invalidTimeAlert(); 
       this.hideDateTimePicker();
     } else {
-
       var today = dateTime;
       var dd = today.getDate();
-      var mm = today.getMonth() + 1; //January is 0!
-
+      var mm = today.getMonth() + 1; //January is 0
       var yyyy = today.getFullYear();
       if (dd < 10) {
         dd = '0' + dd;
       } 
       if (mm < 10) {
         mm = '0' + mm;
-      } 
-      
+      }     
       var h = today.getHours();
       var m = today.getMinutes();
       if (m < 10) {
@@ -156,42 +215,12 @@ export class EventsScreen extends React.Component<Props> {
       if (h < 10) {
         h = '0' + h;
       }
-
       var today = dd + '/' + mm + '/' + yyyy + ' '+ h + ':' + m;
-
       this.setState({eventTime : unixDateAndTime.toString()});
       this.setState({dateTime : today});
       this.showNameDialog();
     }
   };
-
-  toggleModal = () => {
-    this.setState({ isModalVisible: !this.state.isModalVisible });
-  };
-
-  deleteItem = data => {
-    let allItems = this.state.eventsArray;
-    let filteredItems = allItems.filter(item => item.key != data.key);
-    this.setState({ eventsArray: filteredItems })
-  }
-
-  handleDelete = item => {
-    this.setState({currentItem : item});
-    this.deleteItemAlert(item);
-  }
-
-  deleteItemAlert = item => {
-      Alert.alert(
-        'Warning',
-        'Are you sure you would like to delete that event?',
-        [
-          {text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-          {text: 'Yes', onPress: () => this.deleteItem(item)},
-        ],
-        { cancelable: false }
-      )
-    
-  }
 
   filterByTime = () => {
     var currentTime = Math.round((new Date()).getTime() / 1000);
@@ -203,79 +232,68 @@ export class EventsScreen extends React.Component<Props> {
     this.setState({ eventsArray: filteredItems })
     this.setState({doneEventsArray : joined.sort((a, b) => (a.key > b.key) ? 1 : -1)})
     this.setState({isFetching : false})
-  }
+  };
 
-  loadModal = (item) => {
-    this.setState({ isModalVisible: !this.state.isModalVisible });
-    this.props.navigation.navigate('EventsInformation', {item})
-  }
+  changeButtonColour = (item) => {
+    var goingArray = item.going;
+    var name = this.state.account;
+    if (goingArray.includes(name) == true) {
+      return "green";
+    } else {
+      return "red";
+    }
+  };
 
-  onPress = (item) => {
-    this.props.navigation.navigate('EventsInformation', {item})
-  }
-
-  onLongPress = (item) => {
-    this.handleDelete(item)
-  }
-
-  render() { //Turn info and Delete buttons into a dropdown that contains: info, mark as done, delete
+  render() {
     return (
-      <View style={{ 
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        }}>
+      <View style={styles.mainStyle}>
         <Modal 
           isVisible={this.state.isModalVisible}
           onBackdropPress={() => this.setState({ isVisible: false })}
           onBackButtonPress={() => this.setState({ isVisible: false })}
           backdropOpacity = {1}
           backdropColor = {'white'}
-          coverScreen = {true}
-          >
+          coverScreen = {true}>
           <View style={{ flex: 1 }}>
-          <Text style={{width : Dimensions.get('window').width, fontSize : 28, fontWeight : 'bold', paddingTop : 20, paddingLeft : 10 }} >Completed Events:</Text>
-          <FlatList
-            data={this.state.doneEventsArray}
-            renderItem={({item}) => (
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text style={styles.completed} >Completed Events:</Text>
+            <FlatList
+              data={this.state.doneEventsArray}
+              renderItem={({item}) => (
+                <View style={styles.touchableCompleted}>
                   <TouchableOpacity
-                  style={{alignItems: 'center', backgroundColor: 'transparent', padding: 10}}
-                  onPress={() => this.loadModal(item)}
-                  onLongPress={() => this.handleDelete(item)}
-                >
-                <View style={{flex: 1, flexDirection: 'column', paddingTop: 20, width : Dimensions.get('window').width}}>
-                  <Text style={{fontSize : 18}}>{item.name}</Text>
-                  <Text style={{fontSize : 12}}>{item.time}</Text>
-                </View>
-                </TouchableOpacity>
-            </View> )}
-          />  
-          <Button title="Back" onPress={this.toggleModal} />
-      </View>
+                  style={styles.touchableCompleted1}
+                  onPress={() => this.loadModal(item)}>
+                    <View style={styles.touchableCompletedTextView}>
+                      <Text style={{fontSize : 18}}>{item.name}</Text>
+                      <Text style={{fontSize : 12}}>{item.time}</Text>
+                    </View>
+                  </TouchableOpacity>
+                </View> 
+              )}
+            />  
+            <Button title="Back" onPress={this.toggleModal} />
+          </View>
         </Modal>
-        <Text style={{fontSize : 40, fontWeight : 'bold', paddingTop : 20, paddingBottom : 20, paddingLeft : 20, backgroundColor : '#f9f9f9' }} >Upcoming Events:</Text>
+        <Text style={styles.upcoming} >Upcoming Events:</Text>
         <View style={styles.container}>
-        <FlatList
+        < FlatList
           onRefresh={() => this.filterByTime()}
           refreshing={this.state.isFetching}
           data={this.state.eventsArray}
           renderItem={({item}) => (
-              <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                
-                <TouchableOpacity
-                  style={{alignItems: 'center', backgroundColor: 'transparent', paddingBottom: 20}}
-                  onPress={() => this.onPress(item)}
-                  onLongPress={() => this.onLongPress(item)}
-                >
-                <View style={{flex: 1, flexDirection: 'column', paddingLeft: 18, width : Dimensions.get('window').width}}>
+            <View style={styles.touchableUpcoming}>
+              <TouchableOpacity
+                style={styles.touchableUpcoming1}
+                onPress={() => this.onPress(item)}
+                onLongPress={() => this.onLongPress(item)}>
+                <View style={styles.touchableUpcomingTextView}>
                   <Text style={{fontSize : 18}}>{item.name}</Text>
                   <Text style={{fontSize : 12}}>{item.time}</Text>
                 </View>
-                </TouchableOpacity>
-
-                
-          </View> )}
+              </TouchableOpacity>
+              <Button color= {this.changeButtonColour(item)} title="Going" onPress={() => this.onGoingPress(item)} />   
+            </View> 
+          )}
         />      
         <Dialog.Container visible={this.state.dialogVisible}>
           <Dialog.Title>Create Event</Dialog.Title>
@@ -286,19 +304,17 @@ export class EventsScreen extends React.Component<Props> {
           <Dialog.Button label="Cancel" onPress={this.handleCancel} />
           <Dialog.Button label="Done" onPress={this.handleDone} />
         </Dialog.Container>
-        </View>
-        <View style = {{flexDirection: 'row', justifyContent: 'space-between'}}>
+      </View>
+      <View style = {{flexDirection: 'row', justifyContent: 'space-between'}}>
         <Button title="Completed" onPress={this.toggleModal} />
         <Button title="Add Event" onPress={this.showDateTimePicker} />
-            <DateTimePicker
-              isVisible={this.state.isDateTimePickerVisible}
-              onConfirm={this.handleDatePicked}
-              onCancel={this.hideDateTimePicker}
-              mode={'datetime'}
-            />
+          <DateTimePicker
+            isVisible={this.state.isDateTimePickerVisible}
+            onConfirm={this.handleDatePicked}
+            onCancel={this.hideDateTimePicker}
+            mode={'datetime'}
+          />
         </View>
-        
-        
       </View>
     );
   }
@@ -309,11 +325,55 @@ const styles = StyleSheet.create({
    flex: 1,
    paddingTop: 22
   },
-  item1: {
-    padding: 20,
-    fontSize: 16,
-    height: 44,
+  mainStyle: { 
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
   },
+  completed: {
+    width : Dimensions.get('window').width, 
+    fontSize : 28, 
+    fontWeight : 'bold', 
+    paddingTop : 20, 
+    paddingLeft : 10 
+  },
+  upcoming: {
+    fontSize : 40, 
+    fontWeight : 'bold', 
+    paddingTop : 20, 
+    paddingBottom : 20, 
+    paddingLeft : 20, 
+    backgroundColor : '#f9f9f9' },
+  touchableUpcoming : {
+    flex: 1, 
+    flexDirection: 'row', 
+    justifyContent: 'space-between'
+  },
+  touchableUpcoming1 : {
+    flex: 1, 
+    flexDirection: 'row',  
+    justifyContent: 'space-between', 
+    backgroundColor: 'transparent', 
+    paddingBottom: 20},
+  touchableCompleted: {
+    flex: 1, 
+    flexDirection: 'row', 
+    justifyContent: 'space-between'
+  },
+  touchableCompleted1: {
+    alignItems: 'center', 
+    backgroundColor: 'transparent', 
+    padding: 10},
+  touchableCompletedTextView: {
+    flex: 1, 
+    flexDirection: 'column', 
+    paddingTop: 20, 
+    width : Dimensions.get('window').width},
+  touchableUpcomingTextView: {
+    flex: 1, 
+    flexDirection: 'column', 
+    paddingLeft: 18, 
+    width : Dimensions.get('window').width},
 })
 
 // To Do:
