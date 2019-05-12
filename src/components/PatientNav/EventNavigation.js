@@ -1,9 +1,11 @@
+// EventNavigation.js
+
 import React from 'react';
+import {
+  createStackNavigator, 
+  createAppContainer
+} from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-
-import {createStackNavigator, createAppContainer} from 'react-navigation';
-
 import EventInformationScreen from './EventInformation'
 import EventsScreen from './Events' 
 

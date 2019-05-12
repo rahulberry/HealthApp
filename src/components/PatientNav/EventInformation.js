@@ -1,4 +1,4 @@
-// Chats.js
+// EventsInformation.js
 
 import React from 'react';
 import {
@@ -6,7 +6,8 @@ import {
   Text,
   View,
   ScrollView,
-  Dimensions
+  Dimensions,
+  StyleSheet
 } from 'react-native';
 import {
   NavigationScreenProp,
@@ -40,21 +41,21 @@ export class EventInformationScreen extends React.Component<Props> {
     return (
       <ScrollView>
         <View >
-          <Text style={{fontSize : 40, fontWeight : 'bold', padding : 20, backgroundColor : '#f9f9f9' }} >{title}</Text>
-          <Text style={{fontSize : 28, fontWeight : 'bold', paddingLeft : 20 }}>Time and Date:</Text>
-          <Text style={{fontSize : 24, paddingLeft : 20 }}>{time}</Text>
-          <Text style={{fontSize : 28, fontWeight : 'bold', paddingTop : 20,  paddingLeft : 20 }}>Location: </Text>
+          <Text style={styles.title} >{title}</Text>
+          <Text style={styles.timeHeader}>Time and Date:</Text>
+          <Text style={styles.time}>{time}</Text>
+          <Text style={styles.locationHeader}>Location: </Text>
           <View style = {{alignItems : 'center'}}>
-            <View style={{width: 0.8 * Dimensions.get('window').width, height: 0.8 * Dimensions.get('window').width, backgroundColor: 'skyblue'}} >
-            <Text>Map view here</Text>
+            <View style={styles.locationView} >
+              <Text>Map view here</Text>
             </View>
           </View>
-          <Text style={{fontSize : 28, fontWeight : 'bold', paddingTop : 20, paddingLeft : 20 }}>Going: </Text>
+          <Text style={styles.goingHeader}>Going: </Text>
           <FlatList
             data={going}
             renderItem={({item}) => (
-              <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Text style={{fontSize : 24, paddingLeft : 20}}>{item}</Text>
+              <View style={styles.goingListItem}>
+                <Text style={styles.goingListItem1}>{item}</Text>
               </View> )} />
         </View>
         <Button
@@ -64,5 +65,53 @@ export class EventInformationScreen extends React.Component<Props> {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  title: {
+    fontSize : 40, 
+    fontWeight : 'bold', 
+    padding : 20, 
+    backgroundColor : '#f9f9f9' 
+  },
+  timeHeader: {
+    fontSize : 28, 
+    fontWeight : 'bold', 
+    paddingLeft : 20 
+  },
+  time: {
+    fontSize : 24, 
+    paddingLeft : 20 
+  },
+  locationHeader: {
+    fontSize : 28, 
+    fontWeight : 'bold', 
+    paddingTop : 20,  
+    paddingLeft : 20 
+  },
+  locationView: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: 0.8 * Dimensions.get('window').width, 
+    height: 0.8 * Dimensions.get('window').width, 
+    backgroundColor: 'skyblue',
+    alignItems : 'center'
+  },
+  goingHeader: {
+    fontSize : 28, 
+    fontWeight : 'bold', 
+    paddingTop : 20, 
+    paddingLeft : 20
+  },
+  goingListItem: {
+    flex: 1, 
+    flexDirection: 'row', 
+    justifyContent: 'space-between'
+  },
+  goingListItem1: {
+    fontSize : 24, 
+    paddingLeft : 20
+  }
+})
 
 export default EventInformationScreen
