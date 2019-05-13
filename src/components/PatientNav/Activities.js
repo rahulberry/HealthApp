@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Text,
   View,
+  ScrollView
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
@@ -15,7 +16,10 @@ import {
   NavigationState,
   SafeAreaView,
 } from 'react-navigation';
-import { Button } from '../commonComponents/ButtonWithMargin';
+
+import StartButton from './currentActivity/StartButton'
+import CircularProgressBar from './currentActivity/CircularProgessBar'
+import Stats from './currentActivity/Stats'
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
@@ -56,7 +60,12 @@ export class ActivityScreen extends React.Component<Props> {
     const { navigation } = this.props;
     return (
       <SafeAreaView forceInset={{ horizontal: 'always', top: 'always' }}>
-        <Text>Activity Screen</Text>
+            <ScrollView>
+                <CircularProgressBar percentage={50} />
+                <StartButton />
+                <Stats title="Distance Covered: " isShoe={true} metric="km" />
+                <Stats title="Time taken: " isShoe={false} metric="mins" />
+            </ScrollView>
       </SafeAreaView>
     );
   }
