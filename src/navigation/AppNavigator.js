@@ -4,7 +4,6 @@ import BasePatient from './BasePatient'
 import BasePractitioner from './BasePractitioner'
 import {
 createSwitchNavigator,
-createStackNavigator,
 createAppContainer
 } from 'react-navigation';
 
@@ -17,7 +16,7 @@ const AppNav = createAppContainer(createSwitchNavigator(
     BasePractitioner
   },
   {
-    initialRouteName: 'BasePatient'
+    initialRouteName: 'AuthPatient'
   },
 
 ));

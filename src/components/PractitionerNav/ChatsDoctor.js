@@ -16,6 +16,7 @@ import {
   SafeAreaView,
 } from 'react-navigation';
 import { GiftedChat } from "react-native-gifted-chat";
+import firebase from 'firebase'
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
@@ -75,9 +76,12 @@ export class PatientsChatScreen extends React.Component<Props> {
       user={{
         _id: 1
       }}
-      />
+    />
     );
   }
+  //componentWillUnmount() {
+    //Backend.closeChat();
+  //}
 }
 
 export default PatientsChatScreen
