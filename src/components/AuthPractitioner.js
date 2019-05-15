@@ -73,12 +73,12 @@ class AuthPatient extends Component {
             .createUserWithEmailAndPassword(email, password)
             .then(this.onLoginSuccess.bind(this))
             .catch(this.onLoginFail.bind(this))
-            .then( firebase.database().ref("/Doctor/" + firebase.auth().currentUser.uid + "/Account Details/")
+            .then( firebase.database().ref("/Doctors/" + firebase.auth().currentUser.uid + "/Account Details/")
             .set({
               'email': email,
               'Clinic': 'null',
             }))
-            .then( firebase.database().ref("/Doctor/" + firebase.auth().currentUser.uid + "/Chats/")
+            .then( firebase.database().ref("/Doctors/" + firebase.auth().currentUser.uid + "/Chats/")
             .set({
               'groups': 'null',
               'patients':'null'
