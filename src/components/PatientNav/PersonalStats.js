@@ -1,5 +1,5 @@
 // PersonalStats.js
-
+import firebase from "firebase";
 import React from 'react';
 import {
   LayoutAnimation,
@@ -17,11 +17,15 @@ import {
 } from 'react-navigation';
 import { Button } from '../commonComponents/ButtonWithMargin';
 
+import XAxisExample from './XAxisExample'
+
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
 }
 
+
 export class PersonalStatsScreen extends React.Component<Props> {
+
   static navigationOptions = {
     tabBarLabel: 'Personal',
     tabBarIcon: ({
@@ -41,10 +45,16 @@ export class PersonalStatsScreen extends React.Component<Props> {
     ),
   };
   render() {
+    if (firebase.auth().currentUser){
+        test = "How";
+    } else {
+        test = "No one home";
+    }
     const { navigation } = this.props;
     return (
       <SafeAreaView forceInset={{ horizontal: 'always', top: 'always' }}>
-        <Text>Personal Stats Screen</Text>
+        <Text>Personal Stats Screen {test}</Text>
+        <XAxisExample/>
       </SafeAreaView>
     );
   }
