@@ -1,28 +1,20 @@
 // ChatsDoctor.js
 
 import React from 'react';
-import {
-  LayoutAnimation,
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
-  createMaterialTopTabNavigator,
   NavigationScreenProp,
   NavigationState,
-  SafeAreaView,
 } from 'react-navigation';
 import { GiftedChat } from "react-native-gifted-chat";
-import firebase from 'firebase'
+import Fire from './Fire';
 
 interface Props {
+  name?: 'string',
   navigation: NavigationScreenProp<NavigationState>;
 }
 
-export class PatientsChatScreen extends React.Component<Props> {
+export class ChatsDoctor extends React.Component<Props> {
   static navigationOptions = {
     title: 'Chat',
     tabBarIcon: ({
@@ -42,46 +34,37 @@ export class PatientsChatScreen extends React.Component<Props> {
     ),
   };
   state = {
-    messages: []
+    messages: [],
   };
 
-  componentWillMount() {
-    this.setState({
-      messages: [
-        {
-          _id: 1,
-          text: "Hello developer",
-          createdAt: new Date(),
-          user: {
-            _id: 2,
-            name: "React Native",
-            avatar: "https://placeimg.com/140/140/any"
-          }
-        }
-      ]
-    });
+  get user() {
+    return {
+      name: 'john',
+      _id: Fire.shared.uid,
+    };
   }
 
-  onSend(messages = []) {
-    this.setState(previousState => ({
-      messages: GiftedChat.append(previousState.messages, messages)
-    }));
-  }
   render() {
-    const { navigation } = this.props;
     return (
       <GiftedChat
-      messages={this.state.messages}
-      onSend={messages => this.onSend(messages)}
-      user={{
-        _id: 1
-      }}
-    />
+        messages={this.state.messages}
+        onSend={Fire.shared.send}
+        user={this.user}
+      />
     );
   }
-  //componentWillUnmount() {
-    //Backend.closeChat();
-  //}
+
+  componentDidMount() {
+    Fire.shared.on(message =>
+      this.setState(previousState => ({
+        messages: GiftedChat.append(previousState.messages, message),
+      }))
+    );
+  }
+  componentWillUnmount() {
+    Fire.shared.off();
+  }
 }
 
-export default PatientsChatScreen
+
+export default ChatsDoctor
