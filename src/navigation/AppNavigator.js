@@ -16,7 +16,7 @@ const AppNav = createAppContainer(createSwitchNavigator(
     BasePractitioner
   },
   {
-    initialRouteName: 'AuthPractitioner'
+    initialRouteName: 'BasePractitioner'
   },
 
 ));

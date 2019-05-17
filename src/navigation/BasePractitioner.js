@@ -21,11 +21,12 @@ interface Props {
 
 import ChatsDoctor from '../components/PractitionerNav/ChatsDoctor';
 import GroupScreen from '../components/PractitionerNav/GroupsDoctor';
+import GroupsList from '../components/PractitionerNav/GroupsList';
 import EventsScreen from '../components/PractitionerNav/EventsDoctor';
 
 const SimpleTabs = createMaterialTopTabNavigator({
   Chats: ChatsDoctor,
-  Home: GroupScreen,
+  Home: GroupsList,
   Events: EventsScreen,
 },
 {
