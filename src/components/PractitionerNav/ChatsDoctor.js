@@ -6,7 +6,7 @@ import {
   NavigationScreenProp,
   NavigationState,
 } from 'react-navigation';
-import { GiftedChat } from "react-native-gifted-chat";
+import { GiftedChat, Bubble } from "react-native-gifted-chat";
 import Fire from './Fire';
 
 interface Props {
@@ -15,6 +15,20 @@ interface Props {
 }
 
 export class ChatsDoctor extends React.Component<Props> {
+ 
+  renderBubble (props) {
+    return (
+      <Bubble
+        {...props}
+        wrapperStyle={{
+          right: {
+            backgroundColor: '#8ae2ad'
+          }
+        }}
+      />
+    )
+  }
+
   static navigationOptions = {
     title: 'Chat',
     tabBarIcon: ({
@@ -47,6 +61,7 @@ export class ChatsDoctor extends React.Component<Props> {
   render() {
     return (
       <GiftedChat
+        renderBubble={this.renderBubble}
         messages={this.state.messages}
         onSend={Fire.shared.send}
         user={this.user}
