@@ -1,5 +1,4 @@
 // ChatsDoctor.js
-
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
@@ -33,27 +32,13 @@ export class ChatsDoctor extends React.Component<Props> {
   static navigationOptions = {
     title: 'Chat',
     headerStyle: {
-      backgroundColor: '#f4511e',
+      backgroundColor: '#8ae2ad',
     },
-    headerTintColor: '#fff',
+    headerTintColor: '#8ae2ad',
     headerTitleStyle: {
       fontWeight: 'bold',
     },
-    tabBarIcon: ({
-      tintColor,
-      focused,
-      horizontal,
-    }: {
-      tintColor: string;
-      focused: boolean;
-      horizontal: boolean;
-    }) => (
-      <Ionicons
-        name={focused ? 'ios-chatboxes' : 'ios-chatboxes'}
-        size={horizontal ? 20 : 26}
-        style={{ color: tintColor }}
-      />
-    ),
+
   };
   state = {
     messages: [],
@@ -68,7 +53,7 @@ export class ChatsDoctor extends React.Component<Props> {
 
   render() {
     return (
-          <GiftedChat
+        <GiftedChat
           renderBubble={this.renderBubble}
           messages={this.state.messages}
           onSend={Fire.shared.send}

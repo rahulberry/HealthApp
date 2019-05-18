@@ -4,8 +4,6 @@ import React from 'react';
 import {
   LayoutAnimation,
   StatusBar,
-  StyleSheet,
-  Text,
   View,
 } from 'react-native';
 import {
@@ -20,12 +18,12 @@ interface Props {
 }
 
 import ChatsDoctor from '../components/PractitionerNav/ChatsDoctor';
-import GroupScreen from '../components/PractitionerNav/GroupsDoctor';
+import ContactList from '../components/PractitionerNav/ContactList';
 import GroupsList from '../components/PractitionerNav/GroupsList';
 import EventsScreen from '../components/PractitionerNav/EventsDoctor';
 
 const SimpleTabs = createMaterialTopTabNavigator({
-  Chats: ChatsDoctor,
+  Chats: ContactList,
   Home: GroupsList,
   Events: EventsScreen,
 },
