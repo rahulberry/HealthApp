@@ -57,7 +57,7 @@ interface Props {
 
 export default class GroupsList extends React.Component<Props>{
     renderItem = ({ item }) => {
-        return <GroupsItem item={item} />;
+        return <GroupsItem item={item} navigation={this.props.navigation}  />;
     };
     static navigationOptions = ({
         navigation,

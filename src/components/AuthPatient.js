@@ -114,11 +114,6 @@ class AuthPatient extends Component {
     // The following style is responsible of the "bounce-up from bottom" animation of the form
     const formStyle = !visibleForm ? { height: 0 } : { marginTop: 40 };
     return (
-      // <ImageBackground
-      //   source={require("../assets/auth_background2.png")}
-      //   style={{ width: "100%", height: "100%", justifyContent: "flex-end" }}
-      //   resizeMode="cover"
-      // >
         <View style={styles.container}>
           <Image
             animation={"fadeIn"}

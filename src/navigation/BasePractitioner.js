@@ -68,7 +68,7 @@ class TabNavigator extends React.Component<Props> {
     const { navigation } = this.props;
     const { routes, index } = navigation.state;
     const activeRoute = routes[index];
-    let bottom = null;
+    let bottom = null; 
     return (
       <View style={{ flex: 1 }}>
         <StatusBar barStyle="default" />

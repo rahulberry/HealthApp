@@ -5,6 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   NavigationScreenProp,
   NavigationState,
+  SafeAreaView
 } from 'react-navigation';
 import { GiftedChat, Bubble } from "react-native-gifted-chat";
 import Fire from './Fire';
@@ -31,6 +32,13 @@ export class ChatsDoctor extends React.Component<Props> {
 
   static navigationOptions = {
     title: 'Chat',
+    headerStyle: {
+      backgroundColor: '#f4511e',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
     tabBarIcon: ({
       tintColor,
       focused,
@@ -60,12 +68,12 @@ export class ChatsDoctor extends React.Component<Props> {
 
   render() {
     return (
-      <GiftedChat
-        renderBubble={this.renderBubble}
-        messages={this.state.messages}
-        onSend={Fire.shared.send}
-        user={this.user}
-      />
+          <GiftedChat
+          renderBubble={this.renderBubble}
+          messages={this.state.messages}
+          onSend={Fire.shared.send}
+          user={this.user}
+        />
     );
   }
 
