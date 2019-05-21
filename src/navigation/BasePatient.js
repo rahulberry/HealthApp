@@ -17,17 +17,16 @@ interface Props {
   navigation: NavigationScreenProp<NavigationState>;
 }
 
-import StatsScreen from '../components/PatientNav/Stats';
-import EventNavigation from '../components/PatientNav/EventNavigation';
-import App from '../components/PatientNav/EventNavigation'
-import ActivityScreen from '../components/PatientNav/Activities';
+import EventNavigation from '../components/PatientNav/EventNavigation'; //The thing that is actually imported is EventTopBarScreen
+import ActivityScreen1 from '../components/PatientNav/Activities1';
 import ChatsScreen from '../components/PatientNav/Chats';
 import ProfileScreen from '../components/PatientNav/Profile';
+import StatsNavigation from '../components/PatientNav/StatsNavigation';
 
 const SimpleTabs = createMaterialTopTabNavigator({
-  Stats: StatsScreen,
+  Stats: StatsNavigation,
   Events: EventNavigation,
-  Home: ActivityScreen,
+  Home: ActivityScreen1,
   Chats: ChatsScreen,
   Profile: ProfileScreen
 },
@@ -39,6 +38,9 @@ const SimpleTabs = createMaterialTopTabNavigator({
 		labelStyle: {
 			fontSize: 11,
       fontWeight: "bold",
+    },
+    indicatorStyle: {
+      opacity: 0
     },
     activeTintColor  : "#8ae2ad",
     inactiveTintColor : "grey",
@@ -75,7 +77,9 @@ class TabNavigator extends React.Component<Props> {
     let bottom = null;
     return (
       <View style={{ flex: 1 }}>
-        <StatusBar barStyle="default" />
+        <StatusBar 
+          barStyle="default" 
+          backgroundColor="#7ccc9c" />
         <SafeAreaView
           style={{ flex: 1, backgroundColor: "#8ae2ad"}}
           forceInset={{ horizontal: 'always', top: 'never' }}

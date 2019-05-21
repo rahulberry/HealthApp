@@ -28,19 +28,24 @@ const SimpleTabs = createMaterialTopTabNavigator({
   Group : GroupStatsScreen
 },
 {
-    swipeEnabled: false,
+  swipeEnabled: true,
 	tabBarPosition: 'top',
 	initialRouteName: 'Personal', //Default Tab Location
 	tabBarOptions : {
 		labelStyle: {
-			fontSize: 14,
-			fontWeight : "bold"
-		},
-		upperCaseLabel : true,
+			fontSize: 20,
+      fontWeight : "bold",
+    },
+    indicatorStyle : {
+      opacity : 0
+    },
+    activeTintColor  : "#8ae2ad",
+    inactiveTintColor : "grey",
+		upperCaseLabel : false,
 		showIcon : false,
 		style: {
-			backgroundColor : "#8ae2ad",
-		}
+      backgroundColor : "#f9f9f9",
+    },
 	}
 }
 );

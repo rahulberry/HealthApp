@@ -13,6 +13,7 @@ import {
   NavigationScreenProp,
   NavigationState,
 } from 'react-navigation';
+//import MapView from 'react-native-maps';
 import { Button } from '../commonComponents/ButtonWithMargin';
 
 interface Props {
@@ -31,12 +32,22 @@ export class EventInformationScreen extends React.Component<Props> {
     super(props);
   }
 
+  wentOrGoing = (time) => {
+    var currentTime = Math.round((new Date()).getTime() / 1000);
+    if (time < currentTime) {
+      return "Went: ";
+    } else {
+      return "Going: ";
+    }
+  }
+
   render() {
     const { navigation } = this.props;
     const test = navigation.getParam('item', {name : 'You should not see this'});
     const title = test.name;
     const time = test.time;
     const going = test.going;
+    const unixTime = test.key;
     const {goBack} = this.props.navigation;
     return (
       <ScrollView>
@@ -47,16 +58,22 @@ export class EventInformationScreen extends React.Component<Props> {
           <Text style={styles.locationHeader}>Location: </Text>
           <View style = {{alignItems : 'center'}}>
             <View style={styles.locationView} >
-              <Text>Map view here</Text>
+              <Text>Map view here.</Text>
+              {/* <MapView
+                style={styles.map}
+                initialRegion={region}
+              /> */}
             </View>
           </View>
-          <Text style={styles.goingHeader}>Going: </Text>
+          <Text style={styles.goingHeader}>{this.wentOrGoing(unixTime)}</Text>
           <FlatList
             data={going}
             renderItem={({item}) => (
               <View style={styles.goingListItem}>
                 <Text style={styles.goingListItem1}>{item}</Text>
-              </View> )} />
+              </View> 
+            )} 
+          />
         </View>
         <Button
           onPress={() => goBack()}
@@ -66,12 +83,20 @@ export class EventInformationScreen extends React.Component<Props> {
   }
 }
 
+var region = {
+  latitude: 0.1278,
+  longitude: 51.5074,
+  latitudeDelta: 0.0922,
+  longitudeDelta: 0.0421,
+};
+
 const styles = StyleSheet.create({
   title: {
     fontSize : 40, 
     fontWeight : 'bold', 
     padding : 20, 
-    backgroundColor : '#f9f9f9' 
+    //backgroundColor : '#8ae2ad',
+    //color : 'white', 
   },
   timeHeader: {
     fontSize : 28, 
@@ -111,7 +136,16 @@ const styles = StyleSheet.create({
   goingListItem1: {
     fontSize : 24, 
     paddingLeft : 20
-  }
+  },
+  map: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    width: 300,
+    height: 300
+},
 })
 
 export default EventInformationScreen
