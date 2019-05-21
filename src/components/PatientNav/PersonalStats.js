@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Text,
   View,
+  ScrollView,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
@@ -17,7 +18,7 @@ import {
 } from 'react-navigation';
 import { Button } from '../commonComponents/ButtonWithMargin';
 
-import XAxisExample from './XAxisExample'
+import ActivityGraph from './ActivityGraph'
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
@@ -54,7 +55,7 @@ export class PersonalStatsScreen extends React.Component<Props> {
     return (
       <SafeAreaView forceInset={{ horizontal: 'always', top: 'always' }}>
         <Text>Personal Stats Screen {test}</Text>
-        <XAxisExample/>
+        <ActivityGraph/>
       </SafeAreaView>
     );
   }
