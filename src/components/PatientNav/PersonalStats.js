@@ -27,6 +27,8 @@ interface Props {
   navigation: NavigationScreenProp<NavigationState>;
 }
 
+import ActivityGraph from './ActivityGraph'
+
 export class PersonalStatsScreen extends React.Component<Props> {
   static navigationOptions = {
     tabBarLabel: 'Personal',
@@ -144,10 +146,10 @@ export class PersonalStatsScreen extends React.Component<Props> {
     const { navigation } = this.props;
     return (
       <ScrollView>
-        <View style = {{paddingTop: 10}}>
-          <View style = {{alignItems : 'center', paddingBottom: 10}}>
+        <View>
+          <View style = {{alignItems : 'center'}}>
             <View style={styles.statsView} >
-              <Text>Stats here.</Text>
+              <ActivityGraph/>
             </View>
           </View>
           <View style = {{alignItems : 'center'}}>
@@ -164,16 +166,16 @@ export class PersonalStatsScreen extends React.Component<Props> {
             <View>
               <TouchableOpacity
                 style={styles.touchableCompleted}
-                onPress={() => this.onPress(item)}>  
+                onPress={() => this.onPress(item)}>
                 <View style={styles.touchableCompletedTextView}>
                   <Text style={{fontSize : 18, color: 'black'}}>{item.name}</Text>
                   <Text style={{fontSize : 12, color: 'black'}}>{item.time}</Text>
                 </View>
                   <Text style={{fontSize : 24, color: 'black'}}>{/*item.distance*/}4.8 km</Text>
               </TouchableOpacity>
-            </View> 
+            </View>
           )}
-        /> 
+        />
         </View>
       </ScrollView>
     );
@@ -185,8 +187,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
-    width: 0.95 * Dimensions.get('window').width, 
-    height: 0.4 * Dimensions.get('window').width, 
+    width: Dimensions.get('window').width,
+    height: 0.4 * Dimensions.get('window').width,
     backgroundColor: '#f9f9f9',
     alignItems : 'center',
   },
@@ -194,8 +196,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-between',
-    width: Dimensions.get('window').width, 
-    height: 0.275 * Dimensions.get('window').width, 
+    width: Dimensions.get('window').width,
+    height: 0.275 * Dimensions.get('window').width,
     backgroundColor: '#8ae2ad',
     alignItems : 'flex-start',
     paddingVertical : 10,
@@ -203,22 +205,22 @@ const styles = StyleSheet.create({
   },
   distanceText: {
     color : 'black',
-    fontSize : 40, 
-    fontWeight : 'bold', 
+    fontSize : 40,
+    fontWeight : 'bold',
   },
   touchableCompleted: {
-    flex: 1, 
-    flexDirection: 'row', 
+    flex: 1,
+    flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: 'transparent', 
+    backgroundColor: 'transparent',
     paddingStart: 20,
     paddingEnd: 20,
     paddingVertical: 10
   },
   touchableCompletedTextView: {
-    flex: 1, 
-    flexDirection: 'column', 
-    width : Dimensions.get('window').width},  
+    flex: 1,
+    flexDirection: 'column',
+    width : Dimensions.get('window').width},
 })
 
 export default PersonalStatsScreen
