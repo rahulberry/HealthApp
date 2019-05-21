@@ -17,13 +17,12 @@ interface Props {
   navigation: NavigationScreenProp<NavigationState>;
 }
 
-import ChatsDoctor from '../components/PractitionerNav/ChatsDoctor';
-import ContactList from '../components/PractitionerNav/ContactList';
+import PatientList from '../components/PractitionerNav/PatientList';
 import GroupsList from '../components/PractitionerNav/GroupsList';
 import EventsScreen from '../components/PractitionerNav/EventsDoctor';
 
 const SimpleTabs = createMaterialTopTabNavigator({
-  Chats: ContactList,
+  Chats: PatientList,
   Home: GroupsList,
   Events: EventsScreen,
 },
