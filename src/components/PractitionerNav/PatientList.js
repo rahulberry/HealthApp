@@ -101,11 +101,17 @@ export default class PatientList extends Component {
             uid: uid, 
           });
         }}
+        style={{
+          marginBottom: 10,
+          borderBottomColor: '#d3d3d3',
+          borderBottomWidth: 1,
+          borderRadius: 5,
+        }}
       >
         <View style={styles.profileContainer}>
           <Image
             source={{
-              uri: "https://www.gravatar.com/avatar/"
+              uri: "https://www.limestone.edu/sites/default/files/user-icon.png"
             }}
             style={styles.profileImage}
           />
@@ -172,7 +178,10 @@ const styles = StyleSheet.create({
     marginLeft: 6
   },
   profileName: {
-    marginLeft: 6,
-    fontSize: 16
-  }
+    flex: 1,
+    textAlign: 'left',
+    paddingLeft: 8,
+    fontSize: 18
+    
+  },    
 });

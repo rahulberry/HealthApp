@@ -19,13 +19,12 @@ interface Props {
 
 import PatientList from '../components/PractitionerNav/PatientList';
 import GroupsList from '../components/PractitionerNav/GroupsList';
-import EventsScreen from '../components/PractitionerNav/EventsDoctor';
-import ContactsList from '../components/PractitionerNav/ContactList'
+import EventNavigation from '../components/PatientNav/EventNavigation'; //The thing that is actually imported is EventTopBarScreen
 
 const SimpleTabs = createMaterialTopTabNavigator({
   Patients: PatientList,
   Home: GroupsList,
-  Events: EventsScreen,
+  Events: EventNavigation,
   
 },
 {
