@@ -20,6 +20,7 @@ interface Props {
 import PatientList from '../components/PractitionerNav/PatientList';
 import GroupsList from '../components/PractitionerNav/GroupsList';
 import EventsScreen from '../components/PractitionerNav/EventsDoctor';
+import ContactsList from '../components/PractitionerNav/ContactList'
 
 const SimpleTabs = createMaterialTopTabNavigator({
   Patients: PatientList,

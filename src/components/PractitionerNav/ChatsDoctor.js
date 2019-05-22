@@ -115,19 +115,25 @@ export default class Chat extends Component {
       });
     });
   }
+   onPressBack = () => {
+    this.props.navigation.goBack();
+    console.log('test')
+  };
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.viewStyle}>
         <Ionicons
-        name={'ios-people'}
+        onPress={this.onPressBack}
+        name={'arrow-dropleft'}
         size={40}
         style={{ 
-          color: 'white' 
-
+          color: 'white' ,
+          justifyContent: 'flex-start',
+          marginLeft: 10
       }}
       />
-            <Text style={styles.textStyle}>{name} </Text>
+      <Text style={styles.textStyle}>Patients </Text>
         </View>
         <GiftedChat
         messages={this.state.messages}
@@ -150,9 +156,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   viewStyle: {
+    flexDirection: 'row',
     backgroundColor: '#8ae2ad',
     alignItems: 'center', 
-    justifyContent: 'center',
     height: 80, 
     paddingTop: 15, 
     shadowColor: '#000',
@@ -163,8 +169,11 @@ const styles = StyleSheet.create({
 },
 textStyle: {
     marginTop: 5,
+    marginLeft: 10,
     fontSize: 20,
     color: 'white',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    justifyContent: 'center',
+    alignItems: 'center'
 }
 });

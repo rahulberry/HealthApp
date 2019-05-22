@@ -9,26 +9,27 @@ import {
   Button,
   TextInput
 } from "react-native";
-
 import firebase from "firebase";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
-    SafeAreaView
-  } from 'react-navigation';
+  NavigationScreenProp,
+  NavigationState,
+  SafeAreaView,
+} from 'react-navigation';
 
 var name, uid, email;
 
-interface Props {
-  navigation: NavigationScreenProp<NavigationState>;
-}
 
-export default class PatientList extends React.Component<Props> {
-  static navigationOptions = ({
-    navigation,
-  }: {
-    navigation: NavigationScreenProp<NavigationState>;
-  }) => ({
-    title: 'Groups',
+export default class PatientList extends Component {
+  static navigationOptions = {
+    title: 'Chat',
+    headerStyle: {
+      backgroundColor: '#8ae2ad',
+    },
+    headerTintColor: '#8ae2ad',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
     tabBarIcon: ({
       tintColor,
       focused,
@@ -39,12 +40,12 @@ export default class PatientList extends React.Component<Props> {
       horizontal: boolean;
     }) => (
       <Ionicons
-        name={focused ? 'ios-people' : 'ios-people'}
+        name={focused ? 'ios-chatboxes' : 'ios-chatboxes'}
         size={horizontal ? 20 : 26}
         style={{ color: tintColor }}
       />
     ),
-  });
+  };
 
   state = {
     name: "",
@@ -87,34 +88,6 @@ export default class PatientList extends React.Component<Props> {
     this.listenForItems(this.PatientsRef);
   }
 
-  static navigationOptions = {
-    headerStyle: {
-      backgroundColor: "#16a085",
-      elevation: null
-    },
-    headerRight: (
-      <Button
-        primary
-        title="Logout"
-        onPress={() => {
-          firebase
-            .auth()
-            .signOut()
-            .then(
-              () => {
-                this.props.navigation.navigate("Login");
-              },
-              function(error) {
-                // An error happened.
-              }
-            );
-        }}
-      >
-        Log out
-      </Button>
-    )
-  };
-
   renderRow = rowData => {
     return (
       <TouchableOpacity
@@ -125,7 +98,7 @@ export default class PatientList extends React.Component<Props> {
           this.props.navigation.navigate("ChatsDoctor", {
             name: name,
             email: email,
-            uid: uid
+            uid: uid, 
           });
         }}
       >
@@ -143,6 +116,8 @@ export default class PatientList extends React.Component<Props> {
   };
 
   render() {
+    const { navigation } = this.props;
+
     return (
       <SafeAreaView style={styles.container}> 
         <View>
