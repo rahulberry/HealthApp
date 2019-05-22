@@ -7,7 +7,6 @@ import {
     NavigationState,
     SafeAreaView
   } from 'react-navigation';
-import { users } from '../assets/fake_data';
 
 export default class ContactList extends Component {
     static navigationOptions = {

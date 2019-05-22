@@ -17,15 +17,15 @@ interface Props {
   navigation: NavigationScreenProp<NavigationState>;
 }
 
-import ChatsDoctor from '../components/PractitionerNav/ChatsDoctor';
-import ContactList from '../components/PractitionerNav/ContactList';
+import PatientList from '../components/PractitionerNav/PatientList';
 import GroupsList from '../components/PractitionerNav/GroupsList';
-import EventsScreen from '../components/PractitionerNav/EventsDoctor';
+import EventNavigation from '../components/PatientNav/EventNavigation'; //The thing that is actually imported is EventTopBarScreen
 
 const SimpleTabs = createMaterialTopTabNavigator({
-  Chats: ContactList,
+  Patients: PatientList,
   Home: GroupsList,
-  Events: EventsScreen,
+  Events: EventNavigation,
+  
 },
 {
   swipeEnabled: true,
@@ -51,16 +51,6 @@ class TabNavigator extends React.Component<Props> {
   static router = SimpleTabs.router;
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
-  }
-  static navigationOptions = {
-	title: "Health Practitioner Screen",
-    headerStyle: {
-      backgroundColor: "#8ae2ad"
-    },
-    headerTintColor: "#fff",
-    headerTitleStyle: {
-      fontWeight: "bold"
-    },
   };
   render() {
     const { navigation } = this.props;
