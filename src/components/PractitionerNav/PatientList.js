@@ -23,15 +23,12 @@ interface Props {
 }
 
 export default class PatientList extends React.Component<Props> {
-  static navigationOptions = {
-    title: 'Chat',
-    headerStyle: {
-      backgroundColor: '#8ae2ad',
-    },
-    headerTintColor: '#8ae2ad',
-    headerTitleStyle: {
-      fontWeight: 'bold',
-    },
+  static navigationOptions = ({
+    navigation,
+  }: {
+    navigation: NavigationScreenProp<NavigationState>;
+  }) => ({
+    title: 'Groups',
     tabBarIcon: ({
       tintColor,
       focused,
@@ -42,12 +39,12 @@ export default class PatientList extends React.Component<Props> {
       horizontal: boolean;
     }) => (
       <Ionicons
-        name={focused ? 'ios-chatboxes' : 'ios-chatboxes'}
+        name={focused ? 'ios-people' : 'ios-people'}
         size={horizontal ? 20 : 26}
         style={{ color: tintColor }}
       />
     ),
-  };
+  });
 
   state = {
     name: "",
@@ -64,15 +61,9 @@ export default class PatientList extends React.Component<Props> {
     };
     
     this.PatientsRef = firebase.database().ref('/Doctors/tLAXPicI6ZW9oobeqTH7efu4TE42/Patients/');
-  }
-
-  /*getRef() {
-    return firebase.database().ref();
-  }*/
+  } 
 
   listenForItems(PatientsRef) {
-    var user = firebase.auth().currentUser;
-
     PatientsRef.once("value", snap => {
       // get children as an array
       var items = [];
@@ -86,7 +77,6 @@ export default class PatientList extends React.Component<Props> {
       });
 
       this.setState({
-
         dataSource: this.state.dataSource.cloneWithRows(items),
         loading: false
       });

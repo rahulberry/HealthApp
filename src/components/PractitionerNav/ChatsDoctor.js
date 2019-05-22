@@ -1,14 +1,28 @@
 import React, { Component } from "react";
 import {
   StyleSheet,
+  View, 
+  Button,
+  Text
 } from "react-native";
-import { GiftedChat } from "react-native-gifted-chat";
+import { GiftedChat, Bubble} from "react-native-gifted-chat";
 import firebase from  'firebase';
-import SafeAreaView from 'react-navigation'
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 var name, uid, email;
 
 export default class Chat extends Component {
+  static navigationOptions = {
+    headerTitle: 'fasd',
+    headerRight: (
+      <Button
+        onPress={() => alert('This is a button!')}
+        title="Info"
+        color="#fff"
+      />
+    ),
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -72,7 +86,18 @@ export default class Chat extends Component {
   componentWillUnmount() {
     this.chatRefData.off();
   }
-
+  renderBubble (props) {
+    return (
+      <Bubble
+        {...props}
+        wrapperStyle={{
+          right: {
+            backgroundColor: '#8ae2ad'
+          }
+        }}
+      />
+    )
+  }
   onSend(messages = []) {
     // this.setState({
     //     messages: GiftedChat.append(this.state.messages, messages),
@@ -92,13 +117,28 @@ export default class Chat extends Component {
   }
   render() {
     return (
+      <View style={styles.container}>
+        <View style={styles.viewStyle}>
+        <Ionicons
+        name={'ios-people'}
+        size={40}
+        style={{ 
+          color: 'white' 
+
+      }}
+      />
+            <Text style={styles.textStyle}>{name} </Text>
+        </View>
         <GiftedChat
         messages={this.state.messages}
         onSend={this.onSend.bind(this)}
         user={{
-          _id: this.user.uid
+          _id: this.user.uid,
+          name: 'Rahul'
         }}
+        renderBubble={this.renderBubble}
         />
+      </View>     
     );
   }
 }
@@ -107,7 +147,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "stretch",
-    marginRight: 10,
-    marginLeft: 10
-  }
+    marginBottom: 20,
+  },
+  viewStyle: {
+    backgroundColor: '#8ae2ad',
+    alignItems: 'center', 
+    justifyContent: 'center',
+    height: 80, 
+    paddingTop: 15, 
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 }, 
+    shadowOpacity: 0.2,
+    elevation: 2, 
+    position: 'relative'
+},
+textStyle: {
+    marginTop: 5,
+    fontSize: 20,
+    color: 'white',
+    fontWeight: 'bold'
+}
 });

@@ -5,6 +5,65 @@
 	<key>logFormatVersion</key>
 	<integer>9</integer>
 	<key>logs</key>
-	<dict/>
+	<dict>
+		<key>020D6812-8782-49F9-B4D8-077BFB1BEF20</key>
+		<dict>
+			<key>className</key>
+			<string>IDECommandLineBuildLog</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>020D6812-8782-49F9-B4D8-077BFB1BEF20.xcactivitylog</string>
+			<key>highLevelStatus</key>
+			<string>S</string>
+			<key>schemeIdentifier-containerName</key>
+			<string>HealthApp project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>HealthApp</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Building project HealthApp with scheme HealthApp and configuration Debug</string>
+			<key>timeStartedRecording</key>
+			<real>580231089.93238902</real>
+			<key>timeStoppedRecording</key>
+			<real>580231092.00240898</real>
+			<key>title</key>
+			<string>Building project HealthApp with scheme HealthApp and configuration Debug</string>
+			<key>uniqueIdentifier</key>
+			<string>020D6812-8782-49F9-B4D8-077BFB1BEF20</string>
+		</dict>
+		<key>9A0D527D-9130-4691-AFFF-925F48C0D662</key>
+		<dict>
+			<key>className</key>
+			<string>IDECommandLineBuildLog</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>9A0D527D-9130-4691-AFFF-925F48C0D662.xcactivitylog</string>
+			<key>highLevelStatus</key>
+			<string>S</string>
+			<key>schemeIdentifier-containerName</key>
+			<string>HealthApp project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>HealthApp</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Building project HealthApp with scheme HealthApp and configuration Debug</string>
+			<key>timeStartedRecording</key>
+			<real>580150463.58997405</real>
+			<key>timeStoppedRecording</key>
+			<real>580150465.04429197</real>
+			<key>title</key>
+			<string>Building project HealthApp with scheme HealthApp and configuration Debug</string>
+			<key>uniqueIdentifier</key>
+			<string>9A0D527D-9130-4691-AFFF-925F48C0D662</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

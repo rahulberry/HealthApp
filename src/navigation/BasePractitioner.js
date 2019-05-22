@@ -22,9 +22,10 @@ import GroupsList from '../components/PractitionerNav/GroupsList';
 import EventsScreen from '../components/PractitionerNav/EventsDoctor';
 
 const SimpleTabs = createMaterialTopTabNavigator({
-  Chats: PatientList,
+  Patients: PatientList,
   Home: GroupsList,
   Events: EventsScreen,
+  
 },
 {
   swipeEnabled: true,
@@ -50,16 +51,6 @@ class TabNavigator extends React.Component<Props> {
   static router = SimpleTabs.router;
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
-  }
-  static navigationOptions = {
-	title: "Health Practitioner Screen",
-    headerStyle: {
-      backgroundColor: "#8ae2ad"
-    },
-    headerTintColor: "#fff",
-    headerTitleStyle: {
-      fontWeight: "bold"
-    },
   };
   render() {
     const { navigation } = this.props;

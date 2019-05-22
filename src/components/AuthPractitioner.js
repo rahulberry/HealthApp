@@ -3,11 +3,8 @@ import PropTypes from "prop-types";
 import {
   KeyboardAvoidingView,
   LayoutAnimation,
-  Platform,
   StyleSheet,
-  UIManager,
   Dimensions,
-  ImageBackground,
   Alert,
   Text
 } from "react-native";
