@@ -18,19 +18,33 @@ var data = [
   },
   {
     name: 'test',
-    members: '10',
+    members: '7 members',
+    last_active: '2 days ago'
+  },{
+    name: 'test',
+    members: '7 members',
+    last_active: '2 days ago'
+  },{
+    name: 'test',
+    members: '7 members',
+    last_active: '2 days ago'
+  },{
+    name: 'test',
+    members: '7 members',
+    last_active: '2 days ago'
+  },{
+    name: 'test',
+    members: '7 members',
+    last_active: '2 days ago'
+  },{
+    name: 'test',
+    members: '7 members',
+    last_active: '2 days ago'
+  },{
+    name: 'test',
+    members: '7 members',
     last_active: '2 days ago'
   },
-  {
-    name: 'test',
-    members: '10',
-    last_active: '2 days ago'
-  },
-  {
-    name: 'test',
-    members: '10',
-    last_active: '2 days ago'
-  }
 ];
 var name, members, last_active
 interface Props {
