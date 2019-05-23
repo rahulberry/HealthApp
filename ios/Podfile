@@ -10,6 +10,8 @@ target 'HealthApp' do
   target 'HealthApp-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
+    pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
   end
 
   target 'HealthAppTests' do
