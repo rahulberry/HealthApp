@@ -53,6 +53,8 @@ class TabNavigator extends React.Component<Props> {
     LayoutAnimation.easeInEaseOut();
   };
   render() {
+    console.disableYellowBox = true;
+
     const { navigation } = this.props;
     const { routes, index } = navigation.state;
     const activeRoute = routes[index];

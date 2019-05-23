@@ -27,7 +27,7 @@ interface Props {
   navigation: NavigationScreenProp<NavigationState>;
 }
 
-import ActivityGraph from './ActivityGraph'
+//import ActivityGraph from './ActivityGraph'
 
 export class PersonalStatsScreen extends React.Component<Props> {
   static navigationOptions = {
@@ -149,7 +149,7 @@ export class PersonalStatsScreen extends React.Component<Props> {
         <View>
           <View style = {{alignItems : 'center'}}>
             <View style={styles.statsView} >
-              <ActivityGraph/>
+            <Text>{/*<ActivityGraph/>*/} Graph Broken</Text>
             </View>
           </View>
           <View style = {{alignItems : 'center'}}>

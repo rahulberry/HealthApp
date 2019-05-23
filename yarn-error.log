@@ -1,8 +1,8 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\Josh\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add react-native-gifted-chat
+  C:\Program Files\nodejs\node.exe C:\Users\Josh\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add react-native-svg
 
 PATH: 
-  C:\Python27\;C:\Python27\Scripts;C:\windows\system32;C:\windows;C:\windows\System32\Wbem;C:\windows\System32\WindowsPowerShell\v1.0\;C:\windows\System32\OpenSSH\;C:\Program Files\PuTTY\;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files (x86)\Calibre2\;C:\ProgramData\chocolatey\bin;C:\Program Files\Java\jdk1.8.0_211\bin;c:\Users\YOUR_USERNAME\AppData\Local\Android\Sdk\platform-tools;C:\Program Files\nodejs\;C:\Ruby25-x64\bin;C:\Users\Josh\AppData\Local\Microsoft\WindowsApps;C:\Users\Josh\AppData\Local\GitHubDesktop\bin;C:\Users\Josh\AppData\Local\Programs\MiKTeX 2.9\miktex\bin\x64\;C:\Users\Josh\AppData\Local\Programs\Microsoft VS Code\bin;c:\Users\YOUR_USERNAME\AppData\Local\Android\Sdk\platform-tools;C:\Users\Josh\AppData\Roaming\npm
+  C:\windows\system32;C:\windows;C:\windows\System32\Wbem;C:\windows\System32\WindowsPowerShell\v1.0\;C:\windows\System32\OpenSSH\;C:\Program Files\PuTTY\;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\ProgramData\chocolatey\bin;C:\Program Files\Java\jdk1.8.0_211\bin;c:\Users\YOUR_USERNAME\AppData\Local\Android\Sdk\platform-tools;C:\Program Files\nodejs\;C:\Ruby25-x64\bin;C:\Users\Josh\AppData\Local\Microsoft\WindowsApps;C:\Users\Josh\AppData\Local\GitHubDesktop\bin;C:\Users\Josh\AppData\Local\Programs\Microsoft VS Code\bin;c:\Users\YOUR_USERNAME\AppData\Local\Android\Sdk\platform-tools;C:\Users\Josh\AppData\Roaming\npm
 
 Yarn version: 
   1.15.2
@@ -14,7 +14,7 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: EPERM: operation not permitted, unlink 'C:\Users\Josh\Documents\GitHub\HealthApp\node_modules\braces\node_modules\extend-shallow'
+  Error: EPERM: operation not permitted, unlink 'C:\Users\Josh\Documents\GitHub\HealthApp\node_modules\@callstack\react-theme-provider\node_modules\hoist-non-react-statics\dist'
 
 npm manifest: 
   {
@@ -34,6 +34,10 @@ npm manifest:
       "react-native-gesture-handler": "^1.2.1",
       "react-native-gifted-chat": "^0.8.0",
       "react-native-modal-datetime-picker": "^7.4.0",
+      "react-native-paper": "^2.15.2",
+      "react-native-progress-circle": "^2.0.1",
+      "react-native-svg": "^9.4.0",
+      "react-native-svg-charts": "^5.2.0",
       "react-native-vector-icons": "^6.4.2",
       "react-navigation": "^3.9.1",
       "react-redux": "^7.0.3",

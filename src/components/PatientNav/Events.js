@@ -133,6 +133,7 @@ export class EventsScreen extends React.Component<Props> {
     return firebaseRef.once('value')
       .then((dataSnapshot) => {
         console.log('test1', dataSnapshot.val());
+        console.log('data kjhhhjhj', dataSnapshot);
         this.setState({
           firebaseArray: dataSnapshot.val()
         });
@@ -543,8 +544,8 @@ export class EventsScreen extends React.Component<Props> {
           <Dialog.Button label="Done" onPress={this.handleDone} />
         </Dialog.Container>
       </View>
-      <View style = {{flexDirection: 'row', justifyContent: 'space-between'}}>
-        <Button title="Set Firebase" onPress={this.setTestData /*this.toggleModal*/} />
+      <View style = {{flexDirection: 'row', justifyContent: 'flex-end'}}>
+        {/*<Button title="Set Firebase" onPress={this.setTestData} /> */}
         <Button title="Add Event" onPress={this.showDateTimePicker} />
           <DateTimePicker
             isVisible={this.state.isDateTimePickerVisible}
