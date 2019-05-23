@@ -4,7 +4,7 @@ import { Alert, AppRegistry, Platform, StyleSheet, Text, TouchableWithoutFeedbac
 export default class StartButton extends Component {
     constructor(props) {
         super(props);
-        this.state = { activityStarted: false };
+        this.state = { activityStarted: true };
         this._onPressButton = this._onPressButton.bind(this);
     }
 
@@ -14,33 +14,19 @@ export default class StartButton extends Component {
             { activityStarted: !previousState.activityStarted }
         ))
     }
-    
+
     render() {
-        if (!this.state.activityStarted) {
-            return (
-                <View style={styles.container}>
-                    <TouchableWithoutFeedback onPress={this._onPressButton}>
-                        <View style={styles.startActivitybutton}>
-                            <Text style={styles.buttonText}>Start Activity</Text>
-                        </View>
-                    </TouchableWithoutFeedback>
-                </View>
-            );
-        }
-
-        else {
-            return (
-                <View style={styles.container}>
-                    <TouchableWithoutFeedback onPress={this._onPressButton}>
-                        <View style={styles.endActivitybutton}>
-                            <Text style={styles.buttonText}>End Activity</Text>
-                        </View>
-                    </TouchableWithoutFeedback>
-                </View>
-            );
-        }
-
+        return (
+            <View style={styles.container}>
+                <TouchableWithoutFeedback onPress={this._onPressButton}>
+                    <View style={this.state.activityStarted ? styles.startActivitybutton : styles.endActivitybutton}>
+                        <Text style={styles.buttonText}>{this.state.activityStarted ? "Start Activity" : "End Activity"} </Text>
+                    </View>
+                </TouchableWithoutFeedback>
+            </View>
+        );
     }
+
 }
 
 const styles = StyleSheet.create({

@@ -7,16 +7,16 @@ export default class CircularProgressBar extends Component {
 
     render() {
         return (
-            <View style={{ flex: 1, alignItems: 'center', marginTop: 70 }}>
+            <View style={{ flex: 1, alignItems: 'center', marginTop: 30 }}>
                 <ProgressCircle
                     percent={this.props.percentage}
                     radius={130}
                     borderWidth={15}
                     color="#8ae2ad"
-                    shadowColor="#e6e9ef"
-                    bgColor="#fff"
+                    shadowColor='#eaeaea'
+                    bgColor="#ffffff"
                 >
-                    <Text style={{ fontSize: 50, fontWeight: 'bold' }}>{this.props.percentage} %</Text>
+                    <Text style={{ fontSize: 50, fontWeight: 'bold' }}>{Math.floor(this.props.percentage)} %</Text>
                 </ProgressCircle>
             </View>
         );

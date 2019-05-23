@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { AppRegistry, Text, View, Image, StyleSheet } from 'react-native';
+import { AppRegistry, Text, View, Image, StyleSheet, Dimensions } from 'react-native';
+
+const width = Dimensions.get('window').width;
 
 export default class Stats extends Component {
 
@@ -7,20 +9,29 @@ export default class Stats extends Component {
         super(props);
 
         this.state = {
-            distance: 1.6,
-            minutes: 45,
+            statistic: this.props.stats,
         };
     }
 
     render() {
         return (
-            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Image
-                    source={this.props.isShoe ? require('./images/shoe.jpg') : require('./images/clock.jpg')}
-                    style={{ width: 50, height: 50, marginLeft: 15, marginTop: 10 }}
-                /> 
-                <Text style={styles.descriptorStyle}> {this.props.title} </Text>
-                <Text style={styles.dataStyle}> {this.state.distance} {this.props.metric} </Text>
+            <View>
+                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Image
+                        source={require('./images/shoe.png')}
+                        style={styles.shoePicture}
+                    /> 
+                    <Text
+                        style={styles.shoeDescriptorStyle}
+                    >
+                        Distance covered:
+                    </Text>
+                    <Text style={styles.dataStyle}> {this.state.statistic} km </Text>
+                
+                </View>
+
+                <View style={styles.container}>
+                </View>
             </View>
         );
     }
@@ -28,19 +39,32 @@ export default class Stats extends Component {
 }
 
 const styles = StyleSheet.create({
-    descriptorStyle: {
-        paddingTop: 20,
+    container: {
+        width: 265,
+        marginTop: 18,
+        marginLeft: 81,
+        borderBottomWidth: 1,
+        borderColor: '#979797'
+    },
+    shoeDescriptorStyle: {
+        marginTop: 17,
         marginLeft: 10,
-        fontSize: 23,
+        fontSize: 20,
         fontWeight: 'bold',
     },
     dataStyle: {
         marginLeft: 'auto',
         marginRight: 15,
-        marginTop: 20,
-        fontSize: 23,
+        marginTop: 17,
+        fontSize: 20,
         fontWeight: 'bold'
-    }
+    },
+    shoePicture: {
+        width: 58,
+        height: 23,
+        marginLeft: 15,
+        marginTop: 20
+    },
 })
 
 AppRegistry.registerComponent('Stats', () => Stats);

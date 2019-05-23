@@ -17,9 +17,10 @@ import {
   SafeAreaView,
 } from 'react-navigation';
 
-import StartButton from './currentActivity/StartButton'
-import CircularProgressBar from './currentActivity/CircularProgessBar'
-import Stats from './currentActivity/Stats'
+import ActivityPage from './currentActivity/Activities'
+import LocationTracker from './currentActivity/LocationTracker'
+import EmergencyButton from './currentActivity/EmergencyButton'
+import SliderFeedback from './feedback/SliderFeedback'
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
@@ -53,19 +54,14 @@ export class ActivityScreen extends React.Component<Props> {
         size={horizontal ? 20 : 26}
         style={{ color: tintColor }}
       />
-    )
-	
+    )	
   });
+
   render() {
     const { navigation } = this.props;
     return (
-      <SafeAreaView forceInset={{ horizontal: 'always', top: 'always' }}>
-            <ScrollView>
-                <CircularProgressBar percentage={50} />
-                <StartButton />
-                <Stats title="Distance Covered: " isShoe={true} metric="km" />
-                <Stats title="Time taken: " isShoe={false} metric="mins" />
-            </ScrollView>
+        <SafeAreaView forceInset={{ horizontal: 'always', top: 'always' }}>
+            <ActivityPage />
       </SafeAreaView>
     );
   }
