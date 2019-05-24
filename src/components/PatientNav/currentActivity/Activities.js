@@ -36,7 +36,7 @@ export default class Activities extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            percentageCompleted: 50,
+            percentageCompleted: 0,
             //Timer states
             timerStart: false,
             stopwatchStart: false,

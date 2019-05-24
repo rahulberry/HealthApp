@@ -1,9 +1,11 @@
 // PersonalStats.js
 
+// To Do:
+// 
+// Fix graphs
+
 import React from 'react';
 import {
-  LayoutAnimation,
-  StatusBar,
   StyleSheet,
   Text,
   View,
@@ -14,12 +16,9 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
-  createMaterialTopTabNavigator,
   NavigationScreenProp,
   NavigationState,
-  SafeAreaView,
 } from 'react-navigation';
-import { Button } from '../commonComponents/ButtonWithMargin';
 import firebase from "firebase";
 import Fire from '../../components/PractitionerNav/Fire';
 
@@ -58,11 +57,7 @@ export class PersonalStatsScreen extends React.Component<Props> {
   constructor(props) {
     super(props);
     this.state = {
-      //eventsArray: [
-      //  {key : '1525966538', name : 'Afternoon Walk', time : '12/06/2019 12:35', going : ['amy', 'sam'], distance : 4.8},
-      //  {key : '1525966538', name : 'Afternoon Walk 1', time : '12/06/2019 12:35', going : ['amy', 'sam', 'josh'], distance : 4.8},
-      //  {key : '1525966538', name : 'Afternoon Walk 2', time : '12/06/2019 12:35', going : ['amy', 'sam'], distance : 4.8},],
-      account: "josh",
+      account: this.getUser(),
       eventsArray: [],
       isFetching: false,
     };
@@ -79,20 +74,16 @@ export class PersonalStatsScreen extends React.Component<Props> {
     );
   };
 
+  getUser = () => {
+    var user = 'josh'
+    // Need to grab this from firebase. Might need to change how this is implemented cause of async shit
+    return user;
+  }
+
   filterOutCurrent = (data) => {
     if (data != [] && data != null) {
       var currentTime = Math.round((new Date()).getTime() / 1000);
       let filteredItems = data.filter(item => item.key <= currentTime);
-      return filteredItems;
-    } else {
-      return [];
-    }
-  }
-
-  filterOutOld = (data) => {
-    if (data != [] && data != null) {
-      var currentTime = Math.round((new Date()).getTime() / 1000);
-      let filteredItems = data.filter(item => item.key > currentTime);
       return filteredItems;
     } else {
       return [];
@@ -126,7 +117,6 @@ export class PersonalStatsScreen extends React.Component<Props> {
     }
     return result
   }
-
 
   onRefresh() {
     this.setState({ isFetching: true }, function() { this.refreshData });

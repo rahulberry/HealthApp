@@ -1,11 +1,10 @@
-// Events.js
+// MyEvents.js
 
 // To Do:
 // 
 // Need to add a location picker modal and show location in view on the EventInformation page
-// Need to save and initialise eventsArray, doneEvents, and account from a server or redux or whatever
 // Need to send a notification 1 hour before an event
-// Move completed events to stats and have current completed events in group, and a personal completed events in personal
+// Add getName from firebase and use that for the account
 
 import React from 'react';
 import {
@@ -17,32 +16,20 @@ import {
   TouchableOpacity,
   Dimensions
 } from 'react-native';
-import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import firebase from "firebase";
+import Fire from '../../components/PractitionerNav/Fire';
 import {
   NavigationScreenProp,
   NavigationState,
 } from 'react-navigation';
-import { createStore } from 'redux';
 import { Button } from '../commonComponents/ButtonWithMargin';
-import Dialog from "react-native-dialog";
-import DateTimePicker from "react-native-modal-datetime-picker";
-import Modal from 'react-native-modal'
-import firebase from "firebase";
-import Fire from '../../components/PractitionerNav/Fire';
-//import { addEvents } from '../../actions';
-//import EventsReducer from '../../reducers/EventsReducer.js'
-
-//const store = createStore(EventsReducer);
-//store.subscribe(() => console.log(store.getState().eventsArray))
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
 }
 
-var test = [];
-
-export class MyEventsScreen extends React.Component<Props> {
+export class EventsScreen extends React.Component<Props> {
   static navigationOptions = {
 	tabBarLabel: 'My Events',
     tabBarIcon: ({
@@ -62,12 +49,9 @@ export class MyEventsScreen extends React.Component<Props> {
     
   };
   state = {
-    isModalVisible: false,
     eventsArray: [],
-    dialogVisible: false,
-    doneEventsArray: [],
     firebaseArray: [],
-    firebaseDoneArray: [],
+    dialogVisible: false,
     eventName: "",
     eventTime: "",
     dateTime: "",
@@ -79,26 +63,21 @@ export class MyEventsScreen extends React.Component<Props> {
   constructor(props) {
     super(props);
     this.state = {
-      isModalVisible: false,
       isDateTimePickerVisible: false,
       eventsArray: [],
-      //eventsArray: [{key : '1560342934', name : 'Test Event 1', time : '12/06/2019 12:35', going : ['gary', 'john', 'amy', 'josh'], colour : 'red'},
-      //              {key : '1560861334', name : 'Another Test Event', time : '18/06/2019 12:35', going : ['gary', 'bill', 'amy'], colour : 'red'}],
-      dialogVisible: false,
       firebaseArray: [],
-      firebaseDoneArray: [],
-      doneEventsArray: [{key : '1525966538', name : 'Test Old Event', time : '12/06/2019 12:35', going : ['amy', 'sam'], colour : 'red'}],
+      dialogVisible: false,
       eventName: "",
       eventTime: "",
       dateTime: "",
       currentItem: {},
       isFetching: false,
-      account: "josh"
+      account: this.getUser()
     };
     this.readEventData();
-  }
+  };
 
-  readEventData() {
+  readEventData = () => {
     var firebaseRef = firebase.database().ref('Events/events');
     return firebaseRef.once('value')
       .then((dataSnapshot) => {
@@ -108,14 +87,10 @@ export class MyEventsScreen extends React.Component<Props> {
     );
   };
 
-  filterOutCurrent = (data) => {
-    if (data != [] && data != null) {
-      var currentTime = Math.round((new Date()).getTime() / 1000);
-      let filteredItems = data.filter(item => item.key <= currentTime);
-      return filteredItems;
-    } else {
-      return [];
-    }
+  getUser = () => {
+    var user = 'josh'
+    // Need to grab this from firebase. Might need to change how this is implemented cause of async shit
+    return user;
   }
 
   filterOutOld = (data) => {
@@ -127,92 +102,6 @@ export class MyEventsScreen extends React.Component<Props> {
       return [];
     }
   }
-
-  invalidNameAlert = () => {
-    Alert.alert(
-      'Invalid name',
-      'You cannot make an event without a name.',
-      [
-        {text: 'OK', onPress: () => console.log('OK Pressed')},
-      ],
-      { cancelable: false }
-    );
-  };
-
-  
-
-  readDoneEventData() {
-    var firebaseRef = firebase.database().ref('Events/done');
-    return firebaseRef.once('value')
-      .then((dataSnapshot) => {
-        console.log('done', dataSnapshot.val());
-        this.setState({
-          firebaseDoneArray: dataSnapshot.val()
-        });
-      });
-  }
-
-  readEventData1() {
-    var firebaseRef = firebase.database().ref('Events/events');
-    firebaseRef.once('value')
-      .then((dataSnapshot) => {
-        var data = dataSnapshot.val();
-        console.log('data', data)
-        var currentTime = Math.round((new Date()).getTime() / 1000);
-
-        var done = this.state.doneEventsArray;
-
-        var allItems = data; //this.state.firebaseArray;
-        
-        let filteredItems = allItems.filter(item => item.key > currentTime);
-        let doneItems = allItems.filter(item => item.key <= currentTime);
-        var joined = done.concat(doneItems);
-        this.setState({ eventsArray: filteredItems })
-        var sortedJoined = joined.sort((a, b) => (a.key > b.key) ? 1 : -1)
-        this.setState({doneEventsArray : sortedJoined})
-        this.setState({isFetching : false})
-      });
-  }
-  
-  writeEventsData(events1){
-    this.readEventData();
-    if (this.state.firebaseArray == null) {
-      var currentData = [];
-    } else {
-      var currentData = this.state.firebaseArray;
-      }
-    console.log('test', currentData);
-    var events = this.filterByKey(currentData.concat(events1))
-    firebase.database().ref('Events/').set({
-        events
-    }).then((data)=>{
-        //success callback
-        console.log('data ' , data)
-    }).catch((error)=>{
-        //error callback
-        console.log('error ' , error)
-    })
-  };
-
-  writeDoneEventsData(events1){
-    this.readDoneEventData();
-    if (this.state.firebaseDoneArray == null) {
-      var currentData = [];
-    } else {
-      var currentData = this.state.firebaseDoneArray;
-      }
-    console.log('test', currentData);
-    var done = this.filterByKey(currentData.concat(events1))
-    firebase.database().ref('DoneEvents/').set({
-        done
-    }).then((data)=>{
-        //success callback
-        console.log('data ' , data)
-    }).catch((error)=>{
-        //error callback
-        console.log('error ' , error)
-    })
-  };
 
   filterByKey = (data) => {
     const result = [];
@@ -226,24 +115,32 @@ export class MyEventsScreen extends React.Component<Props> {
     return result
   }
 
-  sleep(milliseconds) {
-    var start = new Date().getTime();
-    for (var i = 0; i < 1e7; i++) {
-      if ((new Date().getTime() - start) > milliseconds){
-        break;
+  writeEventsData = (events1) => {
+    this.readEventData();
+    if (this.state.firebaseArray == null) {
+      var currentData = [];
+    } else {
+      var currentData = this.state.firebaseArray;
       }
-    }
-  }
+    console.log('test', currentData);
+    var events = this.filterByKey(currentData.concat(events1))
+    firebase.database().ref('Events/').set({
+        events
+    }).then((data)=>{
+        console.log('Events written to firebase ' , data)
+    }).catch((error)=>{
+        console.log('Error writing events to firebase ' , error)
+    })
+  };
 
-  invalidTimeAlert = () => {
-    Alert.alert(
-      'Invalid time and date',
-      'You cannot make an event in the past.',
-      [
-        {text: 'OK', onPress: () => console.log('OK Pressed')},
-      ],
-      { cancelable: false }
-    );
+  filterGoing = (name, events) => {
+    if (events == null) {
+      return [];
+    } else {
+      var goingEvents = events.filter(item => item.going != null);
+      goingEvents = goingEvents.filter(item => item.going.includes(name));
+      return goingEvents;
+    }
   };
 
   deleteItemAlert = (item) => {
@@ -258,11 +155,12 @@ export class MyEventsScreen extends React.Component<Props> {
     )
   };
 
-  refreshData() {
+  refreshData = () => {
     var firebaseRef = firebase.database().ref('Events/events');
     firebaseRef.once('value')
       .then((dataSnapshot) => {
         var data = dataSnapshot.val();
+        console.log('Firebase Data', data);
         var sorted = this.filterByKey(data.sort((a, b) => (a.key > b.key) ? 1 : -1))
         this.setState({ eventsArray: sorted })
         this.setState({isFetching : false})
@@ -270,48 +168,9 @@ export class MyEventsScreen extends React.Component<Props> {
     );
   }
 
-  onRefresh() {
+  onRefresh = () => {
     this.setState({ isFetching: true }, function() { this.refreshData });
   }
-
-  showDateTimePicker = () => {
-    this.setState({ isDateTimePickerVisible: true });
-  };
-
-  hideDateTimePicker = () => {
-    this.setState({ isDateTimePickerVisible: false });
-  };
-
-  showNameDialog = () => {
-    this.setState({ dialogVisible : true} );
-  };
-
-  handleInput = (input) => {
-    this.setState({eventName : input.toString()});
-  };
-
-  toggleModal = () => {
-    this.setState({ isModalVisible: !this.state.isModalVisible });
-  };
-
-  loadModal = (item) => {
-    this.setState({ isModalVisible: !this.state.isModalVisible });
-    this.props.navigation.navigate('EventsInformation', {item})
-  };
-
-  deleteItem1 = (data) => {
-    this.readEventData();
-    let allItems = this.state.firebaseArray;
-    let filteredItems = allItems.filter(item => item.key != data.key);
-    this.setState({ eventsArray: filteredItems });
-
-    firebase.database().ref('Events/').remove()
-     
-    this.setState({firebaseArray: filteredItems})
-    this.setState({firebaseDoneArray: this.state.doneEventsArray})
-    this.writeEventsData([]);
-    this.writeDoneEventsData([]);
-  };
 
   deleteItem = (data) => {
     let allItems = this.state.eventsArray;
@@ -335,8 +194,6 @@ export class MyEventsScreen extends React.Component<Props> {
   };
 
   onPress = (item) => {
-    console.log(this.props)
-
     this.props.navigation.navigate('EventsInformation', {item})
   };
 
@@ -369,74 +226,6 @@ export class MyEventsScreen extends React.Component<Props> {
     this.setState({isFetching : this.state.isFetching});
   };
 
-  filterGoing = (name, events) => {
-    if (events == null) {
-      return [];
-    } else {
-      var goingEvents = events.filter(item => item.going != null);
-      goingEvents = goingEvents.filter(item => item.going.includes(name));
-      return goingEvents;
-    }
-  };
-
-  handleCancel = () => {
-    this.hideDateTimePicker();
-    this.setState({ eventName : "", eventTime: "", dateTime: "", dialogVisible: false });
-  };
-
-  handleDone = () => {
-    var name = this.state.eventName;  
-    if (name == "") {
-      this.invalidNameAlert();
-    } else {
-    var newDateAndTime = this.state.eventTime;
-    var events = this.state.eventsArray;
-    var time = this.state.dateTime;
-    var joined = [{key : newDateAndTime, name : name, time : time, going : []}].concat(events);
-    this.setState({ eventsArray : joined.sort((a, b) => (a.key > b.key) ? 1 : -1)}); // In Unix Timestamp Mode so that sort works correctly
-    this.hideDateTimePicker();
-    this.setState({ eventName : "", eventTime: "", dateTime: "", dialogVisible: false });
-    }
-  };
-
-  handleDatePicked = (dateTime) => {
-    var unixDateAndTime = Math.floor(dateTime.getTime() / 1000);
-    var currentTime = Math.round((new Date()).getTime() / 1000);
-    if (unixDateAndTime < currentTime) {
-      this.invalidTimeAlert(); 
-      this.hideDateTimePicker();
-    } else {
-      var today = dateTime;
-      var dd = today.getDate();
-      var mm = today.getMonth() + 1; //January is 0
-      var yyyy = today.getFullYear();
-      if (dd < 10) {
-        dd = '0' + dd;
-      } 
-      if (mm < 10) {
-        mm = '0' + mm;
-      }     
-      var h = today.getHours();
-      var m = today.getMinutes();
-      if (m < 10) {
-        m = '0' + m;
-      }
-      if (h < 10) {
-        h = '0' + h;
-      }
-      var today = dd + '/' + mm + '/' + yyyy + ' '+ h + ':' + m;
-      this.setState({eventTime : unixDateAndTime.toString()});
-      this.setState({dateTime : today});
-      this.showNameDialog();
-    }
-  };
-
-  filterByTime = () => {
-    this.readEventData1();
-    this.readDoneEventData();
-    this.writeDoneEventsData(this.state.doneEventsArray);
-  };
-
   changeButtonColour = (item) => {
     if (item.going == null) {
       var goingArray = [];
@@ -454,33 +243,6 @@ export class MyEventsScreen extends React.Component<Props> {
   render() {
     return (
       <View style={styles.mainStyle}>
-        <Modal 
-          isVisible={this.state.isModalVisible}
-          onBackdropPress={() => this.setState({ isVisible: false })}
-          onBackButtonPress={() => this.setState({ isVisible: false })}
-          backdropOpacity = {1}
-          backdropColor = {'white'}
-          coverScreen = {true}>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.completed} >Completed Events:</Text>
-            <FlatList
-              data={this.state.doneEventsArray}
-              renderItem={({item}) => (
-                <View style={styles.touchableCompleted}>
-                  <TouchableOpacity
-                  style={styles.touchableCompleted1}
-                  onPress={() => this.loadModal(item)}>
-                    <View style={styles.touchableCompletedTextView}>
-                      <Text style={{fontSize : 18}}>{item.name}</Text>
-                      <Text style={{fontSize : 12}}>{item.time}</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View> 
-              )}
-            />  
-            <Button title="Back" onPress={this.toggleModal} />
-          </View>
-        </Modal>
         <View style={styles.container}>
         < FlatList
           onRefresh={() => this.refreshData()}
@@ -501,7 +263,7 @@ export class MyEventsScreen extends React.Component<Props> {
             </View> 
           )}
         />      
-        </View>
+      </View>
       </View>
     );
   }
@@ -565,13 +327,4 @@ const styles = StyleSheet.create({
     width : Dimensions.get('window').width},
 })
 
-//const mapStateToProps = state => {
-//  return { eventsArray: test };
-//};
-
-//const mapDispatchToProps = dispatch => {
-//  dispatch(addEvents)
-//};
-
-export default MyEventsScreen
-//export default sts = connect(mapStateToProps)(MyEventsScreen)
+export default EventsScreen

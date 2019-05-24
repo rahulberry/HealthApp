@@ -3,9 +3,8 @@
 // To Do:
 // 
 // Need to add a location picker modal and show location in view on the EventInformation page
-// Need to save and initialise eventsArray, doneEvents, and account from a server or redux or whatever
 // Need to send a notification 1 hour before an event
-// Move completed events to stats and have current completed events in group, and a personal completed events in personal
+// Add getName from firebase and use that for the account
 
 import React from 'react';
 import {
@@ -18,9 +17,6 @@ import {
   Dimensions
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { createStore } from 'redux';
-import { connect } from 'react-redux';
-//import EventsReducer from '../../reducers/EventsReducer.js'
 import firebase from "firebase";
 import Fire from '../../components/PractitionerNav/Fire';
 import {
@@ -30,19 +26,10 @@ import {
 import { Button } from '../commonComponents/ButtonWithMargin';
 import Dialog from "react-native-dialog";
 import DateTimePicker from "react-native-modal-datetime-picker";
-import Modal from 'react-native-modal'
-//import { addEvents } from '../../actions';
-//import { addDoneEvents } from '../../actions';
-
-
-//const store = createStore(EventsReducer);
-//this.props.store.subscribe(() => console.log(this.prop.getState())) //.eventsArray))
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
 }
-
-var test = [];
 
 export class EventsScreen extends React.Component<Props> {
   static navigationOptions = {
@@ -64,12 +51,9 @@ export class EventsScreen extends React.Component<Props> {
     
   };
   state = {
-    isModalVisible: false,
     eventsArray: [],
     firebaseArray: [],
     dialogVisible: false,
-    doneEventsArray: [],
-    firebaseDoneArray: [],
     eventName: "",
     eventTime: "",
     dateTime: "",
@@ -81,24 +65,21 @@ export class EventsScreen extends React.Component<Props> {
   constructor(props) {
     super(props);
     this.state = {
-      isModalVisible: false,
       isDateTimePickerVisible: false,
       eventsArray: [],
       firebaseArray: [],
-      firebaseDoneArray: [],
       dialogVisible: false,
-      doneEventsArray: [], // [{key : '1525966538', name : 'Test Old Event', time : '12/06/2019 12:35', going : ['amy', 'sam'], colour : 'red'}],
       eventName: "",
       eventTime: "",
       dateTime: "",
       currentItem: {},
       isFetching: false,
-      account: 'josh' //Fire.uid
+      account: this.getUser()
     };
     this.readEventData();
   };
 
-  readEventData() {
+  readEventData = () => {
     var firebaseRef = firebase.database().ref('Events/events');
     return firebaseRef.once('value')
       .then((dataSnapshot) => {
@@ -107,6 +88,12 @@ export class EventsScreen extends React.Component<Props> {
       }
     );
   };
+
+  getUser = () => {
+    var user = 'josh'
+    // Need to grab this from firebase. Might need to change how this is implemented cause of async shit
+    return user;
+  }
 
   filterOutCurrent = (data) => {
     if (data != [] && data != null) {
@@ -128,52 +115,6 @@ export class EventsScreen extends React.Component<Props> {
     }
   }
 
-  readEventData2() {
-    var firebaseRef = firebase.database().ref('Events/events');
-    return firebaseRef.once('value')
-      .then((dataSnapshot) => {
-        console.log('test1', dataSnapshot.val());
-        console.log('data kjhhhjhj', dataSnapshot);
-        this.setState({
-          firebaseArray: dataSnapshot.val()
-        });
-      }
-    );
-  }
-
-  readDoneEventData() {
-    var firebaseRef = firebase.database().ref('Events/done');
-    return firebaseRef.once('value')
-      .then((dataSnapshot) => {
-        console.log('done', dataSnapshot.val());
-        this.setState({
-          firebaseDoneArray: dataSnapshot.val()
-        });
-      });
-  }
-
-  readEventData1() {
-    var firebaseRef = firebase.database().ref('Events/events');
-    firebaseRef.once('value')
-      .then((dataSnapshot) => {
-        var data = dataSnapshot.val();
-        console.log('data', data)
-        var currentTime = Math.round((new Date()).getTime() / 1000);
-
-        var done = this.state.firebaseDoneArray;
-
-        var allItems = data; //this.state.firebaseArray;
-        
-        let filteredItems = allItems.filter(item => item.key > currentTime);
-        let doneItems = allItems.filter(item => item.key <= currentTime);
-        var joined = done.concat(doneItems);
-        this.setState({ eventsArray: filteredItems })
-        var sortedJoined = filterByKey(joined.sort((a, b) => (a.key > b.key) ? 1 : -1))
-        this.setState({doneEventsArray : sortedJoined})
-        this.setState({isFetching : false})
-      });
-  }
-
   filterByKey = (data) => {
     const result = [];
     const map = new Map();
@@ -186,36 +127,7 @@ export class EventsScreen extends React.Component<Props> {
     return result
   }
 
-  sleep(milliseconds) {
-    var start = new Date().getTime();
-    for (var i = 0; i < 1e7; i++) {
-      if ((new Date().getTime() - start) > milliseconds){
-        break;
-      }
-    }
-  }
-
-  writeDoneEventsData(events1){
-    this.readDoneEventData();
-    if (this.state.firebaseDoneArray == null) {
-      var currentData = [];
-    } else {
-      var currentData = this.state.firebaseDoneArray;
-      }
-    console.log('test', currentData);
-    var done = this.filterByKey(currentData.concat(events1))
-    firebase.database().ref('DoneEvents/').set({
-        done
-    }).then((data)=>{
-        //success callback
-        console.log('data ' , data)
-    }).catch((error)=>{
-        //error callback
-        console.log('error ' , error)
-    })
-  };
-
-  writeEventsData(events1){
+  writeEventsData = (events1) => {
     this.readEventData();
     if (this.state.firebaseArray == null) {
       var currentData = [];
@@ -227,37 +139,27 @@ export class EventsScreen extends React.Component<Props> {
     firebase.database().ref('Events/').set({
         events
     }).then((data)=>{
-        //success callback
-        console.log('data ' , data)
+        console.log('Events written to firebase ' , data)
     }).catch((error)=>{
-        //error callback
-        console.log('error ' , error)
+        console.log('Error writing events to firebase ' , error)
     })
   };
 
-  firebaseWriteEvents = (testEvents) => {
-    var events = testEvents;
-    firebase.database().ref('Events/').set({
-        events
-    }).then((data)=>{
-        //success callback
-        console.log('Events written to firebase' , data)
-    }).catch((error)=>{
-        //error callback
-        console.log('Error writing events to firebase' , error)
-    })
-  }
-
   setTestData = () => {
-    testEvents = [
+    // This function is for debugging. It provides 2 events that have happened and two that are upcoming (as of time of coding)
+    var events = [
       {key : '1557837000', name : 'Old Test Event 1', time : '14/05/2019 12:30', going : ['gary', 'alfred', 'amy', 'josh'], colour : 'red'},
       {key : '1557857000', name : 'Another Old Test Event', time : '14/05/2019 18:03', going : ['gary', 'billy', 'amy'], colour : 'red'},
       {key : '1560342934', name : 'New Test Event 1', time : '12/06/2019 12:35', going : ['jill', 'john', 'amy', 'josh'], colour : 'red'},
       {key : '1560861334', name : 'Another New Test Event', time : '18/06/2019 12:35', going : ['gary', 'bill', 'amy'], colour : 'red'}
     ]
-    //this.setState({eventsArray : testEvents});
-    console.log('Pushing Events Array', testEvents)
-    this.firebaseWriteEvents(testEvents);
+    firebase.database().ref('Events/').set({
+        events
+    }).then((data)=>{
+        console.log('Events written to firebase ' , data)
+    }).catch((error)=>{
+        console.log('Error writing events to firebase ' , error)
+    })
   }
 
   invalidNameAlert = () => {
@@ -294,7 +196,7 @@ export class EventsScreen extends React.Component<Props> {
     )
   };
 
-  refreshData() {
+  refreshData = () => {
     var firebaseRef = firebase.database().ref('Events/events');
     firebaseRef.once('value')
       .then((dataSnapshot) => {
@@ -307,12 +209,8 @@ export class EventsScreen extends React.Component<Props> {
     );
   }
 
-  onRefresh() {
+  onRefresh = () => {
     this.setState({ isFetching: true }, function() { this.refreshData });
-  }
-
-  onRefresh1() {
-    this.setState({ isFetching: true }, function() { this.filterByTime });
   }
 
   showDateTimePicker = () => {
@@ -329,27 +227,6 @@ export class EventsScreen extends React.Component<Props> {
 
   handleInput = (input) => {
     this.setState({eventName : input.toString()});
-  };
-
-  toggleModal = () => {
-    this.setState({ isModalVisible: !this.state.isModalVisible });
-  };
-
-  loadModal = (item) => {
-    this.setState({ isModalVisible: !this.state.isModalVisible });
-    this.props.navigation.navigate('EventsInformation', {item})
-  };
-
-  deleteItem1 = (data) => {
-    this.readEventData();
-    let allItems = this.state.firebaseArray;
-    let filteredItems = allItems.filter(item => item.key != data.key);
-    this.setState({ eventsArray: filteredItems });
-
-    firebase.database().ref('Events/').remove()
-     
-    this.setState({firebaseArray: filteredItems})
-    this.writeEventsData([]);
   };
 
   deleteItem = (data) => {
@@ -426,10 +303,6 @@ export class EventsScreen extends React.Component<Props> {
     this.hideDateTimePicker();
     this.setState({ eventName : "", eventTime: "", dateTime: "", dialogVisible: false });
     }
-    //console.log(this.state.eventsArray)
-    //this.props.eventsArray = this.state.eventsArray;
-    //this.props.dispatch(addEvents(this.state.eventsArray));
-    //console.log(this.props)
   };
 
   handleDatePicked = (dateTime) => {
@@ -464,12 +337,6 @@ export class EventsScreen extends React.Component<Props> {
     }
   };
 
-  filterByTime = () => {
-    this.readEventData1();
-    this.readDoneEventData();
-    this.writeDoneEventsData(this.state.doneEventsArray);
-  };
-
   changeButtonColour = (item) => {
     if (item.going == null) {
       var goingArray = [];
@@ -487,33 +354,6 @@ export class EventsScreen extends React.Component<Props> {
   render() {
     return (
       <View style={styles.mainStyle}>
-        <Modal 
-          isVisible={this.state.isModalVisible}
-          onBackdropPress={() => this.setState({ isVisible: false })}
-          onBackButtonPress={() => this.setState({ isVisible: false })}
-          backdropOpacity = {1}
-          backdropColor = {'white'}
-          coverScreen = {true}>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.completed} >Completed Events:</Text>
-            <FlatList
-              data={this.state.doneEventsArray}
-              renderItem={({item}) => (
-                <View style={styles.touchableCompleted}>
-                  <TouchableOpacity
-                  style={styles.touchableCompleted1}
-                  onPress={() => this.loadModal(item)}>
-                    <View style={styles.touchableCompletedTextView}>
-                      <Text style={{fontSize : 18}}>{item.name}</Text>
-                      <Text style={{fontSize : 12}}>{item.time}</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View> 
-              )}
-            />  
-            <Button title="Back" onPress={this.toggleModal} />
-          </View>
-        </Modal>
         <View style={styles.container}>
         < FlatList
           onRefresh={() => this.refreshData()}
@@ -545,7 +385,7 @@ export class EventsScreen extends React.Component<Props> {
         </Dialog.Container>
       </View>
       <View style = {{flexDirection: 'row', justifyContent: 'flex-end'}}>
-        {/*<Button title="Set Firebase" onPress={this.setTestData} /> */}
+        {/* Uncomment this for debugging <Button title="Set Firebase" onPress={this.setTestData} /> */}
         <Button title="Add Event" onPress={this.showDateTimePicker} />
           <DateTimePicker
             isVisible={this.state.isDateTimePickerVisible}
@@ -617,14 +457,4 @@ const styles = StyleSheet.create({
     width : Dimensions.get('window').width},
 })
 
-
-//const mapStateToProps = state => {
-//  return { eventsArray: test };
-//};
-
-//const mapDispatchToProps = dispatch => {
-//  dispatch(addEvents)
-//};
-
 export default EventsScreen
-//export default sts = connect(mapStateToProps)(EventsScreen)

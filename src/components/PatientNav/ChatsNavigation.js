@@ -13,14 +13,11 @@ import {
   createMaterialTopTabNavigator,
   NavigationScreenProp,
   NavigationState,
-  SafeAreaView,
-  createStackNavigator,
-  createAppContainer
+  SafeAreaView
 } from 'react-navigation';
 
 import ChatsPatientScreen from './ChatsPatient';
 import ChatsDoctorScreen from './ChatsDoctor';
-import EventInformationScreen from './EventInformation'
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
@@ -53,7 +50,7 @@ const DoctorPatientChatTabs = createMaterialTopTabNavigator({
   }
 );
 
-class DoctorPatientScreen extends React.Component<Props> {
+export class DoctorPatientScreen extends React.Component<Props> {
   static router = DoctorPatientChatTabs.router;
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
@@ -71,7 +68,7 @@ class DoctorPatientScreen extends React.Component<Props> {
       horizontal: boolean;
     }) => (
       <Ionicons
-        name={focused ? 'ios-calendar' : 'ios-calendar'}
+        name={focused ? 'ios-chatboxes' : 'ios-chatboxes'}
         size={horizontal ? 20 : 26}
         style={{ color: tintColor }}
       />
@@ -126,7 +123,7 @@ const ChatsTopTab = createMaterialTopTabNavigator({
 }
 );
 
-export class ChatsTopBarScreen extends React.Component<Props> {
+class ChatsTopBarScreen extends React.Component<Props> {
   static router = ChatsTopTab.router;
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
@@ -172,4 +169,5 @@ export class ChatsTopBarScreen extends React.Component<Props> {
   }
 }
 
-export default ChatsTopBarScreen
+//export default ChatsTopBarScreen
+export default DoctorPatientScreen

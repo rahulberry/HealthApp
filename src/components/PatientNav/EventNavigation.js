@@ -59,8 +59,8 @@ class GrouPersonalScreen extends React.Component<Props> {
     LayoutAnimation.easeInEaseOut();
   }
   static navigationOptions = {
-	title : 'Upcoming Events',
-    tabBarLabel: 'Upcoming Events',
+	title : 'Events',
+    tabBarLabel: 'Events',
     tabBarIcon: ({
       tintColor,
       focused,
@@ -100,46 +100,8 @@ class GrouPersonalScreen extends React.Component<Props> {
 }
 
 
-const MainNavigator = createStackNavigator(
-  {
-    Events: {screen: GrouPersonalScreen},
-    EventsInformation: {screen: EventInformationScreen},
-  },
-  {
-    headerMode: 'none'
-  }
-);
-
-const EventNavigator = createAppContainer(MainNavigator);
-
-
-class EventNavigatorScreen extends React.Component<Props> {
-  static navigationOptions = {
-    title : 'Events',
-      tabBarLabel: 'Events',
-      tabBarIcon: ({
-        tintColor,
-        focused,
-        horizontal,
-      }: {
-        tintColor: string;
-        focused: boolean;
-        horizontal: boolean;
-      }) => (
-        <Ionicons
-          name={focused ? 'ios-calendar' : 'ios-calendar'}
-          size={horizontal ? 20 : 26}
-          style={{ color: tintColor }} />
-      ),
-    };
-    render() {
-      return <EventNavigator />;    
-    }
-  }
-
-
 const EventsTopTab = createMaterialTopTabNavigator({
-  Home : EventNavigatorScreen,
+  Home : GrouPersonalScreen,
 },
 {
   swipeEnabled: false,
@@ -164,7 +126,7 @@ const EventsTopTab = createMaterialTopTabNavigator({
 }
 );
 
-export class EventTopBarScreen extends React.Component<Props> {
+class EventTopBarScreen extends React.Component<Props> {
   static router = EventsTopTab.router;
   componentWillUpdate() {
     LayoutAnimation.easeInEaseOut();
@@ -210,4 +172,41 @@ export class EventTopBarScreen extends React.Component<Props> {
   }
 }
 
-export default EventTopBarScreen
+const MainNavigator = createStackNavigator(
+  {
+    Events: {screen: EventTopBarScreen},
+    EventsInformation: {screen: EventInformationScreen},
+  },
+  {
+    headerMode: 'none'
+  }
+);
+
+const EventNavigator = createAppContainer(MainNavigator);
+
+
+export class EventNavigatorScreen extends React.Component<Props> {
+  static navigationOptions = {
+    title : 'Events',
+      tabBarLabel: 'Events',
+      tabBarIcon: ({
+        tintColor,
+        focused,
+        horizontal,
+      }: {
+        tintColor: string;
+        focused: boolean;
+        horizontal: boolean;
+      }) => (
+        <Ionicons
+          name={focused ? 'ios-calendar' : 'ios-calendar'}
+          size={horizontal ? 20 : 26}
+          style={{ color: tintColor }} />
+      ),
+    };
+    render() {
+      return <EventNavigator />;    
+    }
+  }
+
+export default EventNavigatorScreen
