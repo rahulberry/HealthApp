@@ -68,6 +68,6 @@ This application was developed as a third year Electrical and Electronic enginee
 
 ## License
 
-This application is MIT Licensed which is found in the [LICENSE file](https://github.com/rahulberry/HealthApp/blob/master/LICENSE).
+This application is MIT Licensed which is found in the [LICENSE file](https://github.com/rahulberry/HealthApp/blob/master/LICENSE.md).
 
 
