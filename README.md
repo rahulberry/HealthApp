@@ -6,6 +6,8 @@ The Orbis Health App is an application created using react native that is design
 
 A common treatment for this disease is surgery but research shows that changes in lifestyle and exercise habits can help without requring surgery. An issue that can occur is that patients aren't motivated to exercise and therefore choose not to. In an attempt to counter this, this application provides a social platform that allows groups of patients to do exercise together. It includes a messaging system; a system for keeping track of and creating new events; detailed statistics that can be viewed and monitored by a health practitioner.
 
+View the wiki for this project [here](https://github.com/rahulberry/HealthApp/wiki).
+
 ## Contents
 - [Orbis Health App](#orbis-health-app)
   - [Contents](#contents)
