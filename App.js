@@ -10,7 +10,7 @@ const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
 
 class App extends Component {
   componentWillMount() {
-    /*var config = {
+    var config = {
       apiKey: "AIzaSyBFyNmEephAMQy6v-4-U_w7WNnXzgHdyws",
       authDomain: "healthapp-e61b2.firebaseapp.com",
       databaseURL: "https://healthapp-e61b2.firebaseio.com",
@@ -18,8 +18,11 @@ class App extends Component {
       storageBucket: "healthapp-e61b2.appspot.com",
       messagingSenderId: "613572931536"
     };
-    firebase.initializeApp(config);*/
-    
+
+      if (!firebase.apps.length) {
+          firebase.initializeApp(config);
+      }
+
   state = {
     isReady: false
   };

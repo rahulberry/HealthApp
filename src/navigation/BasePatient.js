@@ -28,14 +28,15 @@ const SimpleTabs = createMaterialTopTabNavigator({
   Events: EventNavigation,
   Home: ActivityScreen1,
   Chats: ChatsTopBarScreen,
-  Profile: ProfileScreen
+  Profile: ProfileScreen,
 },
 {
   swipeEnabled: true,
 	tabBarPosition: 'bottom',
 	initialRouteName: 'Home', //Default Tab Location
 	tabBarOptions : {
-		labelStyle: {
+        labelStyle: {
+            marginTop: 1,
 			fontSize: 11,
       fontWeight: "bold",
     },
@@ -45,9 +46,13 @@ const SimpleTabs = createMaterialTopTabNavigator({
     activeTintColor  : "#8ae2ad",
     inactiveTintColor : "grey",
 		upperCaseLabel : false,
-		showIcon : true,
+        showIcon: true,
+        iconStyle: {
+            marginTop: -3,
+        },
 		style: {
-			backgroundColor : "#f9f9f9",
+            backgroundColor: "#f9f9f9",
+            height: 49
 		}
 	}
 },
@@ -66,7 +71,7 @@ class TabNavigator extends React.Component<Props> {
     headerTintColor: "#fff",
     headerTitleStyle: {
       fontWeight: "bold"
-    },
+      },
   };
   render() {
     console.disableYellowBox = true;

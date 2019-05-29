@@ -9,6 +9,7 @@ export default class SubmitButton extends Component {
 
     _onPressButton() {
         Alert.alert('Feedback submitted successfully');
+        this.props.navigation.navigate('MainActivityPage');
     }
 
     render() {
@@ -27,7 +28,7 @@ export default class SubmitButton extends Component {
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
-        marginTop: 65
+        marginTop: 80
     },
 
     submitbutton: {

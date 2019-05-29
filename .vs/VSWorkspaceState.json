@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\components",
+    "\\src\\components\\PatientNav",
+    "\\src\\components\\PatientNav\\currentActivity",
+    "\\src\\components\\PatientNav\\feedback",
+    "\\src\\components\\PatientNav\\MainPage",
+    "\\src\\navigation"
+  ],
+  "SelectedNode": "\\src\\components\\PatientNav\\ActivityNavigation.js",
+  "PreviewInSolutionExplorer": false
+}

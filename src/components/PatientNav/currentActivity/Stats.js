@@ -41,7 +41,7 @@ export default class Stats extends Component {
 const styles = StyleSheet.create({
     container: {
         width: 265,
-        marginTop: 18,
+        marginTop: 5,
         marginLeft: 81,
         borderBottomWidth: 1,
         borderColor: '#979797'
@@ -60,8 +60,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     shoePicture: {
-        width: 58,
-        height: 23,
+        width: 50,
+        height: 41,
         marginLeft: 15,
         marginTop: 20
     },

@@ -1,29 +1,47 @@
 import React, { Component } from 'react';
-import { AppRegistry, Text, View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { AppRegistry, Text, View, StyleSheet, TouchableWithoutFeedback, Alert } from 'react-native';
 import { Image } from 'react-native-elements';
 
 import SubmitButton from './SubmitButton'
-import Slider from './Slider'
+import Slider from "react-native-slider";
+
+import firebase from 'firebase'
+
+const GREEN = '#4CD964'
+const LIMEGREEN = '#A5EE00'
+const YELLOW = '#FAEB00'
+const ORANGE = '#FF8000'
+const RED = '#FF3B30'
 
 export default class SliderFeedback extends Component {
+
+    static navigationOptions = {
+        header: null
+    }
+
     constructor(props) {
         super(props);
         this.state = {
-            reachedTarget: false,
-            pain: false,
+            completedActivity: false,
+            legPain: false,
             chestPain: false,
             fatigue: false,
-            intense: false,
-            mild: false,
-            none: false
+
+            sliderValue: 50,
+            bgColour: YELLOW,
+            image: require('./sliderImages/mild.png')
+
         };
+
+        this._onPressButton = this._onPressButton.bind(this);
+        this.setBackgroundColor = this.setBackgroundColor.bind(this);
     }
 
     checkReason = (reason) => {
         switch (reason) {
-            case 'pain':
+            case 'legPain':
                 this.setState(previousState => (
-                    { pain: !previousState.pain }
+                    { legPain: !previousState.legPain }
                 ))
                 break;
 
@@ -39,11 +57,69 @@ export default class SliderFeedback extends Component {
                 ))
                 break;
 
-            case 'reachedTarget':
+            case 'completedActivity':
                 this.setState(previousState => (
-                    { reachedTarget: !previousState.reachedTarget }
+                    { completedActivity: !previousState.completedActivity }
                 ))
         }
+    }
+
+    setBackgroundColor = (value) => {
+        if (value >= 0 && value < 20) {
+            this.setState({
+                sliderValue: value,
+                bgColour: GREEN,
+                image: require('./sliderImages/none.png')
+            });
+        }
+        else if (value >= 20 && value < 40) {
+            this.setState({
+                sliderValue: value,
+                bgColour: LIMEGREEN,
+                image: require('./sliderImages/slight.png')
+            });
+        }
+        else if (value >= 40 && value < 60) {
+            this.setState({
+                sliderValue: value,
+                bgColour: YELLOW,
+                image: require('./sliderImages/mild.png')
+            });
+        }
+        else if (value >= 60 && value < 80) {
+            this.setState({
+                sliderValue: value,
+                bgColour: ORANGE,
+                image: require('./sliderImages/painful.png')
+            });
+        }
+        else if (value >= 80 && value <= 100) {
+            this.setState({
+                sliderValue: value,
+                bgColour: RED,
+                image: require('./sliderImages/intense.png')
+            });
+        }
+    }
+
+    _onPressButton() {
+        Alert.alert('Feedback submitted successfully');
+
+        let completedActivity = this.state.completedActivity;
+        let legPain = this.state.legPain;
+        let chestPain = this.state.chestPain;
+        let fatigue = this.state.fatigue;
+        let painIntensity = Math.floor(this.state.sliderValue);
+
+        firebase.database().ref('Patients/BPlNxGZmqlY4TrqG34g64aURGop2/Feedback/').update({
+            completedActivity,
+            legPain,
+            chestPain,
+            fatigue,
+            painIntensity
+        });
+
+        this.props.navigation.navigate('MainActivityPage');
     }
 
     render() {
@@ -52,11 +128,11 @@ export default class SliderFeedback extends Component {
                 <Text style={styles.questionStyle}> Why did you end the activity? </Text>
                 <Text style={styles.selectStyle}> Select all that apply </Text>
 
-                <TouchableWithoutFeedback onPress={this.checkReason.bind(this, 'pain')}>
-                    <View style={this.state.pain ? styles.selectedButton : styles.unselectedButton}>
+                <TouchableWithoutFeedback onPress={this.checkReason.bind(this, 'legPain')}>
+                    <View style={this.state.legPain ? styles.selectedButton : styles.unselectedButton}>
                         <Image
                             style={styles.checkStyle}
-                            source={this.state.pain ? require('./images/tickedCheckBox.png') : require('./images/emptyCheckBox.png')}
+                            source={this.state.legPain ? require('./images/tickedCheckBox.png') : require('./images/emptyCheckBox.png')}
                         />
                         <Text style={styles.buttonText}>
                             Felt pain in legs
@@ -88,11 +164,11 @@ export default class SliderFeedback extends Component {
                     </View>
                 </TouchableWithoutFeedback>
 
-                <TouchableWithoutFeedback onPress={this.checkReason.bind(this, 'reachedTarget')}>
-                    <View style={this.state.reachedTarget ? styles.selectedButton : styles.unselectedButton}>
+                <TouchableWithoutFeedback onPress={this.checkReason.bind(this, 'completedActivity')}>
+                    <View style={this.state.completedActivity ? styles.selectedButton : styles.unselectedButton}>
                         <Image
                             style={styles.checkStyle}
-                            source={this.state.reachedTarget ? require('./images/tickedCheckBox.png') : require('./images/emptyCheckBox.png')}
+                            source={this.state.completedActivity ? require('./images/tickedCheckBox.png') : require('./images/emptyCheckBox.png')}
                         />
                         <Text style={styles.buttonText}>
                             Completed the activity
@@ -102,10 +178,31 @@ export default class SliderFeedback extends Component {
 
                 <Text style={styles.questionStyle}> Rate the pain in your legs: </Text>
 
-                <Slider />
+                <Image
+                    source={this.state.image}
+                    style={styles.sliderImageStyle}
+                />
 
-                <SubmitButton />
-
+                <View style={styles.sliderContainer}>
+                    <Slider
+                        value={this.state.sliderValue}
+                        minimumValue={0}
+                        maximumValue={100}
+                        trackStyle={{ height: 15, borderRadius: 100 }}
+                        thumbStyle={{ width: 30, height: 30, borderRadius: 100, backgroundColor: '#eaeaea' }}
+                        minimumTrackTintColor={this.state.bgColour}
+                        onValueChange={value => this.setBackgroundColor(value)}
+                    />
+                </View>
+                
+                <View style={styles.submitButtoncontainer}>
+                    <TouchableWithoutFeedback onPress={this._onPressButton}>
+                        <View style={styles.submitbutton}>
+                            <Text style={styles.submitButtonText}>Submit</Text>
+                        </View>
+                    </TouchableWithoutFeedback>
+                </View>
+                
             </View>
         );
     }
@@ -208,7 +305,47 @@ const styles = StyleSheet.create({
         fontSize: 13,
         fontWeight: 'bold',
         color: '#666161'
-    }
+    },
+
+    submitButtoncontainer: {
+        alignItems: 'center',
+        marginTop: 40
+    },
+
+    submitbutton: {
+        borderRadius: 40,
+        borderWidth: 3,
+        borderColor: '#8ae2ad',
+        marginTop: 20,
+        width: 184,
+        height: 44,
+        alignItems: 'center',
+        backgroundColor: '#FFFFFF'
+    },
+
+    submitButtonText: {
+        color: 'black',
+        fontWeight: 'bold',
+        fontSize: 20,
+        marginTop: 5
+    },
+
+    sliderContainer: {
+        flex: 1,
+        marginTop: 15,
+        marginLeft: 10,
+        marginRight: 10,
+        width: 250,
+        alignSelf: "center",
+        //justifyContent: "center"
+    },
+
+    sliderImageStyle: {
+        alignSelf: 'center',
+        marginTop: 20,
+        width: 100,
+        height: 100
+    },
 
 });
 

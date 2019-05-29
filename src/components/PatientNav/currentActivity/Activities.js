@@ -16,6 +16,7 @@ import {
 import EmergencyButton from './EmergencyButton'
 import CircularProgressBar from './CircularProgessBar'
 
+import firebase from 'firebase'
 //Timer imports
 import Stopwatch from './Stopwatch'
 
@@ -32,6 +33,10 @@ const LATITUDEDELTA = 0.015;
 const LONGITUDEDELTA = 0.0121;
 
 export default class Activities extends Component {
+
+    static navigationOptions = {
+        header: null,
+    }
 
     constructor(props) {
         super(props);
@@ -54,7 +59,9 @@ export default class Activities extends Component {
                 longitude: LONGITUDE,
                 latitudeDelta: LATITUDEDELTA,
                 longitudeDelta: LONGITUDEDELTA
-            })
+            }),
+            pace: 0,
+            timeElapsed: 0
         };
         this.toggleStopwatch = this.toggleStopwatch.bind(this);
         this.resetStopwatch = this.resetStopwatch.bind(this);
@@ -66,6 +73,17 @@ export default class Activities extends Component {
         if (this.state.stopwatchStart) {
             //Save the data locally first
             this.resetStopwatch();
+
+            let distanceTravelled = this.state.distanceTravelled;
+            let timeElapsed = this.state.timeElapsed;
+            let pace = this.state.pace;
+
+            firebase.database().ref('Patients/BPlNxGZmqlY4TrqG34g64aURGop2/Stats/').update({
+                distanceTravelled,
+                pace,
+                timeElapsed
+            });
+            this.props.navigation.navigate('FeedbackPage')
         }
         else {
             this.setState({ percentageCompleted: 0.3 });
@@ -109,7 +127,7 @@ export default class Activities extends Component {
                     longitude,
                     routeCoordinates: routeCoordinates.concat([newCoordinate]),
                     distanceTravelled: distanceTravelled + this.calcDistance(newCoordinate),
-                    prevLatLng: newCoordinate
+                    prevLatLng: newCoordinate,
                 });
             },
 
@@ -217,8 +235,8 @@ const options = {
         fontWeight: 'bold'
     },
     clockPicture: {
-        width: 36,
-        height: 36,
+        width: 34,
+        height: 38,
         marginLeft: 24,
         marginTop: 15
     }

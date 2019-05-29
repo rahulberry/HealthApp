@@ -17,10 +17,10 @@ import {
     SafeAreaView,
 } from 'react-navigation';
 
-import ActivityPage from './currentActivity/Activities'
-import LocationTracker from './currentActivity/LocationTracker'
-import EmergencyButton from './currentActivity/EmergencyButton'
-import SliderFeedback from './feedback/SliderFeedback'
+import ActivityNavigation from './ActivityNavigation'
+import MainActivity from './MainPage/MainActivityPage'
+import Activities from './currentActivity/Activities'
+import SliderFeedBack from './feedback/SliderFeedback'
 
 interface Props {
     navigation: NavigationScreenProp<NavigationState>;
@@ -57,12 +57,11 @@ export class ActivityScreen extends React.Component<Props> {
         )	
     });
 
+    
     render() {
-        const { navigation } = this.props;
+        const { navigation } = this.props; 
         return (
-                <SafeAreaView forceInset={{ horizontal: 'always', top: 'always' }}>
-                        <ActivityPage />
-            </SafeAreaView>
+            <ActivityNavigation />
         );
     }
 }

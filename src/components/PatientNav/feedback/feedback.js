@@ -20,7 +20,7 @@ export default class Feedback extends Component {
 
     checkReason = (reason) => {
         switch (reason) {
-            case 'pain':
+            case 'legPain':
                 this.setState(previousState => (
                     { pain: !previousState.pain }
                 ))
@@ -38,7 +38,7 @@ export default class Feedback extends Component {
                 ))
                 break;
 
-            case 'reachedTarget':
+            case 'completedActivity':
                 this.setState(previousState => (
                     { reachedTarget: !previousState.reachedTarget }
                 ))
@@ -66,7 +66,7 @@ export default class Feedback extends Component {
                 <Text style={styles.questionStyle}> Why did you end the activity? </Text>
                 <Text style={styles.selectStyle}> Select all that apply </Text>
 
-                <TouchableWithoutFeedback onPress={this.checkReason.bind(this, 'pain')}>
+                <TouchableWithoutFeedback onPress={this.checkReason.bind(this, 'legPain')}>
                     <View style={this.state.pain ? styles.selectedButton : styles.unselectedButton}>
                         <Image
                             style={styles.checkStyle}
@@ -102,7 +102,7 @@ export default class Feedback extends Component {
                     </View>
                 </TouchableWithoutFeedback>
 
-                <TouchableWithoutFeedback onPress={this.checkReason.bind(this, 'reachedTarget')}>
+                <TouchableWithoutFeedback onPress={this.checkReason.bind(this, 'completedActivity')}>
                     <View style={this.state.reachedTarget ? styles.selectedButton : styles.unselectedButton}>
                         <Image
                             style={styles.checkStyle}
