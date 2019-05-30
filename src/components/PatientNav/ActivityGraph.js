@@ -2,21 +2,33 @@
 
 import React from 'react'
 import { BarChart, XAxis, Grid } from 'react-native-svg-charts'
-import { View, ScrollView, Dimensions } from 'react-native';
+import { View, ScrollView, Dimensions, Text } from 'react-native';
 import * as scale from 'd3-scale'
+import firebase from "firebase";
 
 class ActivityGraph extends React.PureComponent {
 
     constructor(props){
       super(props);
-      this.scrollref = React.createRef();
-      this.startScroll = this.startScroll.bind(this);
+      this.state = {
+        data: [ 10, 10, 28, 60, 75, 68, 69, 24, 18, 28, 60, 75, 68, 69, 24, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 ],
+      }
+      this.getdata()
     }
 
-    startScroll() {
-      // Explicitly focus the text input using the raw DOM API
-      // Note: we're accessing "current" to get the DOM node
-      this.scrollref.current.scrollToEnd();
+    getdata(){
+      var userId = this.props.id;
+      var firebaseRef = firebase.database().ref('/Patients/Testing/' + userId);
+      return firebaseRef.once('value')
+        .then((dataSnapshot) => {
+          console.log('getting data', dataSnapshot.val());
+          this.setState({ data: dataSnapshot.val().data });
+        }
+      );
+    }
+
+    componentDidMount(){
+      //this.getdata()
     }
 
     render() {
@@ -25,7 +37,7 @@ class ActivityGraph extends React.PureComponent {
         var n = d.getDay();
 
         const day = [ 'Mon', 'Tue','Wed','Thu','Fri','Sat','Sun' ]
-        const dataset = [ 24, 56, 28, 60, 75, 68, 69, 24, 18, 28, 60, 75, 68, 69, 24, 15, 28, 60, 75, 68, 69, 24, 15, 28, 60, 75, 68, 69 ]
+        const dataset = this.state.data
 
 
         var colour = ["#7ccc9c"]
@@ -37,13 +49,6 @@ class ActivityGraph extends React.PureComponent {
             colour.push("#7ccc9c")
           }
         }
-
-
-        // if (2 > 1) {
-        //   colour = ['rgb(138,226,173)']
-        // } else {
-        //   colour = ['rgb(138,126,173)']
-        // }
 
         const data1 = [ dataset[0] ]
           .map((value) => ({ value }))
@@ -278,7 +283,8 @@ class ActivityGraph extends React.PureComponent {
         return (
             <ScrollView horizontal={true}
                         snapToAlignment = 'end'
-                        ref={this.scrollref} >
+                        ref= "scrollref"
+                        onContentSizeChange={()=> this.refs.scrollref.scrollToEnd()}>
                 <BarChart
                     style={ { height: 0.4 * Dimensions.get('window').width, width: (Dimensions.get('window').width)*4, } }
                     data={ barData }
@@ -299,6 +305,7 @@ class ActivityGraph extends React.PureComponent {
                     labelStyle={ { color: 'black' } }
                 />
                 </BarChart>
+
               </ScrollView>
         )
     }
