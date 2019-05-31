@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { AppRegistry, StyleSheet, Text, View, Image, ScrollView, TouchableWithoutFeedback } from 'react-native'
+import { AppRegistry, StyleSheet, Text, View, Image, ScrollView, TouchableWithoutFeedback, Dimensions } from 'react-native'
 
 import ProgressBar from './ProgressBar'
 
@@ -8,6 +8,8 @@ import MainPageStats from './MainPageStats'
 import PatientPlaceHolder from './PatientPlaceHolder'
 
 import PlacesVisitedPlaceHolder from './PlacesVisitedPlaceHolder'
+
+import { Header } from '../Header'
 
 const icons = {
     flag: require('./Images/Icons/flag.png'),
@@ -144,6 +146,11 @@ export default class MainActivityPage extends Component {
 
     render() {
         return (
+            <View>
+                <Header 
+                    title="Activities" 
+                    emergencyButton= {true}
+                    />
             <ScrollView>
                 <View style={{ marginTop: 20, marginBottom: 20 }}>
                     <ProgressBar data={patientData} />
@@ -253,6 +260,7 @@ export default class MainActivityPage extends Component {
                 </View>
 
             </ScrollView>
+            </View>
         );
     }
 }
@@ -265,6 +273,21 @@ const styles = StyleSheet.create({
         position: 'absolute',
         alignSelf: 'center'
     },
+
+    headerStyle: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: Dimensions.get('window').width, 
+        height: 0.1 * Dimensions.get('window').height, 
+        backgroundColor: '#8ae2ad',
+        alignItems : 'center'
+    },
+    titleStyle: {
+        fontSize : 30, 
+        fontWeight : 'bold', 
+        color: 'white'
+    },
+
     percentText: {
         position: 'absolute',
         fontSize: 50,

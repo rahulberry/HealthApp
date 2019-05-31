@@ -46,9 +46,9 @@ export class ProfileScreen extends React.Component<Props> {
     render() {
         const { navigation } = this.props;
         return (
-            <SafeAreaView forceInset={{ horizontal: 'always', top: 'always' }}>
+            <View forceInset={{ horizontal: 'always', top: 'always' }}>
                 <Profile />
-            </SafeAreaView>
+            </View>
         );
     }
 }

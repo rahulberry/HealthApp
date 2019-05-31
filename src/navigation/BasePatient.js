@@ -18,7 +18,7 @@ interface Props {
 }
 
 import EventNavigation from '../components/PatientNav/EventNavigation'; //The thing that is actually imported is EventTopBarScreen
-import ActivityScreen1 from '../components/PatientNav/Activities1';
+import ActivityScreen1 from '../components/PatientNav/MainPage/MainActivityPage';
 import ChatsTopBarScreen from '../components/PatientNav/ChatsNavigation';
 import ProfileScreen from '../components/PatientNav/Profile';
 import StatsNavigation from '../components/PatientNav/StatsNavigation';

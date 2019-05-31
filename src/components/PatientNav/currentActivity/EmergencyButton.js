@@ -45,9 +45,11 @@ const styles = StyleSheet.create({
         borderRadius: 18,
         alignItems: 'center',
         justifyContent: 'center',
-        marginLeft: 'auto',
+        //marginLeft: 'auto',
+        marginLeft: 20,
         marginRight: 20,
-        marginTop: 0,
+        //marginTop: 0,
+        marginTop: 20,
         marginBottom: 20
     }
 })
