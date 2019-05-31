@@ -11,40 +11,7 @@ import {
 import firebase from 'firebase';
 
 var data = [
-  {
-    name: 'test',
-    members: '7 members',
-    last_active: '2 days ago'
-  },
-  {
-    name: 'test',
-    members: '7 members',
-    last_active: '2 days ago'
-  },{
-    name: 'test',
-    members: '7 members',
-    last_active: '2 days ago'
-  },{
-    name: 'test',
-    members: '7 members',
-    last_active: '2 days ago'
-  },{
-    name: 'test',
-    members: '7 members',
-    last_active: '2 days ago'
-  },{
-    name: 'test',
-    members: '7 members',
-    last_active: '2 days ago'
-  },{
-    name: 'test',
-    members: '7 members',
-    last_active: '2 days ago'
-  },{
-    name: 'test',
-    members: '7 members',
-    last_active: '2 days ago'
-  },
+  
 ];
 var name, members, last_active
 interface Props {
@@ -65,7 +32,7 @@ export default class GroupsList extends React.Component<Props>{
       loading: true
     };
 
-    this.PatientsRef = firebase.database().ref('/Groups/')
+    this.PatientsRef = firebase.database().ref('/Doctors/' + firebase.auth().currentUser.uid + '/Patients/')
 
     this.listenForItems(this.PatientsRef);
     console.log(this.PatientsRef);
@@ -79,9 +46,7 @@ export default class GroupsList extends React.Component<Props>{
       snap.forEach(child => {
        // if (child.val().email != user.email)
           data.push({
-            name: child.val().gname,
-            members: child.val().members,
-            last_active: child.val().lastactive
+            name: child.val().name,
           });
       });
       console.log(items)
@@ -99,7 +64,7 @@ export default class GroupsList extends React.Component<Props>{
       }: {
         navigation: NavigationScreenProp<NavigationState>;
       }) => ({
-        title: 'Groups',
+        title: 'Patients',
         tabBarIcon: ({
           tintColor,
           focused,

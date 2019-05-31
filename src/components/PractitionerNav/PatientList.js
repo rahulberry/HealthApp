@@ -61,7 +61,7 @@ export default class PatientList extends Component {
       loading: true
     };
     
-    this.PatientsRef = firebase.database().ref('/Doctors/tLAXPicI6ZW9oobeqTH7efu4TE42/Patients/');
+    this.PatientsRef = firebase.database().ref('/Doctors/' + firebase.auth().currentUser.uid + '/Patients/');
   } 
 
   listenForItems(PatientsRef) {
@@ -135,6 +135,11 @@ export default class PatientList extends Component {
           dataSource={this.state.dataSource}
           renderRow={this.renderRow}
         />
+        <TouchableOpacity>
+          <Text>
+            Add Patient
+          </Text>
+        </TouchableOpacity>
       </SafeAreaView>
     );
   }

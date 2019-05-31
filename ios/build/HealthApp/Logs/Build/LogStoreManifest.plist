@@ -5,6 +5,36 @@
 	<key>logFormatVersion</key>
 	<integer>9</integer>
 	<key>logs</key>
-	<dict/>
+	<dict>
+		<key>297DBEEA-CFDB-4099-8A14-17A4C22F3758</key>
+		<dict>
+			<key>className</key>
+			<string>IDECommandLineBuildLog</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>297DBEEA-CFDB-4099-8A14-17A4C22F3758.xcactivitylog</string>
+			<key>highLevelStatus</key>
+			<string>S</string>
+			<key>schemeIdentifier-containerName</key>
+			<string>HealthApp project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>HealthApp</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Building project HealthApp with scheme HealthApp and configuration Debug</string>
+			<key>timeStartedRecording</key>
+			<real>580775514.78280199</real>
+			<key>timeStoppedRecording</key>
+			<real>580775528.59664905</real>
+			<key>title</key>
+			<string>Building project HealthApp with scheme HealthApp and configuration Debug</string>
+			<key>uniqueIdentifier</key>
+			<string>297DBEEA-CFDB-4099-8A14-17A4C22F3758</string>
+		</dict>
+	</dict>
 </dict>
 </plist>
