@@ -30,7 +30,7 @@ interface Props {
 
 const DoctorPatientChatTabs = createMaterialTopTabNavigator({
     Personal : ChatsPatientScreen,
-    Group : ChatDoctorPat
+    Doctor : ChatDoctorPat
     },
     {
         swipeEnabled: true,

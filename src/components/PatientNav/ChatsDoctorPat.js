@@ -12,6 +12,28 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 var name, uid, email;
 
 export default class ChatDoctorPat extends Component {
+  static navigationOptions = {
+    title : 'Dr. Pitt',
+    headerStyle: {
+              backgroundColor: '#f4511e',
+          },
+          tabBarLabel: 'Dr. Pitt',
+          tabBarIcon: ({
+              tintColor,
+              focused,
+              horizontal,
+          }: {
+              tintColor: string;
+              focused: boolean;
+              horizontal: boolean;
+          }) => (
+              <Ionicons
+                  name={focused ? 'ios-chatboxes' : 'ios-chatboxes'} // Change these to change the icons
+                  size={horizontal ? 20 : 26}
+                  style={{ color: tintColor }}
+              />
+          )
+      };
 
   constructor(props) {
     super(props);
@@ -103,10 +125,7 @@ export default class ChatDoctorPat extends Component {
       });
     });
   }
-   onPressBack = () => {
-    this.props.navigation.goBack();
-    console.log('test')
-  };
+ 
   render() {
     return (
         <GiftedChat

@@ -19,7 +19,7 @@ const AppNav = createAppContainer(createSwitchNavigator(
     StatsNavigation
   },
   {
-    initialRouteName: 'BasePatient'
+    initialRouteName: 'AuthPatient'
   },
 
 ));
