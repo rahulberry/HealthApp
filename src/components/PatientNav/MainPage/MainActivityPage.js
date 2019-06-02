@@ -151,115 +151,115 @@ export default class MainActivityPage extends Component {
                     title="Activities" 
                     emergencyButton= {true}
                     />
-            <ScrollView>
-                <View style={{ marginTop: 20, marginBottom: 20 }}>
-                    <ProgressBar data={patientData} />
-                    <Image
-                        source={require('./Images/targets/France.png')}
-                        style={styles.flagContainer}
-                    />
-                    <Text style={styles.percentText}>73%</Text>
-                </View>
+                <ScrollView>
+                    <View style={{ marginTop: 20, marginBottom: 20 }}>
+                        <ProgressBar data={patientData} />
+                        <Image
+                            source={require('./Images/targets/France.png')}
+                            style={styles.flagContainer}
+                        />
+                        <Text style={styles.percentText}>73%</Text>
+                    </View>
 
-                <View style={styles.buttonContainer}>
-                    <TouchableWithoutFeedback onPress={this._onPressButton}>
-                        <View style={styles.startActivitybutton}>
-                            <Text style={styles.buttonText}>{"Start Walking"} </Text>
-                        </View>
-                    </TouchableWithoutFeedback>
-                </View>
+                    <View style={styles.buttonContainer}>
+                        <TouchableWithoutFeedback onPress={this._onPressButton}>
+                            <View style={styles.startActivitybutton}>
+                                <Text style={styles.buttonText}>{"Start Walking"} </Text>
+                            </View>
+                        </TouchableWithoutFeedback>
+                    </View>
 
-                <MainPageStats
-                    icon={milestones[3].image}
-                    iconStyle={iconstyles.destination}
-                    dataContext={"Destination"}
-                    metric={milestones[3].destination}
-                    showBorder={true}
-                />
-                <MainPageStats
-                    icon={icons.shoe}
-                    iconStyle={iconstyles.shoe}
-                    dataContext={"Distance covered"}
-                    data={250}
-                    metric={"km"}
-                    showBorder={true}
-                />
-                <MainPageStats
-                    icon={icons.flag}
-                    iconStyle={iconstyles.flag}
-                    dataContext={"Distance left"}
-                    data={100}
-                    metric={"km"}
-                    showBorder={false}
-                />
-                
-                <Text style={styles.subheadingStyles}>Group Members</Text>
+                    <MainPageStats
+                        icon={milestones[3].image}
+                        iconStyle={iconstyles.destination}
+                        dataContext={"Destination"}
+                        metric={milestones[3].destination}
+                        showBorder={true}
+                    />
+                    <MainPageStats
+                        icon={icons.shoe}
+                        iconStyle={iconstyles.shoe}
+                        dataContext={"Distance covered"}
+                        data={250}
+                        metric={"km"}
+                        showBorder={true}
+                    />
+                    <MainPageStats
+                        icon={icons.flag}
+                        iconStyle={iconstyles.flag}
+                        dataContext={"Distance left"}
+                        data={100}
+                        metric={"km"}
+                        showBorder={false}
+                    />
+                    
+                    <Text style={styles.subheadingStyles}>Group Members</Text>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginLeft: 5 }}>
-                    <PatientPlaceHolder
-                        profileBorder={borderStyles.patient1}
-                        profilePicture={patientData[0].image}
-                        patientName={patientData[0].name}
-                    />
-                    <PatientPlaceHolder
-                        profileBorder={borderStyles.patient2}
-                        profilePicture={patientData[1].image}
-                        patientName={patientData[1].name}
-                    />
-                    <PatientPlaceHolder
-                        profileBorder={borderStyles.patient3}
-                        profilePicture={patientData[2].image}
-                        patientName={patientData[2].name}
-                    />
-                </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 15, marginLeft: 5, marginBottom: 5 }}>
-                    <PatientPlaceHolder
-                        profileBorder={borderStyles.patient4}
-                        profilePicture={patientData[3].image}
-                        patientName={patientData[3].name}
-                    />
-                    <PatientPlaceHolder
-                        profileBorder={borderStyles.patient5}
-                        profilePicture={patientData[4].image}
-                        patientName={patientData[4].name}
-                    />
-                    <PatientPlaceHolder
-                    />
-                </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginLeft: 5 }}>
+                        <PatientPlaceHolder
+                            profileBorder={borderStyles.patient1}
+                            profilePicture={patientData[0].image}
+                            patientName={patientData[0].name}
+                        />
+                        <PatientPlaceHolder
+                            profileBorder={borderStyles.patient2}
+                            profilePicture={patientData[1].image}
+                            patientName={patientData[1].name}
+                        />
+                        <PatientPlaceHolder
+                            profileBorder={borderStyles.patient3}
+                            profilePicture={patientData[2].image}
+                            patientName={patientData[2].name}
+                        />
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 15, marginLeft: 5, marginBottom: 5 }}>
+                        <PatientPlaceHolder
+                            profileBorder={borderStyles.patient4}
+                            profilePicture={patientData[3].image}
+                            patientName={patientData[3].name}
+                        />
+                        <PatientPlaceHolder
+                            profileBorder={borderStyles.patient5}
+                            profilePicture={patientData[4].image}
+                            patientName={patientData[4].name}
+                        />
+                        <PatientPlaceHolder
+                        />
+                    </View>
 
-                <Text style={styles.subheadingStyles}>Places Visited</Text>
+                    <Text style={styles.subheadingStyles}>Places Visited</Text>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginLeft: 5, marginBottom: 5 }}>
-                    <PlacesVisitedPlaceHolder
-                        countryFlag={milestones[0].countryIcon}
-                        data={testData}
-                        destination={milestones[0].destination}/>
-                    <PlacesVisitedPlaceHolder
-                        countryFlag={milestones[1].countryIcon}
-                        data={testData}
-                        destination={milestones[1].destination} />
-                    <PlacesVisitedPlaceHolder
-                        countryFlag={milestones[2].countryIcon}
-                        data={testData}
-                        destination={milestones[2].destination} />
-                </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginLeft: 5, marginBottom: 5 }}>
+                        <PlacesVisitedPlaceHolder
+                            countryFlag={milestones[0].countryIcon}
+                            data={testData}
+                            destination={milestones[0].destination}/>
+                        <PlacesVisitedPlaceHolder
+                            countryFlag={milestones[1].countryIcon}
+                            data={testData}
+                            destination={milestones[1].destination} />
+                        <PlacesVisitedPlaceHolder
+                            countryFlag={milestones[2].countryIcon}
+                            data={testData}
+                            destination={milestones[2].destination} />
+                    </View>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop:15, marginLeft: 5, marginBottom: 5 }}>
-                    <PlacesVisitedPlaceHolder
-                        countryFlag={milestones[3].countryIcon}
-                        data={testData}
-                        destination={milestones[3].destination} />
-                    <PlacesVisitedPlaceHolder
-                        countryFlag={milestones[4].countryIcon}
-                        data={testData}
-                        destination={milestones[4].destination} />
-                    <PlacesVisitedPlaceHolder
-                        countryFlag={milestones[5].countryIcon}
-                        data={testData}
-                        destination={milestones[5].destination} />
-                </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop:15, marginLeft: 5, marginBottom: 75 }}>
+                        <PlacesVisitedPlaceHolder
+                            countryFlag={milestones[3].countryIcon}
+                            data={testData}
+                            destination={milestones[3].destination} />
+                        <PlacesVisitedPlaceHolder
+                            countryFlag={milestones[4].countryIcon}
+                            data={testData}
+                            destination={milestones[4].destination} />
+                        <PlacesVisitedPlaceHolder
+                            countryFlag={milestones[5].countryIcon}
+                            data={testData}
+                            destination={milestones[5].destination} />
+                    </View>
 
-            </ScrollView>
+                </ScrollView>
             </View>
         );
     }

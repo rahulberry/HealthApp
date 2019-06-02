@@ -7,11 +7,11 @@ import {
 } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EventInformationScreen from './EventInformation'
-import StatsScreen1 from './Stats1' 
+import StatsScreen from './Stats' 
 
 const MainNavigator = createStackNavigator(
     {
-        Stats: {screen: StatsScreen1},
+        Stats: {screen: StatsScreen},
         EventsInformation: {screen: EventInformationScreen},
     },
     {
