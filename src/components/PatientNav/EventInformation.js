@@ -15,6 +15,7 @@ import {
 } from 'react-navigation';
 //import MapView from 'react-native-maps';
 import { Button } from '../commonComponents/ButtonWithMargin';
+import { Header } from './Header'
 
 interface Props {
     navigation: NavigationScreenProp<NavigationState>;
@@ -50,6 +51,8 @@ export class EventInformationScreen extends React.Component<Props> {
         const unixTime = test.key;
         const {goBack} = this.props.navigation;
         return (
+            <View>
+            <Header title='Event Information' emergencyButton={false}/>
             <ScrollView>
                 <View >
                     <Text style={styles.title} >{title}</Text>
@@ -79,6 +82,7 @@ export class EventInformationScreen extends React.Component<Props> {
                     onPress={() => goBack()}
                     title="Back"/>
             </ScrollView>
+            </View>
         );
     }
 }

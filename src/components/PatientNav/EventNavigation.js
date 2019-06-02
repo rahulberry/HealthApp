@@ -22,9 +22,13 @@ import MyEventsScreen from './MyEvents';
 import EventsScreen from './Events';
 import EventInformationScreen from './EventInformation'
 
+import { Header } from './Header'
+
 interface Props {
     navigation: NavigationScreenProp<NavigationState>;
 }
+
+
 
 const GroupPersonalTabs = createMaterialTopTabNavigator({
     Personal : MyEventsScreen,
@@ -53,7 +57,9 @@ const GroupPersonalTabs = createMaterialTopTabNavigator({
     }
 );
 
-class GrouPersonalScreen extends React.Component<Props> {
+
+
+class GroupPersonalScreen extends React.Component<Props> {
     static router = GroupPersonalTabs.router;
     componentWillUpdate() {
         LayoutAnimation.easeInEaseOut();
@@ -85,20 +91,22 @@ class GrouPersonalScreen extends React.Component<Props> {
         return (
             <View style={{ flex: 1 }}>
                 <StatusBar barStyle="default" />
-                <SafeAreaView
+                <Header title='Events' emergencyButton={false}/>
+                <View
                     style={{ flex: 1, backgroundColor: '#8ae2ad'}}
                     forceInset={{ horizontal: 'always', top: 'always' }}
                 >
                     <View style={{flex:1, backgroundColor: 'white'}}>
                         <GroupPersonalTabs navigation={navigation} />
                     </View>
-                </SafeAreaView>
+                </View>
                 {bottom}
             </View>
         );
     }
 }
 
+/*
 
 const EventsTopTab = createMaterialTopTabNavigator({
     Home : GrouPersonalScreen,
@@ -171,10 +179,11 @@ class EventTopBarScreen extends React.Component<Props> {
         );
     }
 }
+*/
 
 const MainNavigator = createStackNavigator(
     {
-        Events: {screen: EventTopBarScreen},
+        Events: {screen: GroupPersonalScreen},
         EventsInformation: {screen: EventInformationScreen},
     },
     {

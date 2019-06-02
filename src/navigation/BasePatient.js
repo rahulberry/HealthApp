@@ -18,7 +18,7 @@ interface Props {
 }
 
 import EventNavigation from '../components/PatientNav/EventNavigation'; //The thing that is actually imported is EventTopBarScreen
-import ActivityScreen1 from '../components/PatientNav/MainPage/MainActivityPage';
+import ActivityScreen1 from '../components/PatientNav/Activities';
 import ChatsTopBarScreen from '../components/PatientNav/ChatsNavigation';
 import ProfileScreen from '../components/PatientNav/Profile';
 import StatsNavigation from '../components/PatientNav/StatsNavigation';
@@ -31,7 +31,7 @@ const SimpleTabs = createMaterialTopTabNavigator({
   Profile: ProfileScreen,
 },
 {
-  swipeEnabled: true,
+  swipeEnabled: false,
 	tabBarPosition: 'bottom',
 	initialRouteName: 'Home', //Default Tab Location
 	tabBarOptions : {

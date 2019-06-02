@@ -15,6 +15,7 @@ import {
     NavigationState,
     SafeAreaView,
 } from 'react-navigation';
+import { Header } from './Header'
 
 interface Props {
     navigation: NavigationScreenProp<NavigationState>;
@@ -81,6 +82,7 @@ export class statsScreen extends React.Component<Props> {
         let bottom = null;
         return (
             <View style={{ flex: 1 }}>
+                <Header title='Events' emergencyButton={false}/>
                 <StatusBar barStyle="default" />
                     <View style={{flex:1, backgroundColor: 'white'}}>
                         <SimpleTabs navigation={navigation} />
