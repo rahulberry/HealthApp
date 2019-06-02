@@ -10,9 +10,39 @@ import {
 } from 'react-navigation';
 import firebase from 'firebase';
 
-var data = [
-  
-];
+/*var data = [
+    {
+      name: 'test'
+    },
+    {
+      name: 'test'
+    },
+    {
+      name: 'test'
+    },
+    {
+      name: 'test'
+    },
+    {
+      name: 'test'
+    },
+    {
+      name: 'test'
+    },
+    {
+      name: 'test'
+    },
+    {
+      name: 'test'
+    },
+    {
+      name: 'test'
+    },
+    {
+      name: 'test'
+    },
+  ];*/
+
 var name, members, last_active
 interface Props {
     navigation: NavigationScreenProp<NavigationState>;
@@ -29,35 +59,37 @@ export default class GroupsList extends React.Component<Props>{
   constructor(props) {
     super(props);
     this.state = {
-      loading: true
-    };
+      loading: true,
+      data: [],
+      selected: (new Map(): Map<string, boolean>)
+  };
+}
 
-    this.PatientsRef = firebase.database().ref('/Doctors/' + firebase.auth().currentUser.uid + '/Patients/')
-
-    this.listenForItems(this.PatientsRef);
-    console.log(this.PatientsRef);
-
-  }
-
-  listenForItems(PatientsRef) {
-    PatientsRef.once("value", snap => {
-      // get children as an array
+  listenForItems() {
+    firebase.database().ref('/Doctors/' + firebase.auth().currentUser.uid + '/Patients/')
+    .once("value", snap => {
       var items = [];
+      // get children as an array
       snap.forEach(child => {
        // if (child.val().email != user.email)
-          data.push({
+          items.push({
             name: child.val().name,
           });
       });
-      console.log(items)
+      this.setState({
+        data: items,
+        loading: false
+
+      });
     });
   }
   componentDidMount() {
-    this.listenForItems(this.PatientsRef);
+    this.listenForItems();
   }
   
     renderItem = ({ item }) => {
-        return <GroupsItem item={item} navigation={this.props.navigation}  />;
+        return <GroupsItem item={item} navigation={this.props.navigation} id={item.name}   selected={!!this.state.selected.get(item.id)}
+        />;
     };
     static navigationOptions = ({
         navigation,
@@ -85,9 +117,10 @@ export default class GroupsList extends React.Component<Props>{
         return (
           <SafeAreaView>
             <FlatList
-                data={data}
+                data={this.state.data}
                 contentContainerStyle={styles.list}
                 renderItem={this.renderItem}
+                keyExtractor={item=>item.name}
                 showsVerticalScrollIndicator={false}
             />
           </SafeAreaView>

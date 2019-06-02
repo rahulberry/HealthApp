@@ -30,7 +30,7 @@ const SimpleTabs = createMaterialTopTabNavigator({
 {
   swipeEnabled: true,
 	tabBarPosition: 'bottom',
-	initialRouteName: 'Home', //Default Tab Location
+	initialRouteName: 'Patients', //Default Tab Location
 	tabBarOptions : {
 		labelStyle: {
 			fontSize: 11,
