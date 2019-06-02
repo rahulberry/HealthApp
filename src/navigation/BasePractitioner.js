@@ -17,12 +17,12 @@ interface Props {
   navigation: NavigationScreenProp<NavigationState>;
 }
 
-import PatientList from '../components/PractitionerNav/PatientList';
+import ChatsNav from '../components/PractitionerNav/ChatsNav'
 import GroupsList from '../components/PractitionerNav/GroupsList';
 import EventNavigation from '../components/PatientNav/EventNavigation'; //The thing that is actually imported is EventTopBarScreen
 
 const SimpleTabs = createMaterialTopTabNavigator({
-  Patients: PatientList,
+  Chat: ChatsNav,
   Home: GroupsList,
   Events: EventNavigation,
   
@@ -30,7 +30,7 @@ const SimpleTabs = createMaterialTopTabNavigator({
 {
   swipeEnabled: true,
 	tabBarPosition: 'bottom',
-	initialRouteName: 'Patients', //Default Tab Location
+	initialRouteName: 'Home', //Default Tab Location
 	tabBarOptions : {
 		labelStyle: {
 			fontSize: 11,

@@ -16,7 +16,6 @@ const AppNav = createAppContainer(createSwitchNavigator(
     AuthPractitioner,
     BasePatient,
     BasePractitioner,
-    ChatsDoctor,
     StatsNavigation
   },
   {

@@ -12,16 +12,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 var name, uid, email;
 
 export default class Chat extends Component {
-  static navigationOptions = {
-    headerTitle: 'fasd',
-    headerRight: (
-      <Button
-        onPress={() => alert('This is a button!')}
-        title="Info"
-        color="#fff"
-      />
-    ),
-  };
 
   constructor(props) {
     super(props);
@@ -121,20 +111,6 @@ export default class Chat extends Component {
   };
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.viewStyle}>
-        <Ionicons
-        onPress={this.onPressBack}
-        name={'arrow-dropleft'}
-        size={40}
-        style={{ 
-          color: 'white' ,
-          justifyContent: 'flex-start',
-          marginLeft: 10
-      }}
-      />
-      <Text style={styles.textStyle}>Patients </Text>
-        </View>
         <GiftedChat
         messages={this.state.messages}
         onSend={this.onSend.bind(this)}
@@ -144,7 +120,6 @@ export default class Chat extends Component {
         }}
         renderBubble={this.renderBubble}
         />
-      </View>     
     );
   }
 }
