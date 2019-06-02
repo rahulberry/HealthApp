@@ -46,17 +46,36 @@ class AuthPatient extends Component {
     this.forceUpdate;
   }
 
-  onLoginSuccess( ) {
-    if(firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid)==null){
+  onLoginSuccess() {
+    if(firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid) == null ) {
       firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/Account Details/")
-      .set({
-        'Clinic': 'null',
-      })
-      firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/Patients/")
-        .set('null') 
+        .set({
+          'age': 'null',
+          })
+      firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/Chats/")
+        .set({
+          'friends': 'null',
+          'groups': 'null',
+            'patients':'null'
+      });
     }
     this.setState({ loading: false });
-    this.props.navigation.navigate("BasePatient");
+    this.props.navigation.navigate('BasePatient');
+  }
+  
+  onCreateAccountSuccess() {
+      firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/Account Details/")
+        .set({
+          'age': 'null',
+          })
+      firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/Chats/")
+        .set({
+          'friends': 'null',
+          'groups': 'null',
+            'patients':'null'
+      });
+    this.setState({ loading: false });
+    this.props.navigation.navigate('BasePatient');
   }
 
   onSignupPress(email, confirmEmail, password, confirmPassword) {
@@ -79,7 +98,7 @@ class AuthPatient extends Component {
           firebase
             .auth()
             .createUserWithEmailAndPassword(email, password)
-            .then(this.onLoginSuccess.bind(this))
+            .then(this.onCreateAccountSuccess.bind(this))
             .catch(this.onLoginFail.bind(this))
         });
     }

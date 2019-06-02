@@ -22,7 +22,7 @@ import header, { Header } from './Header';
 import { Button } from '../commonComponents/ButtonWithMargin'
 
 import ChatsPatientScreen from './ChatsPatient';
-import ChatsDoctorScreen from './ChatsDoctor';
+import ChatDoctorPat from './ChatsDoctorPat';
 
 interface Props {
     navigation: NavigationScreenProp<NavigationState>;
@@ -30,7 +30,7 @@ interface Props {
 
 const DoctorPatientChatTabs = createMaterialTopTabNavigator({
     Personal : ChatsPatientScreen,
-    Group : ChatsDoctorScreen
+    Group : ChatDoctorPat
     },
     {
         swipeEnabled: true,

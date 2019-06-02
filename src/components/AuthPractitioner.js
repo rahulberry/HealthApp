@@ -56,6 +56,18 @@ class AuthPatient extends Component {
     this.props.navigation.navigate("BasePractitioner");
   }
 
+  onCreateAccountSuccess( ) {
+      firebase.database().ref("/Doctors/" + firebase.auth().currentUser.uid + "/Account Details/")
+      .set({
+        'Clinic': 'null',
+      })
+      firebase.database().ref("/Doctors/" + firebase.auth().currentUser.uid + "/Patients/")
+        .set('null') 
+    this.setState({ loading: false });
+    this.props.navigation.navigate("BasePractitioner");
+  }
+
+
   onSignupPress(email, confirmEmail, password, confirmPassword) {
     this.setState({ loading: true });
 
@@ -76,7 +88,7 @@ class AuthPatient extends Component {
           firebase
             .auth()
             .createUserWithEmailAndPassword(email, password)
-            .then(this.onLoginSuccess.bind(this))
+            .then(this.onCreateAccountSuccess.bind(this))
             .catch(this.onLoginFail.bind(this))
             /*.then( firebase.database().ref("/Doctors/" + firebase.auth().currentUser.uid + "/Account Details/")
             .set({
