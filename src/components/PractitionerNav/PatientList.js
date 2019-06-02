@@ -21,7 +21,6 @@ var name, uid, email;
 
 
 export default class PatientList extends Component {
-  
 
   state = {
     name: "",

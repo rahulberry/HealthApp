@@ -56,7 +56,7 @@ class AuthPatient extends Component {
         .set('null') 
     }
     this.setState({ loading: false });
-    this.props.navigation.navigate("BasePractitioner");
+    this.props.navigation.navigate("BasePatient");
   }
 
   onSignupPress(email, confirmEmail, password, confirmPassword) {
