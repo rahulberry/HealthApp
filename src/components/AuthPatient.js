@@ -46,9 +46,17 @@ class AuthPatient extends Component {
     this.forceUpdate;
   }
 
-  onLoginSuccess() {
+  onLoginSuccess( ) {
+    if(firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid)==null){
+      firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/Account Details/")
+      .set({
+        'Clinic': 'null',
+      })
+      firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/Patients/")
+        .set('null') 
+    }
     this.setState({ loading: false });
-    this.props.navigation.navigate('BasePatient');
+    this.props.navigation.navigate("BasePractitioner");
   }
 
   onSignupPress(email, confirmEmail, password, confirmPassword) {
@@ -73,17 +81,6 @@ class AuthPatient extends Component {
             .createUserWithEmailAndPassword(email, password)
             .then(this.onLoginSuccess.bind(this))
             .catch(this.onLoginFail.bind(this))
-            .then( firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/Account Details/")
-            .set({
-              'email': email,
-              'age': 'null',
-            }))
-            .then( firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/Chats/")
-            .set({
-              'friends': 'null',
-              'groups': 'null',
-              'patients':'null'
-            }));
         });
     }
   }
