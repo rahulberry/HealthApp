@@ -25,7 +25,7 @@ export default class Profile extends Component {
         return (
             <View>
                 <Header title = 'Profile' emergencyButton = {false} />
-                <ScrollView>
+                <ScrollView style={{marginBottom: 150}}>
                     <ProfilePicture />
                     <FirstRowAchievement
                         streak={this.state.sevenDayStreak}

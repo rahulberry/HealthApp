@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AppRegistry, Text, View, StyleSheet, TouchableWithoutFeedback, Alert } from 'react-native';
+import { AppRegistry, Text, View, StyleSheet, TouchableWithoutFeedback, Alert, ScrollView } from 'react-native';
 import { Image } from 'react-native-elements';
 
 import SubmitButton from './SubmitButton'
@@ -128,6 +128,7 @@ export default class SliderFeedback extends Component {
         return (
             <View>
                 <Header title='Feedback' emergencyButton={true} />
+            <ScrollView style={{marginBottom: 75}}>
                 <Text style={styles.questionStyle}> Why did you end the activity? </Text>
                 <Text style={styles.selectStyle}> Select all that apply </Text>
 
@@ -206,6 +207,7 @@ export default class SliderFeedback extends Component {
                     </TouchableWithoutFeedback>
                 </View>
                 
+            </ScrollView>
             </View>
         );
     }
@@ -312,7 +314,7 @@ const styles = StyleSheet.create({
 
     submitButtoncontainer: {
         alignItems: 'center',
-        marginTop: 40
+        marginTop: 40,
     },
 
     submitbutton: {

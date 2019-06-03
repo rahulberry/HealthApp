@@ -147,8 +147,8 @@ export default class Activities extends Component {
     render() {
         return (
             <View>
-                <Header title='Activities' EmergencyButton = {true} />
-            <ScrollView>
+                <Header title='Activities' emergencyButton = {true} />
+            <ScrollView style={{marginBottom: 75}}>
 
                 <CircularProgressBar percentage={this.state.percentageCompleted} />
 
