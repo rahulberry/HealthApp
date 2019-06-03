@@ -96,7 +96,6 @@ export default class GroupsList extends React.Component<Props>{
         item={item} navigation={this.props.navigation} 
         id={item.name}   
         selected={!!this.state.selected.get(item.id)}
-        uri={item.display_image}
         />;
     };
     static navigationOptions = ({
