@@ -18,7 +18,8 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import firebase from "firebase";
-import Fire from '../../components/PractitionerNav/Fire';
+import Fire from '../PractitionerNav/Fire';
+
 import {
     NavigationScreenProp,
     NavigationState,
@@ -48,6 +49,7 @@ export class EventsScreen extends React.Component<Props> {
         ),
         
     };
+
     state = {
         eventsArray: [],
         firebaseArray: [],
@@ -96,9 +98,8 @@ export class EventsScreen extends React.Component<Props> {
     }
 
     getUser = () => {
-        var user = 'josh'
-        // Need to grab this from firebase. Might need to change how this is implemented cause of async shit
-        return user;
+        console.log('User (current screen \'My Events\'):', firebase.auth().currentUser.displayName)
+        return firebase.auth().currentUser.displayName;
     }
 
     filterOutOld = (data) => {

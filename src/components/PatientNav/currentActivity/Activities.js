@@ -13,6 +13,8 @@ import {
     PermissionsAndroid
 } from 'react-native';
 
+import { Header } from '../Header'
+
 import EmergencyButton from './EmergencyButton'
 import CircularProgressBar from './CircularProgessBar'
 
@@ -144,6 +146,8 @@ export default class Activities extends Component {
 
     render() {
         return (
+            <View>
+                <Header title='Activities' EmergencyButton = {true} />
             <ScrollView>
 
                 <CircularProgressBar percentage={this.state.percentageCompleted} />
@@ -162,6 +166,7 @@ export default class Activities extends Component {
                     reset={this.state.stopwatchReset} />
 
             </ScrollView>
+            </View>
         );
     }
 }

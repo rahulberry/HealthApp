@@ -1,9 +1,5 @@
 // PersonalStats.js
 
-// To Do:
-//
-// Fix graphs
-
 import React from 'react';
 import {
     StyleSheet,
@@ -75,9 +71,8 @@ export class PersonalStatsScreen extends React.Component<Props> {
     };
 
     getUser = () => {
-        var user = 'josh'
-        // Need to grab this from firebase. Might need to change how this is implemented cause of async shit
-        return user;
+        console.log('User (current screen \'Events\'):', firebase.auth().currentUser.displayName)
+        return firebase.auth().currentUser.displayName;
     }
 
     filterOutCurrent = (data) => {

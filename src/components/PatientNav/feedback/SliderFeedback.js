@@ -7,6 +7,8 @@ import Slider from "react-native-slider";
 
 import firebase from 'firebase'
 
+import { Header } from '../Header'
+
 const GREEN = '#4CD964'
 const LIMEGREEN = '#A5EE00'
 const YELLOW = '#FAEB00'
@@ -125,6 +127,7 @@ export default class SliderFeedback extends Component {
     render() {
         return (
             <View>
+                <Header title='Feedback' emergencyButton={true} />
                 <Text style={styles.questionStyle}> Why did you end the activity? </Text>
                 <Text style={styles.selectStyle}> Select all that apply </Text>
 

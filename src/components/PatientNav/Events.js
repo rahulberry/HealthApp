@@ -98,9 +98,8 @@ export class EventsScreen extends React.Component<Props> {
     }
 
     getUser = () => {
-        var user = 'josh'
-        // Need to grab this from firebase. Might need to change how this is implemented cause of async shit
-        return user;
+        console.log('User (current screen \'Events\'):', firebase.auth().currentUser.displayName)
+        return firebase.auth().currentUser.displayName;
     }
 
     filterOutCurrent = (data) => {
@@ -157,10 +156,10 @@ export class EventsScreen extends React.Component<Props> {
     setTestData = () => {
         // This function is for debugging. It provides 2 events that have happened and two that are upcoming (as of time of coding)
         var events = [
-            {key : '1557837000', name : 'Old Test Event 1', time : '14/05/2019 12:30', going : ['gary', 'alfred', 'amy', 'josh'], colour : 'red'},
-            {key : '1557857000', name : 'Another Old Test Event', time : '14/05/2019 18:03', going : ['gary', 'billy', 'amy'], colour : 'red'},
-            {key : '1560342934', name : 'New Test Event 1', time : '12/06/2019 12:35', going : ['jill', 'john', 'amy', 'josh'], colour : 'red'},
-            {key : '1560861334', name : 'Another New Test Event', time : '18/06/2019 12:35', going : ['gary', 'bill', 'amy'], colour : 'red'}
+            {key : '1557837000', name : 'Old Test Event 1', time : '14/05/2019 12:30', going : ['Gary', 'Alfred', 'Amy', 'Josh'], colour : 'red'},
+            {key : '1557857000', name : 'Another Old Test Event', time : '14/05/2019 18:03', going : ['Gary', 'Billy', 'Amy'], colour : 'red'},
+            {key : '1560342934', name : 'New Test Event 1', time : '12/06/2019 12:35', going : ['Jill', 'John', 'Amy', 'Josh'], colour : 'red'},
+            {key : '1560861334', name : 'Another New Test Event', time : '18/06/2019 12:35', going : ['Gary', 'Bill', 'Amy'], colour : 'red'}
         ]
         firebase.database().ref('Events/').set({
                 events
