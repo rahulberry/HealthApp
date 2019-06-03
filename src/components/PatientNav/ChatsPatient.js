@@ -9,6 +9,7 @@ import {
 } from 'react-navigation';
 import { GiftedChat, Bubble } from "react-native-gifted-chat";
 import Fire from '../PractitionerNav/Fire';
+import firebase from 'firebase'
 
 interface Props {
     name?: 'string',
@@ -46,7 +47,7 @@ export class ChatsPatientScreen extends React.Component<Props> {
 
         get user() {
         return {
-          name: 'john',
+          name: firebase.auth().currentUser.displayName,
           _id: Fire.shared.uid,
         };
       }

@@ -65,6 +65,9 @@ class AuthPatient extends Component {
           'groups': 'null',
           'patients':'null'
       });
+      firebase.auth().currentUser.updateProfile({
+        displayName: this.state.name
+      })
     this.setState({ loading: false });
     this.props.navigation.navigate('BasePatient');
   }
