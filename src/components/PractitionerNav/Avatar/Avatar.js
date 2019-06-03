@@ -16,7 +16,7 @@ export default class Avatar extends Component {
                     <Icon name="face" size={64} color="grey" />
                 ) : (
                     <Image
-                        source={uri ? { uri: uri } : Images.profile.avatar}
+                        source={{uri: uri}}
                         style={large ? styles.avatarLarge : styles.avatar}
                     />
                 )}

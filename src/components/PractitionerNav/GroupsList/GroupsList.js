@@ -77,10 +77,13 @@ export default class GroupsList extends React.Component<Props>{
             display_image: child.val().display_image
           });
       });
+      items.push({
+        name: 'Add Patient',
+        display_image: 'https://cdn4.iconfinder.com/data/icons/avatars-circle-2/72/142-512.png'
+      })
       this.setState({
         data: items,
         loading: false
-
       });
     });
   }
@@ -89,7 +92,11 @@ export default class GroupsList extends React.Component<Props>{
   }
   
     renderItem = ({ item }) => {
-        return <GroupsItem item={item} navigation={this.props.navigation} id={item.name}   selected={!!this.state.selected.get(item.id)}
+        return <GroupsItem 
+        item={item} navigation={this.props.navigation} 
+        id={item.name}   
+        selected={!!this.state.selected.get(item.id)}
+        uri={item.display_image}
         />;
     };
     static navigationOptions = ({

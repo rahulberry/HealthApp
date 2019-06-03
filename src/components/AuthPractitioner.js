@@ -32,7 +32,6 @@ class AuthPatient extends Component {
       .signInWithEmailAndPassword(email, password)
       .then(this.onLoginSuccess.bind(this))
       .catch(() => {
-        
           this.onLoginFail();
       });
   }
@@ -61,20 +60,29 @@ class AuthPatient extends Component {
   onCreateAccountSuccess( ) {
       firebase.database().ref("/Doctors/" + firebase.auth().currentUser.uid + "/Account Details/")
       .set({
-        name: this.state.name,
-        email: this.state.email
+        'name': this.state.name,
+        'email': this.state.email
       })
       firebase.auth().currentUser.updateProfile({
         displayName: this.state.name
       })
       firebase.database().ref("/Doctors/" + firebase.auth().currentUser.uid + "/Patients/")
-        .set('null') 
+        .set({
+          '1234123412': {
+            'name': 'asdaf',
+            'email': 'asdfa'
+          },
+          '1234123': {
+            'name': 'asdaf',
+            'email': 'asdfa'
+          }
+        }) 
     this.setState({ loading: false });
     this.props.navigation.navigate("BasePractitioner");
   }
 
 
-  onSignupPress(email, confirmEmail, password, confirmPassword) {
+  onSignupPress(email, confirmEmail, password, confirmPassword, name) {
     this.setState({ loading: true });
 
     if (email != confirmEmail) {

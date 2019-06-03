@@ -16,11 +16,8 @@ export default class GroupItem extends Component {
             <Card style={styles.card} onPress={this.onPress}>
                 <View style={styles.cardView}>
                     <View style={styles.nameView}>
-                        <Avatar large uri={'https://image.flaticon.com/icons/svg/219/219981.svg'} />
+                        <Avatar large uri={'https://cdn4.iconfinder.com/data/icons/avatars-circle-2/72/142-512.png'} />
                         <Text style={styles.nameText}>{item.name}</Text>
-                        <Text style={styles.last}>
-                            Active {item.last_active}
-                        </Text>
                     </View>
                     <View style={styles.footer}>
                         <Text numberOflines={2} style={styles.members}>

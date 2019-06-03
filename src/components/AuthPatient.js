@@ -59,11 +59,10 @@ class AuthPatient extends Component {
           'name': this.state.name,
           'email': this.state.email
           })
-      firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/Chats/")
+      firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/DoctorInfo/")
         .set({
-          'friends': 'null',
-          'groups': 'null',
-          'patients':'null'
+          'name': 'Dr. Pitt',
+          'uid': 'nVyOFGjdBTen4shIr0zz4R3APGi2'
       });
       firebase.auth().currentUser.updateProfile({
         displayName: this.state.name

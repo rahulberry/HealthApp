@@ -12,7 +12,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 var name, uid, email;
 
 export default class Chat extends Component {
-
+    
   constructor(props) {
     super(props);
     this.state = {
