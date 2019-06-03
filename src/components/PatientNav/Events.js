@@ -76,7 +76,8 @@ export class EventsScreen extends React.Component<Props> {
             isFetching: false,
             account: this.getUser()
         };
-        this.readEventData();
+        //this.readEventData();
+        this.realtimeEventsRefresh();
     };
 
     readEventData = () => {
@@ -88,6 +89,13 @@ export class EventsScreen extends React.Component<Props> {
             }
         );
     };
+
+    realtimeEventsRefresh() {
+        var firebaseRef = firebase.database().ref('Events/events');
+        firebaseRef.on("value", (snapshot) => {
+            this.setState({ eventsArray: snapshot.val() });
+      });
+    }
 
     getUser = () => {
         var user = 'josh'
@@ -143,6 +151,7 @@ export class EventsScreen extends React.Component<Props> {
         }).catch((error)=>{
                 console.log('Error writing events to firebase ' , error)
         })
+        this.readEventData();
     };
 
     setTestData = () => {
@@ -274,13 +283,20 @@ export class EventsScreen extends React.Component<Props> {
             item.going = joined;
         }
 
+        /*
         firebase.database().ref('Events/').remove()
             .then(()=>{
                 this.setState({firebaseArray: this.state.eventsArray})
                 this.writeEventsData([]);
             })
+        */
+        
+        var events = this.state.eventsArray;
+        firebase.database().ref('Events/').update({
+            events,
+        })
 
-        this.setState({isFetching : this.state.isFetching});
+        //this.setState({isFetching : this.state.isFetching});
     };
 
     handleCancel = () => {
@@ -385,7 +401,7 @@ export class EventsScreen extends React.Component<Props> {
                 </Dialog.Container>
             </View>
             <View style = {{flexDirection: 'row', justifyContent: 'flex-end'}}>
-                {/* Uncomment this for debugging <Button title="Set Firebase" onPress={this.setTestData} /> */}
+                {/* Uncomment this for debugging */}<Button title="Set Firebase" onPress={this.setTestData} />{/* */}
                 <Button title="Add Event" onPress={this.showDateTimePicker} />
                     <DateTimePicker
                         isVisible={this.state.isDateTimePickerVisible}
