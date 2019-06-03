@@ -1,9 +1,6 @@
 import React, { Component } from "react";
 import {
   StyleSheet,
-  View, 
-  Button,
-  Text
 } from "react-native";
 import { GiftedChat, Bubble} from "react-native-gifted-chat";
 import firebase from  'firebase';

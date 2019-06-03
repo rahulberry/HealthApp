@@ -25,7 +25,8 @@ export default class PatientList extends Component {
   state = {
     name: "",
     uid: null,
-    email: ""
+    email: "",
+    display: ''
   };
   constructor(props) {
     super(props);
@@ -48,7 +49,8 @@ export default class PatientList extends Component {
           items.push({
             name: child.val().name,
             uid: child.val().uid,
-            email: child.val().email
+            email: child.val().email,
+            display: child.val().display_image
           });
       });
 
@@ -86,7 +88,7 @@ export default class PatientList extends Component {
         <View style={styles.profileContainer}>
           <Image
             source={{
-              uri: "https://www.limestone.edu/sites/default/files/user-icon.png"
+              uri: rowData.display
             }}
             style={styles.profileImage}
           />
@@ -98,7 +100,7 @@ export default class PatientList extends Component {
 
   render() {
     const { navigation } = this.props;
-
+    
     return (
       <SafeAreaView style={styles.container}> 
         <View>

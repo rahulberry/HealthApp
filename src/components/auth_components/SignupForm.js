@@ -16,6 +16,7 @@ export default class SignupForm extends Component {
   // }
 
   state = {
+    name: '',
     email: '',
     confirmEmail: '',
     password: '',
@@ -33,12 +34,24 @@ export default class SignupForm extends Component {
   }
 
   render () {
-    const { email, confirmEmail, password, confirmPassword } = this.state
+    const { name, email, confirmEmail, password, confirmPassword } = this.state
     const { isLoading, onLoginLinkPress, onSignupPress } = this.props
-    const isValid = email !== '' && password !== '' && confirmEmail !== '' && confirmPassword !== ''
+    const isValid = email !== '' && password !== '' && confirmEmail !== '' && confirmPassword !== '' && name !== ''
     return (
       <View style={styles.container}>
         <View style={styles.form} ref={(ref) => this.formRef = ref}>
+        <CustomTextInput
+            ref={(ref) => this.nameInputRef = ref}
+            placeholder={'Name'}
+            keyboardType={'email-address'}
+            editable={!isLoading}
+            returnKeyType={'next'}
+            blurOnSubmit={false}
+            withRef={true}
+            onSubmitEditing={() => this.emailInputRef.focus()}
+            onChangeText={(value) => this.setState({ name: value })}
+            isEnabled={!isLoading}
+          />
           <CustomTextInput
             ref={(ref) => this.emailInputRef = ref}
             placeholder={'Email'}
@@ -88,7 +101,7 @@ export default class SignupForm extends Component {
         <View style={styles.footer}>
           <View ref={(ref) => this.buttonRef = ref} animation={'bounceIn'} duration={600} delay={400}>
             <CustomButton
-              onPress={() => onSignupPress(email, confirmEmail, password, confirmPassword)}
+              onPress={() => onSignupPress(email, confirmEmail, password, confirmPassword, name)}
               isEnabled={isValid}
               isLoading={isLoading}
               buttonStyle={styles.createAccountButton}

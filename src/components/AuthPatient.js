@@ -23,6 +23,8 @@ const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 class AuthPatient extends Component {
   state = {
     visibleForm: null, // Can be: null | SIGNUP | LOGIN
+    email: '',
+    name: '',
     loading: false
   };
 
@@ -47,18 +49,6 @@ class AuthPatient extends Component {
   }
 
   onLoginSuccess() {
-    if(firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid) == null ) {
-      firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/Account Details/")
-        .set({
-          'age': 'null',
-          })
-      firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/Chats/")
-        .set({
-          'friends': 'null',
-          'groups': 'null',
-            'patients':'null'
-      });
-    }
     this.setState({ loading: false });
     this.props.navigation.navigate('BasePatient');
   }
@@ -66,19 +56,20 @@ class AuthPatient extends Component {
   onCreateAccountSuccess() {
       firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/Account Details/")
         .set({
-          'age': 'null',
+          'name': this.state.name,
+          'email': this.state.email
           })
       firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/Chats/")
         .set({
           'friends': 'null',
           'groups': 'null',
-            'patients':'null'
+          'patients':'null'
       });
     this.setState({ loading: false });
     this.props.navigation.navigate('BasePatient');
   }
 
-  onSignupPress(email, confirmEmail, password, confirmPassword) {
+  onSignupPress(email, confirmEmail, password, confirmPassword, name) {
     this.setState({ loading: true });
 
     if (email != confirmEmail) {
@@ -98,6 +89,11 @@ class AuthPatient extends Component {
           firebase
             .auth()
             .createUserWithEmailAndPassword(email, password)
+            .then(this.setState({
+                email: email,
+                name: name
+            }))
+            .then(console.log(this.state.name))
             .then(this.onCreateAccountSuccess.bind(this))
             .catch(this.onLoginFail.bind(this))
         });

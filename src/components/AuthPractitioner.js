@@ -20,7 +20,9 @@ const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 class AuthPatient extends Component {
   state = {
     visibleForm: null, // Can be: null | SIGNUP | LOGIN
-    loading: false
+    loading: false,
+    email: '',
+    name: ''
   };
 
   onLoginPress(email, password) {
@@ -59,7 +61,8 @@ class AuthPatient extends Component {
   onCreateAccountSuccess( ) {
       firebase.database().ref("/Doctors/" + firebase.auth().currentUser.uid + "/Account Details/")
       .set({
-        'Clinic': 'null',
+        name: this.state.name,
+        email: this.state.email
       })
       firebase.database().ref("/Doctors/" + firebase.auth().currentUser.uid + "/Patients/")
         .set('null') 
@@ -88,18 +91,12 @@ class AuthPatient extends Component {
           firebase
             .auth()
             .createUserWithEmailAndPassword(email, password)
+            .then(this.setState({
+              email: email,
+              name: name
+            }))
             .then(this.onCreateAccountSuccess.bind(this))
             .catch(this.onLoginFail.bind(this))
-            /*.then( firebase.database().ref("/Doctors/" + firebase.auth().currentUser.uid + "/Account Details/")
-            .set({
-              'email': email,
-              'Clinic': 'null',
-            }))
-            .then( firebase.database().ref("/Doctors/" + firebase.auth().currentUser.uid + "/Chats/")
-            .set({
-              'groups': 'null',
-              'patients':'null'
-            }));*/
         });
     }
   }

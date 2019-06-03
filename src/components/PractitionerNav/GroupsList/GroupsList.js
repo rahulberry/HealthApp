@@ -74,6 +74,7 @@ export default class GroupsList extends React.Component<Props>{
        // if (child.val().email != user.email)
           items.push({
             name: child.val().name,
+            display_image: child.val().display_image
           });
       });
       this.setState({
