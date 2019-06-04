@@ -10,7 +10,7 @@ export default class ProgressBar extends Component {
         return (
             <PieChart
                 style={{ height: 300 }}
-                valueAccessor={({ item }) => item.distanceTravelled}
+                valueAccessor={({ item }) => item.amount}
                 data={data}
                 innerRadius={"90%"}
                 padAngle={0}

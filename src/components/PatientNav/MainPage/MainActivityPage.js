@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { AppRegistry, StyleSheet, Text, View, Image, ScrollView, TouchableWithoutFeedback, Dimensions } from 'react-native'
+import { AppRegistry, StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native'
 
 import ProgressBar from './ProgressBar'
 
@@ -7,7 +7,9 @@ import MainPageStats from './MainPageStats'
 
 import PatientPlaceHolder from './PatientPlaceHolder'
 
-import PlacesVisitedPlaceHolder from './PlacesVisitedPlaceHolder'
+import Modal from './Modal'
+import LandmarksReachedLondon from './LandnmarksReachedLondon'
+import LandmarksReachedBerlin from './LandmarkReachedBerlin'
 
 import { Header } from '../Header'
 
@@ -17,68 +19,261 @@ const icons = {
     shoe: require('./Images/Icons/shoe.png'),
 }
 
-const testData = [
+var LondonData = [
     {
         key: 1,
-        amount: 50,
+        amount: 0,
+        name: "",
         svg: { fill: '#E28A8A' },
     },
     {
         key: 2,
-        amount: 50,
+        amount: 0,
+        name: "",
         svg: { fill: '#E2D88A' }
     },
     {
         key: 3,
-        amount: 40,
+        amount: 0,
+        name: "",
         svg: { fill: '#8AE2AD' }
     },
     {
         key: 4,
-        amount: 95,
+        amount: 0,
+        name: "",
         svg: { fill: '#8AB6E2' }
     },
     {
         key: 5,
-        amount: 35,
+        amount: 0,
+        name: "",
         svg: { fill: '#C78AE2' },
-    }
+    },
+    {
+        key: 6,
+        amount: 8370,
+        name: "distanceLeft",
+        svg: { fill: '#ECECEC' },
+    },
+];
+
+var BerlinData = [
+    {
+        key: 1,
+        amount: 0,
+        name: "",
+        svg: { fill: '#E28A8A' },
+    },
+    {
+        key: 2,
+        amount: 0,
+        name: "",
+        svg: { fill: '#E2D88A' }
+    },
+    {
+        key: 3,
+        amount: 0,
+        name: "",
+        svg: { fill: '#8AE2AD' }
+    },
+    {
+        key: 4,
+        amount: 0,
+        name: "",
+        svg: { fill: '#8AB6E2' }
+    },
+    {
+        key: 5,
+        amount: 0,
+        name: "",
+        svg: { fill: '#C78AE2' },
+    },
+    {
+        key: 6,
+        amount: 13300,
+        name: "distanceLeft",
+        svg: { fill: '#ECECEC' },
+    },
+];
+
+var RomeData = [
+    {
+        key: 1,
+        amount: 0,
+        name: "",
+        svg: { fill: '#E28A8A' },
+    },
+    {
+        key: 2,
+        amount: 0,
+        name: "",
+        svg: { fill: '#E2D88A' }
+    },
+    {
+        key: 3,
+        amount: 0,
+        name: "",
+        svg: { fill: '#8AE2AD' }
+    },
+    {
+        key: 4,
+        amount: 0,
+        name: "",
+        svg: { fill: '#8AB6E2' }
+    },
+    {
+        key: 5,
+        amount: 0,
+        name: "",
+        svg: { fill: '#C78AE2' },
+    },
+    {
+        key: 6,
+        amount: 14000,
+        name: "distanceLeft",
+        svg: { fill: '#ECECEC' },
+    },
+];
+
+var ParisData = [
+    {
+        key: 1,
+        amount: 0,
+        name: "",
+        svg: { fill: '#E28A8A' },
+    },
+    {
+        key: 2,
+        amount: 0,
+        name: "",
+        svg: { fill: '#E2D88A' }
+    },
+    {
+        key: 3,
+        amount: 0,
+        name: "",
+        svg: { fill: '#8AE2AD' }
+    },
+    {
+        key: 4,
+        amount: 0,
+        name: "",
+        svg: { fill: '#8AB6E2' }
+    },
+    {
+        key: 5,
+        amount: 0,
+        name: "",
+        svg: { fill: '#C78AE2' },
+    },
+    {
+        key: 6,
+        amount: 15000,
+        name: "distanceLeft",
+        svg: { fill: '#ECECEC' },
+    },
+];
+
+var MadridData = [
+    {
+        key: 1,
+        amount: 0,
+        name: "",
+        svg: { fill: '#E28A8A' },
+    },
+    {
+        key: 2,
+        amount: 0,
+        name: "",
+        svg: { fill: '#E2D88A' }
+    },
+    {
+        key: 3,
+        amount: 0,
+        name: "",
+        svg: { fill: '#8AE2AD' }
+    },
+    {
+        key: 4,
+        amount: 0,
+        name: "",
+        svg: { fill: '#8AB6E2' }
+    },
+    {
+        key: 5,
+        amount: 0,
+        name: "",
+        svg: { fill: '#C78AE2' },
+    },
+    {
+        key: 6,
+        amount: 16000,
+        name: "distanceLeft",
+        svg: { fill: '#ECECEC' },
+    },
+];
+
+var LisbonData = [
+    {
+        key: 1,
+        amount: 0,
+        name: "",
+        svg: { fill: '#E28A8A' },
+    },
+    {
+        key: 2,
+        amount: 0,
+        name: "",
+        svg: { fill: '#E2D88A' }
+    },
+    {
+        key: 3,
+        amount: 0,
+        name: "",
+        svg: { fill: '#8AE2AD' }
+    },
+    {
+        key: 4,
+        amount: 0,
+        name: "",
+        svg: { fill: '#8AB6E2' }
+    },
+    {
+        key: 5,
+        amount: 0,
+        name: "",
+        svg: { fill: '#C78AE2' },
+    },
+    {
+        key: 6, amount: 17000, name: "distanceLeft", svg: { fill: '#ECECEC' },
+    },
 ];
 
 const patientData = [
     {
         key: 1,
-        name: "Fred",
-        image: require('./Images/Profile/patient1.png'), 
-        distanceTravelled: 20,
+        image: require('./Images/Profile/patient1.png'),
         svg: { fill: '#E28A8A' },
     },
     {
         key: 2,
-        name: "Hannah",
         image: require('./Images/Profile/patient2.png'),
-        distanceTravelled: 20,
         svg: { fill: '#E2D88A' },
     },
     {
         key: 3,
-        name: "You",
         image: require('./Images/Profile/patient3.png'),
-        distanceTravelled: 20,
         svg: { fill: '#8AE2AD' },
     },
     {
         key: 4,
-        name: "David",
         image: require('./Images/Profile/patient4.png'),
-        distanceTravelled: 20,
         svg: { fill: '#8AB6E2' },
     },
     {
         key: 5,
-        name: "Reepicheep",
         image: require('./Images/Profile/patient5.png'),
-        distanceTravelled: 20,
         svg: { fill: '#C78AE2' },
     },
 ];
@@ -86,39 +281,51 @@ const patientData = [
 const milestones = [
     {
         key: 1,
-        destination: "Germany",
-        image: require('./Images/Icons/destination/germany.png'),
-        countryIcon: require('./Images/placesVisited/germany.png')
+        destination: "London",
+        currentCityImage: require('./Images/targets/London.png'),
+        image: require('./Images/currentCity/London.png'),
+        cityIcon: require('./Images/ModalAssets/citiesReached/London.png'),
+        greyScaleCity: require('./Images/ModalAssets/citiesReached/London.png')
     },
     {
         key: 2,
-        destination: "Austria",
-        image: require('./Images/Icons/destination/austria.png'),
-        countryIcon: require('./Images/placesVisited/austria.png')
+        destination: "Berlin",
+        currentCityImage: require('./Images/targets/Berlin.png'),
+        image: require('./Images/currentCity/Berlin.png'),
+        cityIcon: require('./Images/ModalAssets/citiesReached/Berlin.png'),
+        greyScaleCity: require('./Images/ModalAssets/greyScaleCities/GermanyGrayscale.png')
     },
     {
         key: 3,
-        destination: "Italy",
-        image: require('./Images/Icons/destination/italy.png'),
-        countryIcon: require('./Images/placesVisited/italy.png'),
+        destination: "Rome",
+        currentCityImage: require('./Images/targets/Rome.png'),
+        image: require('./Images/currentCity/Rome.png'),
+        cityIcon: require('./Images/ModalAssets/citiesReached/Rome.png'),
+        greyScaleCity: require('./Images/ModalAssets/greyScaleCities/ItalyGrayscale.png'),
     },
     {
         key: 4,
-        destination: "France",
-        image: require('./Images/Icons/destination/france.png'),
-        countryIcon: require('./Images/placesVisited/france.png')
+        destination: "Paris",
+        currentCityImage: require('./Images/targets/Paris.png'),
+        image: require('./Images/currentCity/Paris.png'),
+        cityIcon: require('./Images/ModalAssets/citiesReached/Paris.png'),
+        greyScaleCity: require('./Images/ModalAssets/greyScaleCities/FranceGrayscale.png')
     },
     {
         key: 5,
-        destination: "Spain",
-        image: require('./Images/Icons/destination/spain.png'),
-        countryIcon: require('./Images/placesVisited/spain.png')
+        destination: "Madrid",
+        currentCityImage: require('./Images/targets/Madrid.png'),
+        image: require('./Images/currentCity/Madrid.png'),
+        cityIcon: require('./Images/ModalAssets/citiesReached/Madrid.png'),
+        greyScaleCity: require('./Images/ModalAssets/greyScaleCities/SpainGrayscale.png')
     },
     {
         key: 6,
-        destination: "Portugal",
-        image: require('./Images/Icons/destination/portugal.png'),
-        countryIcon: require('./Images/placesVisited/portugal.png')
+        destination: "Lisbon",
+        currentCityImage: require('./Images/targets/Lisbon.png'),
+        image: require('./Images/currentCity/Lisbon.png'),
+        cityIcon: require('./Images/ModalAssets/citiesReached/Lisbon.png'),
+        greyScaleCity: require('./Images/ModalAssets/greyScaleCities/PortugalGrayscale.png')
     }
 ];
 
@@ -130,8 +337,194 @@ export default class MainActivityPage extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { activityStarted: true };
+        this.state = {
+            activityStarted: true,
+            destination: 0,
+            patientDistances: {
+                patient1: 0,
+                patient2: 0,
+                patient3: 0,
+                patient4: 0,
+                patient5: 0
+            },
+            distanceCovered: 0,
+            distanceLeft: 0,
+            reachedBerlin: false,
+            reachedRome: false,
+            reachedParis: false,
+            reachedMadrid: false,
+            reachedLisbon: false,
+            percentageCompleted: 0,
+            LondonData: [...LondonData],
+            BerlinData: [...BerlinData],
+            RomeData: [...RomeData],
+            ParisData: [...ParisData],
+            MadridData: [...MadridData],
+            LisbonData: [...LisbonData],
+        };
         this._onPressButton = this._onPressButton.bind(this);
+        this.setCurrentCity = this.setCurrentCity.bind(this);
+        this.renderLandmarks = this.renderLandmarks.bind(this);
+        this.setDestinationArray = this.setDestinationArray.bind(this);
+
+    }
+
+    componentWillMount() {
+        //fetch data from firebase
+        let distanceTravelled = this.props.distanceTravelled;
+        const patientData = [
+            {
+                name: "Fred",
+                distanceTravelled: 1300
+            },
+            {
+                name: "Hannah",
+                distanceTravelled: 1300,
+            },
+            {
+                name: "You",
+                distanceTravelled: 1300,
+            },
+            {
+                name: "David",
+                distanceTravelled: 1300,
+            },
+            {
+                name: "Reepicheep",
+                distanceTravelled: 1300,
+            }
+        ];
+
+        this.setCurrentCity(distanceTravelled, patientData);
+    }
+
+    setDestinationArray = (value) => {
+        switch (value) {
+            case 0:
+                return this.state.LondonData;
+                break;
+            case 1:
+                return this.state.BerlinData;
+                break;
+            case 2:
+                return this.state.RomeData;
+                break;
+            case 3:
+                return this.state.ParisData;
+                break;
+            case 4:
+                return this.state.MadridData;
+                break;
+            case 5:
+                return this.state.LisbonData;
+                break;
+        }
+
+    }
+
+    setCurrentCity = (totalDistanceTravelled, patientData) => {
+
+        let distanceAccumulated = 0;
+
+        if (totalDistanceTravelled >= 0 && totalDistanceTravelled <= 8370) {
+
+            let tmpArrayLondon = [...this.state.LondonData];
+
+            for (let i = 0; i < 5; i++) {
+                tmpArrayLondon[i].name = patientData[i].name;
+                tmpArrayLondon[i].amount = patientData[i].distanceTravelled;
+                distanceAccumulated += patientData[i].distanceTravelled;
+            }
+
+            tmpArrayLondon[5].amount = tmpArrayLondon[5].amount - distanceAccumulated;
+
+            this.setState({
+                destination: 0,
+                distanceCovered: totalDistanceTravelled,
+                distanceLeft: 8370 - totalDistanceTravelled,
+                percentageCompleted: (totalDistanceTravelled / 8370) * 100,
+                LondonData: tmpArrayLondon
+            })
+        }
+        else if (totalDistanceTravelled > 8370 && totalDistanceTravelled <= 21670) {
+            this.setState({
+                destination: 1,
+                distanceCovered: totalDistanceTravelled - 8370,
+                distanceLeft: 21670 - totalDistanceTravelled,
+                reachedBerlin: true,
+                percentageCompleted: ((totalDistanceTravelled - 8370) / 13300) * 100
+            })
+        }
+        else if (totalDistanceTravelled > 21670 && totalDistanceTravelled <= 35670) {
+            this.setState({
+                destination: 2,
+                distanceCovered: totalDistanceTravelled - 21670,
+                distanceLeft: 35670 - totalDistanceTravelled,
+                reachedBerlin: true,
+                reachedRome: true,
+                percentageCompleted: ((totalDistanceTravelled - 21670) / 14000) * 100
+            })
+        }
+        else if (totalDistanceTravelled > 35670 && totalDistanceTravelled <= 50670) {
+            this.setState({
+                destination: 3,
+                distanceCovered: totalDistanceTravelled - 35670,
+                distanceLeft: 50670 - totalDistanceTravelled,
+                reachedBerlin: true,
+                reachedRome: true,
+                reachedParis: true,
+                percentageCompleted: ((totalDistanceTravelled - 35670) / 15000) * 100
+            })
+        }
+        else if (totalDistanceTravelled > 50670 && totalDistanceTravelled <= 66670) {
+            this.setState({
+                destination: 4,
+                distanceCovered: totalDistanceTravelled - 50670,
+                distanceLeft: 66670 - totalDistanceTravelled,
+                reachedBerlin: true,
+                reachedRome: true,
+                reachedParis: true,
+                reachedMadrid: true,
+                percentageCompleted: ((totalDistanceTravelled - 50670) / 16000) * 100
+            })
+        }
+        else if (totalDistanceTravelled > 66670) {
+            this.setState({
+                destination: 5,
+                distanceCovered: totalDistanceTravelled - 66670,
+                distanceLeft: 83670 - totalDistanceTravelled,
+                reachedBerlin: true,
+                reachedRome: true,
+                reachedParis: true,
+                reachedMadrid: true,
+                reachedLisbon: true,
+                percentageCompleted: ((totalDistanceTravelled - 66670) / 17000) * 100
+            })
+        }
+    }
+
+    renderLandmarks = (destinationIndex) => {
+        switch (destinationIndex) {
+            case 0:
+                return <LandmarksReachedLondon progressValue={750} />
+                break;
+            case 1:
+                return <LandmarksReachedBerlin progressValue={2000} />
+                break;
+            case 2:
+                return <LandmarksReachedLondon progressValue={750} />
+                break;
+            case 3:
+                return <LandmarksReachedBerlin progressValue={2000} />
+                break;
+            case 4:
+                return <LandmarksReachedLondon progressValue={750} />
+                break;
+            case 5:
+                return <LandmarksReachedBerlin progressValue={2000} />
+                break;
+
+        }
     }
 
     _onPressButton() {
@@ -146,121 +539,144 @@ export default class MainActivityPage extends Component {
 
     render() {
         return (
-            <View>
+            <ScrollView>
                 <Header 
                     title="Activities" 
                     emergencyButton= {true}
                     />
-                <ScrollView>
+
                     <View style={{ marginTop: 20, marginBottom: 20 }}>
-                        <ProgressBar data={patientData} />
+                    <ProgressBar
+                        data={this.setDestinationArray(0)}
+                    />
                         <Image
-                            source={require('./Images/targets/France.png')}
+                            source={milestones[this.state.destination].currentCityImage}
                             style={styles.flagContainer}
                         />
-                        <Text style={styles.percentText}>73%</Text>
+                        <Text style={styles.percentText}>{parseFloat(this.state.percentageCompleted).toFixed(0)}%</Text>
                     </View>
 
-                    <View style={styles.buttonContainer}>
-                        <TouchableWithoutFeedback onPress={this._onPressButton}>
-                            <View style={styles.startActivitybutton}>
-                                <Text style={styles.buttonText}>{"Start Walking"} </Text>
-                            </View>
-                        </TouchableWithoutFeedback>
+                    <View
+                        style={styles.startActivitybutton}
+                        elevation={1}
+                    >
+                        <TouchableOpacity onPress={this._onPressButton}>
+                            <Text style={styles.buttonText}>{"Start activity"} </Text>
+                        </TouchableOpacity>
                     </View>
 
                     <MainPageStats
-                        icon={milestones[3].image}
+                        icon={milestones[this.state.destination].image}
                         iconStyle={iconstyles.destination}
-                        dataContext={"Destination"}
-                        metric={milestones[3].destination}
+                        dataContext={"City"}
+                        metric={milestones[this.state.destination].destination}
                         showBorder={true}
                     />
                     <MainPageStats
                         icon={icons.shoe}
                         iconStyle={iconstyles.shoe}
                         dataContext={"Distance covered"}
-                        data={250}
-                        metric={"km"}
+                        data={this.state.distanceCovered}
+                        metric={"m"}
                         showBorder={true}
                     />
                     <MainPageStats
                         icon={icons.flag}
                         iconStyle={iconstyles.flag}
                         dataContext={"Distance left"}
-                        data={100}
-                        metric={"km"}
+                        data={this.state.distanceLeft}
+                        metric={"m"}
                         showBorder={false}
                     />
-                    
+
                     <Text style={styles.subheadingStyles}>Group Members</Text>
 
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginLeft: 5 }}>
                         <PatientPlaceHolder
                             profileBorder={borderStyles.patient1}
                             profilePicture={patientData[0].image}
-                            patientName={patientData[0].name}
+                            patientName={this.setDestinationArray(this.state.destination)[0].name}
                         />
                         <PatientPlaceHolder
                             profileBorder={borderStyles.patient2}
                             profilePicture={patientData[1].image}
-                            patientName={patientData[1].name}
+                            patientName={this.setDestinationArray(this.state.destination)[1].name}
                         />
                         <PatientPlaceHolder
                             profileBorder={borderStyles.patient3}
                             profilePicture={patientData[2].image}
-                            patientName={patientData[2].name}
+                            patientName={this.setDestinationArray(this.state.destination)[2].name}
                         />
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 15, marginLeft: 5, marginBottom: 5 }}>
                         <PatientPlaceHolder
                             profileBorder={borderStyles.patient4}
                             profilePicture={patientData[3].image}
-                            patientName={patientData[3].name}
+                            patientName={this.setDestinationArray(this.state.destination)[3].name}
                         />
                         <PatientPlaceHolder
                             profileBorder={borderStyles.patient5}
                             profilePicture={patientData[4].image}
-                            patientName={patientData[4].name}
+                            patientName={this.setDestinationArray(this.state.destination)[4].name}
                         />
                         <PatientPlaceHolder
                         />
                     </View>
 
-                    <Text style={styles.subheadingStyles}>Places Visited</Text>
+                    <Text style={styles.subheadingStyles}>Landmarks</Text>
+
+                    <View>
+                        {this.renderLandmarks(this.state.destination)}
+                    </View>
+
+                    <Text style={[styles.subheadingStyles, { marginTop: 250 }]}>Cities reached</Text>
 
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginLeft: 5, marginBottom: 5 }}>
-                        <PlacesVisitedPlaceHolder
-                            countryFlag={milestones[0].countryIcon}
-                            data={testData}
-                            destination={milestones[0].destination}/>
-                        <PlacesVisitedPlaceHolder
-                            countryFlag={milestones[1].countryIcon}
-                            data={testData}
-                            destination={milestones[1].destination} />
-                        <PlacesVisitedPlaceHolder
-                            countryFlag={milestones[2].countryIcon}
-                            data={testData}
-                            destination={milestones[2].destination} />
+                        <Modal
+                            countryFlag={milestones[0].cityIcon}
+                            data={this.setDestinationArray(0)}
+                            city={milestones[0].destination}
+                            showModal={true}
+                            greeting={"Hello!"}
+                            fact={"With over 4,000 trees, a large lake, a meadow and ornamental flower gardens, Hyde Park is the largest park in London."}
+                        />
+                        <Modal
+                            countryFlag={this.state.reachedBerlin ? milestones[1].cityIcon : milestones[1].greyScaleCity}
+                            data={this.setDestinationArray(1)}
+                            city={milestones[1].destination}
+                            showModal={this.state.reachedBerlin}
+                            greeting={"Hallo!"}
+                            fact={"Founded in the 17th century, Berlin's Botanical Garden spans 42 hectares of land and contains over 18,000 species of plants."}
+                        />
+                        <Modal
+                            countryFlag={this.state.reachedRome ? milestones[2].cityIcon : milestones[2].greyScaleCity}
+                            data={this.setDestinationArray(2)}
+                            city={milestones[2].destination}
+                            showModal={this.state.reachedRome}
+                        />
                     </View>
 
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop:15, marginLeft: 5, marginBottom: 75 }}>
-                        <PlacesVisitedPlaceHolder
-                            countryFlag={milestones[3].countryIcon}
-                            data={testData}
-                            destination={milestones[3].destination} />
-                        <PlacesVisitedPlaceHolder
-                            countryFlag={milestones[4].countryIcon}
-                            data={testData}
-                            destination={milestones[4].destination} />
-                        <PlacesVisitedPlaceHolder
-                            countryFlag={milestones[5].countryIcon}
-                            data={testData}
-                            destination={milestones[5].destination} />
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 15, marginLeft: 5, marginBottom: 5 }}>
+                        <Modal
+                            countryFlag={this.state.reachedParis ? milestones[3].cityIcon : milestones[3].greyScaleCity}
+                            data={this.setDestinationArray(3)}
+                            city={milestones[3].destination}
+                            showModal={this.state.reachedParis}
+                        />
+                        <Modal
+                            countryFlag={this.state.reachedMadrid ? milestones[4].cityIcon : milestones[4].greyScaleCity}
+                            data={this.setDestinationArray(4)}
+                            city={milestones[4].destination}
+                            showModal={this.state.Madrid}
+                        />
+                        <Modal
+                            countryFlag={this.state.reachedLisbon ? milestones[5].cityIcon : milestones[5].greyScaleCity}
+                            data={this.setDestinationArray(5)}
+                            city={milestones[5].destination}
+                            showModal={this.state.reachedLisbon}
+                        />
                     </View>
-
-                </ScrollView>
-            </View>
+            </ScrollView>
         );
     }
 }
@@ -273,21 +689,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         alignSelf: 'center'
     },
-
-    headerStyle: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: Dimensions.get('window').width, 
-        height: 0.1 * Dimensions.get('window').height, 
-        backgroundColor: '#8ae2ad',
-        alignItems : 'center'
-    },
-    titleStyle: {
-        fontSize : 30, 
-        fontWeight : 'bold', 
-        color: 'white'
-    },
-
     percentText: {
         position: 'absolute',
         fontSize: 50,
@@ -307,7 +708,15 @@ const styles = StyleSheet.create({
         width: 184,
         height: 44,
         alignItems: 'center',
-        backgroundColor: '#FFFFFF'
+        alignSelf: 'center',
+        backgroundColor: '#FFFFFF',
+        shadowColor: '#000000',
+        shadowOffset: {
+            width: 0,
+            height: 3
+        },
+        shadowRadius: 5,
+        shadowOpacity: 1.0
     },
     endActivitybutton: {
         borderRadius: 40,

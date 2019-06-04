@@ -21,6 +21,7 @@ import ActivityNavigation from './ActivityNavigation'
 import MainActivity from './MainPage/MainActivityPage'
 import Activities from './currentActivity/Activities'
 import SliderFeedBack from './feedback/SliderFeedback'
+import MainActivityPage from './MainPage/MainActivityPage';
 
 interface Props {
     navigation: NavigationScreenProp<NavigationState>;

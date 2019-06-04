@@ -113,15 +113,29 @@ export default class SliderFeedback extends Component {
         let fatigue = this.state.fatigue;
         let painIntensity = Math.floor(this.state.sliderValue);
 
-        firebase.database().ref('Patients/BPlNxGZmqlY4TrqG34g64aURGop2/Feedback/').update({
-            completedActivity,
-            legPain,
-            chestPain,
-            fatigue,
-            painIntensity
+        firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/eventCounter').once('value', function (snapshot) {
+            let eventCounter = snapshot.val();
+
+            firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Feedback/Event' + eventCounter).set({
+                completedActivity,
+                legPain,
+                chestPain,
+                fatigue,
+                painIntensity
+            }).then((data) => {
+            }).catch((error) => {
+                //error callback
+            })
         });
 
-        this.props.navigation.navigate('MainActivityPage');
+        Alert.alert(
+            'Feedback successfully submitted',
+            '',
+            [
+                { text: 'OK', onPress: () => this.props.navigation.navigate('MainActivityPage') },
+            ],
+            { cancelable: false },
+        );
     }
 
     render() {

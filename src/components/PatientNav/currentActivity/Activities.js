@@ -1,28 +1,28 @@
 //Activities.js - Performs distance calculations and sets up the timer to render in backend
 
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
     AppRegistry,
     StyleSheet,
-    ScrollView,
     View,
+    ScrollView,
     Text,
+    Alert,
     Image,
-    TouchableWithoutFeedback,
+    Vibration,
     Platform,
-    PermissionsAndroid
-} from 'react-native';
+    PermissionsAndroid,
+    TouchableOpacity
+} from 'react-native'
 
 import { Header } from '../Header'
 
 import EmergencyButton from './EmergencyButton'
 import CircularProgressBar from './CircularProgessBar'
+import Stats from './Stats'
 
 import firebase from 'firebase'
-//Timer imports
-import Stopwatch from './Stopwatch'
 
-import Stats from './Stats'
 //MapView imports
 import MapView, { AnimatedRegion, Polyline } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 import haversine from "haversine"
@@ -34,6 +34,9 @@ const LONGITUDE = -0.174757;
 const LATITUDEDELTA = 0.015;
 const LONGITUDEDELTA = 0.0121;
 
+var THRESHOLD = 0.5;
+var DISTANCETHRESHOLD = 100;
+
 export default class Activities extends Component {
 
     static navigationOptions = {
@@ -42,15 +45,9 @@ export default class Activities extends Component {
 
     constructor(props) {
         super(props);
+
         this.state = {
-            percentageCompleted: 0,
-            //Timer states
-            timerStart: false,
-            stopwatchStart: false,
-            totalDuration: 90000,
-            timerReset: false,
-            stopwatchReset: false,
-            //Mapview states
+            //MapView States
             latitude: LATITUDE,
             longitude: LONGITUDE,
             routeCoordinates: [],
@@ -62,44 +59,23 @@ export default class Activities extends Component {
                 latitudeDelta: LATITUDEDELTA,
                 longitudeDelta: LONGITUDEDELTA
             }),
+            //Timing Components
+            interval: 0,
+            prevTime: ({
+                hours: new Date().getHours(),
+                minutes: new Date().getMinutes(),
+                seconds: new Date().getSeconds()
+            }),
             pace: 0,
-            timeElapsed: 0
+            percentageCompleted: 0,
+            //EventCounter
+            eventCounter: 1,
+            timeElapsed: 0,
         };
-        this.toggleStopwatch = this.toggleStopwatch.bind(this);
-        this.resetStopwatch = this.resetStopwatch.bind(this);
+
+        this._onPress = this._onPress.bind(this);
+        this.writeStats = this.writeStats.bind(this);
     }
-
-    //Timer functions
-    toggleStopwatch() {
-        this.setState({ stopwatchStart: !this.state.stopwatchStart, stopwatchReset: false });
-        if (this.state.stopwatchStart) {
-            //Save the data locally first
-            this.resetStopwatch();
-
-            let distanceTravelled = this.state.distanceTravelled;
-            let timeElapsed = this.state.timeElapsed;
-            let pace = this.state.pace;
-
-            firebase.database().ref('Patients/BPlNxGZmqlY4TrqG34g64aURGop2/Stats/').update({
-                distanceTravelled,
-                pace,
-                timeElapsed
-            });
-            this.props.navigation.navigate('FeedbackPage')
-        }
-        else {
-            this.setState({ percentageCompleted: 0.3 });
-        }
-    }
-
-    resetStopwatch() {
-        this.setState({ stopwatchStart: false, stopwatchReset: true, percentageCompleted: 0 });
-    }
-
-    getFormattedTime() {
-        this.currentTime = Stopwatch.time;
-        return this.currentTime;
-    };
 
     //Mapview functions
     componentDidMount() {
@@ -124,48 +100,137 @@ export default class Activities extends Component {
                     coordinate.timing(newCoordinate).start();
                 }
 
+                let distanceDelta = this.calcDistance(newCoordinate);
+                let pace = distanceDelta / this.state.interval;
+                let percentageOfDistanceThresholdCompleted = ((this.state.distanceTravelled + distanceDelta) / DISTANCETHRESHOLD) * 100;
+
+                if (pace < THRESHOLD) {
+                    Vibration.vibrate(500);
+                };
+
                 this.setState({
                     latitude,
                     longitude,
                     routeCoordinates: routeCoordinates.concat([newCoordinate]),
-                    distanceTravelled: distanceTravelled + this.calcDistance(newCoordinate),
+                    distanceTravelled: distanceTravelled + distanceDelta,
                     prevLatLng: newCoordinate,
+                    pace: pace,
+                    percentageCompleted: percentageOfDistanceThresholdCompleted,
                 });
+
             },
 
+
             error => console.log(error),
-            { enableHighAccuracy: true }
+            {
+                enableHighAccuracy: true,
+                distanceFilter: 9
+            }
 
         );
     }
 
     calcDistance = newLatLng => {
         const { prevLatLng } = this.state;
-        return haversine(prevLatLng, newLatLng) || 0;
+
+        let currentTime = {
+            hours: new Date().getHours(),
+            minutes: new Date().getMinutes(),
+            seconds: new Date().getSeconds()
+        }
+
+        this.setState({
+            interval: ((currentTime.hours - this.state.prevTime.hours) * 3600)
+                + ((currentTime.minutes - this.state.prevTime.minutes) * 60)
+                + ((currentTime.seconds - this.state.prevTime.seconds)),
+            prevTime: currentTime
+        });
+
+        return (((haversine(prevLatLng, newLatLng)) * 1.609) * 1000) || 0;
     };
+
+    writeStats(distanceTravelled, timeElapsed, pace, eventCounter) {
+
+        firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/Event' + eventCounter).set({
+            distanceTravelled,
+            pace,
+            timeElapsed,
+            eventCounter
+        }).then((data) => {
+            //success callback
+        }).catch((error) => {
+            //error callback
+        })
+
+    }
+
+
+    _onPress() {
+
+        let distanceTravelled = this.state.distanceTravelled;
+        let pace = this.state.pace;
+        let timeElapsed = this.state.timeElapsed;
+        
+        firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/eventCounter').once('value', function (snapshot) {
+            let counter = snapshot.val();
+            let eventCounter = counter + 1;
+
+            firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/Event' + eventCounter).set({
+                distanceTravelled,
+                pace,
+                timeElapsed,
+            }).then((data) => {
+                firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats').update({
+                    eventCounter
+                }).then((data) => {
+                    
+                    }).catch((error) => {
+
+                    })
+            }).catch((error) => {
+                //error callback
+            })
+        });
+
+        this.props.navigation.navigate('FeedbackPage')
+    }
 
     render() {
         return (
             <View>
                 <Header title='Activities' emergencyButton = {true} />
-            <ScrollView style={{marginBottom: 75}}>
+                <ScrollView style={{marginBottom: 75}}>
 
-                <CircularProgressBar percentage={this.state.percentageCompleted} />
+                    <CircularProgressBar percentage={this.state.percentageCompleted} />
 
-                <TouchableWithoutFeedback onPress={this.toggleStopwatch}>
-                    <View style={!this.state.stopwatchStart ? styles.startActivitybutton : styles.endActivitybutton}>
-                        <Text style={styles.buttonText}>{!this.state.stopwatchStart ? "Start Activity" : "End Activity"}</Text>
+                    <View
+                        style={styles.endActivitybutton}
+                        elevation={1}
+                    >
+                        <TouchableOpacity onPress={this._onPress}>
+                            <Text style={styles.buttonText}>{"End activity"} </Text>
+                        </TouchableOpacity>
                     </View>
-                </TouchableWithoutFeedback>
 
-                <Stats stats={ parseFloat(this.state.distanceTravelled).toFixed(2) } />
+                    <View>
+                        <Stats stats={parseFloat(this.state.distanceTravelled).toFixed(2)} />
+                    </View>
 
-                <Stopwatch laps msecs
-                    start={this.state.stopwatchStart}
-                    options={options}
-                    reset={this.state.stopwatchReset} />
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
+                        <Image
+                            source={require('./images/pace.png')}
+                            style={{ width: 47, height: 39, marginLeft: 10, marginTop: 5 }}
+                        />
 
-            </ScrollView>
+                        <Text
+                            style={styles.shoeDescriptorStyle}
+                        >
+                            Pace
+                    </Text>
+                        <Text style={styles.dataStyle}> {parseFloat(this.state.pace).toFixed(2)} m/s </Text>
+                    </View>
+
+                </ScrollView>
             </View>
         );
     }
@@ -175,76 +240,74 @@ const handleTimerComplete = () => alert("custom completion function");
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 60,
-        alignItems: 'center'
+        justifyContent: "flex-end",
+        alignItems: "center"
     },
-
     map: {
         width: 400,
         height: 600
     },
-
-    startActivitybutton: {
-        borderRadius: 40,
-        borderWidth: 3,
-        borderColor: '#8ae2ad',
-        marginTop: 40,
-        marginBottom: 30,
+    bubble: {
+        flex: 1,
+        backgroundColor: "rgba(255,255,255,0.7)",
+        paddingHorizontal: 18,
+        paddingVertical: 12,
+        borderRadius: 20
+    },
+    latlng: {
         width: 200,
-        alignItems: 'center',
-        alignSelf: 'center',
-        backgroundColor: '#FFFFFF'
+        alignItems: "stretch"
+    },
+    button: {
+        width: 80,
+        paddingHorizontal: 12,
+        alignItems: "center",
+        marginHorizontal: 10
+    },
+    buttonContainer: {
+        flexDirection: "row",
+        marginVertical: 20,
+        backgroundColor: "transparent"
+    },
+    shoeDescriptorStyle: {
+        paddingTop: 20,
+        marginLeft: 15,
+        fontSize: 20,
+        fontWeight: 'bold'
+    },
+    dataStyle: {
+        marginLeft: 'auto',
+        marginRight: 15,
+        marginTop: 20,
+        fontSize: 20,
+        fontWeight: 'bold'
+    },
+    shoePicture: {
+        width: 49,
+        height: 40,
+        marginLeft: 15,
+        marginTop: 10
     },
 
     endActivitybutton: {
         borderRadius: 40,
         borderWidth: 3,
-        borderColor: '#c60b0b',
-        marginTop: 40,
+        borderColor: '#E78282',
+        marginTop: 30,
         marginBottom: 30,
-        width: 200,
+        width: 225,
+        height: 44,
         alignItems: 'center',
         alignSelf: 'center',
         backgroundColor: '#FFFFFF'
     },
 
     buttonText: {
-        padding: 20,
-        color: 'black',
+        paddingTop: 5,
         fontWeight: 'bold',
         fontSize: 20
-    }
-});
+    },
 
-const options = {
-    container: {
-        backgroundColor: 'transparent',
-        padding: 5,
-    },
-    text: {
-        fontSize: 30,
-        color: '#FFF',
-        marginLeft: 7,
-    },
-    clockDescriptorStyle: {
-        paddingTop: 20,
-        marginLeft: 22,
-        fontSize: 20,
-        fontWeight: 'bold'
-    },
-    dataStyle: {
-        marginLeft: 'auto',
-        marginRight: 10,
-        marginTop: 20,
-        fontSize: 20,
-        fontWeight: 'bold'
-    },
-    clockPicture: {
-        width: 34,
-        height: 38,
-        marginLeft: 24,
-        marginTop: 15
-    }
-};
+});
 
 AppRegistry.registerComponent('Activities', () => Activities);

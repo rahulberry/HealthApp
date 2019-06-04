@@ -5,10 +5,12 @@
     "\\src\\components",
     "\\src\\components\\PatientNav",
     "\\src\\components\\PatientNav\\currentActivity",
+    "\\src\\components\\PatientNav\\currentActivity\\images",
     "\\src\\components\\PatientNav\\feedback",
     "\\src\\components\\PatientNav\\MainPage",
+    "\\src\\components\\PatientNav\\MainPage\\Images",
     "\\src\\navigation"
   ],
-  "SelectedNode": "\\src\\components\\PatientNav\\ActivityNavigation.js",
+  "SelectedNode": "\\src\\assets",
   "PreviewInSolutionExplorer": false
 }
