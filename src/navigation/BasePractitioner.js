@@ -19,7 +19,7 @@ interface Props {
 
 import ChatsNav from '../components/PractitionerNav/ChatsNav'
 import GroupsList from '../components/PractitionerNav/GroupsList';
-import EventNavigation from '../components/PatientNav/EventNavigation'; //The thing that is actually imported is EventTopBarScreen
+import EventNavigation from '../components/PractitionerNav/EventsDoctor'; //The thing that is actually imported is EventTopBarScreen
 import MainPageNav from '../components/PractitionerNav/MainPageNav';
 
 const SimpleTabs = createMaterialTopTabNavigator({
