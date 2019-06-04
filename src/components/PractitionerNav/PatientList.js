@@ -79,8 +79,7 @@ export default class PatientList extends Component {
           });
         }}
         style={{
-          marginBottom: 15,
-          marginTop: 15,
+          marginBottom: 10,
           borderBottomColor: '#d3d3d3',
           borderBottomWidth: 1,
           borderRadius: 5,
@@ -113,11 +112,6 @@ export default class PatientList extends Component {
           dataSource={this.state.dataSource}
           renderRow={this.renderRow}
         />
-        <TouchableOpacity>
-          <Text>
-            Add Patient
-          </Text>
-        </TouchableOpacity>
       </SafeAreaView>
     );
   }

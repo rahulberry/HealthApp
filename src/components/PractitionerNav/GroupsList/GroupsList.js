@@ -104,6 +104,14 @@ export default class GroupsList extends React.Component<Props>{
         navigation: NavigationScreenProp<NavigationState>;
       }) => ({
         title: 'Patients',
+        headerStyle: {
+          backgroundColor: '#8ae2ad',
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          fontSize: 24,
+        },
         tabBarIcon: ({
           tintColor,
           focused,
@@ -120,6 +128,7 @@ export default class GroupsList extends React.Component<Props>{
           />
         ),
       });
+
     render() {
         return (
           <SafeAreaView>
