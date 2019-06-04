@@ -45,7 +45,7 @@ export default class PatientList extends Component {
       horizontal: boolean;
     }) => (
       <Ionicons
-        name={focused ? 'ios-people' : 'ios-people'}
+        name={focused ? 'ios-chat' : 'ios-chat'}
         size={horizontal ? 20 : 26}
         style={{ color: tintColor }}
       />

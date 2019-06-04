@@ -17,14 +17,13 @@ interface Props {
   navigation: NavigationScreenProp<NavigationState>;
 }
 
-import ChatsNav from '../components/PractitionerNav/ChatsNav'
-import GroupsList from '../components/PractitionerNav/GroupsList';
+import MainChat from '../components/PractitionerNav/MainChat'
 import EventNavigation from '../components/PractitionerNav/EventsDoctor'; //The thing that is actually imported is EventTopBarScreen
-import MainPageNav from '../components/PractitionerNav/MainPageNav';
+import MainPage from '../components/PractitionerNav/MainPage';
 
 const SimpleTabs = createMaterialTopTabNavigator({
-  Chat: ChatsNav,
-  Home: MainPageNav,
+  Chat: MainChat,
+  Home: MainPage,
   Events: EventNavigation,
   
 },

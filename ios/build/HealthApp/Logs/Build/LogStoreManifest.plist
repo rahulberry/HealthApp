@@ -6,7 +6,7 @@
 	<integer>9</integer>
 	<key>logs</key>
 	<dict>
-		<key>75192790-2176-4E09-B950-13A92FB0D2B1</key>
+		<key>2AB7392F-F472-46EA-9B31-D356ACBC8F96</key>
 		<dict>
 			<key>className</key>
 			<string>IDECommandLineBuildLog</string>
@@ -15,7 +15,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>75192790-2176-4E09-B950-13A92FB0D2B1.xcactivitylog</string>
+			<string>2AB7392F-F472-46EA-9B31-D356ACBC8F96.xcactivitylog</string>
 			<key>highLevelStatus</key>
 			<string>S</string>
 			<key>schemeIdentifier-containerName</key>
@@ -27,13 +27,13 @@
 			<key>signature</key>
 			<string>Building project HealthApp with scheme HealthApp and configuration Debug</string>
 			<key>timeStartedRecording</key>
-			<real>581270643.89509296</real>
+			<real>581377554.13032401</real>
 			<key>timeStoppedRecording</key>
-			<real>581270645.782058</real>
+			<real>581377558.72251201</real>
 			<key>title</key>
 			<string>Building project HealthApp with scheme HealthApp and configuration Debug</string>
 			<key>uniqueIdentifier</key>
-			<string>75192790-2176-4E09-B950-13A92FB0D2B1</string>
+			<string>2AB7392F-F472-46EA-9B31-D356ACBC8F96</string>
 		</dict>
 	</dict>
 </dict>

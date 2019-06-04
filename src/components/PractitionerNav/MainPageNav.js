@@ -5,6 +5,7 @@ import { createStackNavigator, createAppContainer } from 'react-navigation'; // 
 
 import StatsNavigation from '../../components/PatientNav/StatsNavigation'
 import GroupList from './GroupsList'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 //import AddPatient from './AddPatient'
 
 let SlideFromRight = (index, position, width) => {
@@ -50,7 +51,22 @@ export default App = createAppContainer(createStackNavigator(
             cardStack: {
                 gesturesEnabled: false
             },
-            gesturesEnabled: false
+            gesturesEnabled: false,
+            tabBarIcon: ({
+                tintColor,
+                focused,
+                horizontal,
+              }: {
+                tintColor: string;
+                focused: boolean;
+                horizontal: boolean;
+              }) => (
+                <Ionicons
+                  name={focused ? 'ios-people' : 'ios-people'}
+                  size={horizontal ? 20 : 26}
+                  style={{ color: tintColor }}
+                />
+              ),
         },
         gesturesEnabled: false,
         transitionConfig: TransitionConfiguration,
