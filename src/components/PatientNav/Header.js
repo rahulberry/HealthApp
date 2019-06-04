@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: Dimensions.get('window').width, 
-        height: 0.1 * Dimensions.get('window').height, 
+        height: 0.15 * Dimensions.get('window').height, 
         backgroundColor: '#8ae2ad',
         alignItems : 'center'
     },
@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
         alignItems : 'center'
     },
     titleStyle: {
+        marginTop: 35,
         fontSize : 30, 
         fontWeight : 'bold', 
         color: 'white'

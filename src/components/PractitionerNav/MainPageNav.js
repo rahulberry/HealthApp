@@ -4,6 +4,7 @@ import { Animated, Easing, Platform } from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation'; // Version can be specified in package.json
 
 import StatsNavigation from '../../components/PatientNav/StatsNavigation'
+import statsScreen from './PatientStats'
 import GroupList from './GroupsList'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 //import AddPatient from './AddPatient'
@@ -43,7 +44,7 @@ export default App = createAppContainer(createStackNavigator(
     {
         MainPage: GroupList,
       //  AddPatient: AddPatient,
-        StatsNavigation: StatsNavigation
+        StatsNavigation: statsScreen
     },
     {
         initialRouteName: 'MainPage',
