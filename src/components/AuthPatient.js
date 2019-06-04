@@ -141,7 +141,7 @@ class AuthPatient extends Component {
             style={styles.logoImg}
             source={imgLogo}
           />
-        <Text style={styles.headerStyle}>Orbis</Text>
+        <Text style={styles.headerStyle}>ORBIS</Text>
           {!visibleForm && (
             <Opening
               onCreateAccountPress={() => this._setVisibleForm("SIGNUP")}
