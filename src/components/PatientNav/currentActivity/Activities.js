@@ -170,7 +170,15 @@ export default class Activities extends Component {
         let distanceTravelled = this.state.distanceTravelled;
         let pace = this.state.pace;
         let timeElapsed = this.state.timeElapsed;
-        
+
+        var date = new Date().getDate(); //Current Date
+        var month = new Date().getMonth() + 1; //Current Month
+        var year = new Date().getFullYear(); //Current Year
+        var hours = new Date().getHours(); //Current Hours
+        var min = new Date().getMinutes(); //Current Minutes
+
+        let timestamp = date + '/' + month + '/' + year + ' ' + hours + ':' + min;
+
         firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/eventCounter').once('value', function (snapshot) {
             let counter = snapshot.val();
             let eventCounter = counter + 1;
@@ -179,6 +187,7 @@ export default class Activities extends Component {
                 distanceTravelled,
                 pace,
                 timeElapsed,
+                timestamp
             }).then((data) => {
                 firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats').update({
                     eventCounter

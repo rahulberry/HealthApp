@@ -31,7 +31,10 @@ export default class SliderFeedback extends Component {
 
             sliderValue: 50,
             bgColour: YELLOW,
-            image: require('./sliderImages/mild.png')
+            image: require('./sliderImages/mild.png'),
+
+            eventCounter: 0,
+            timestamp: "0"
 
         };
 
@@ -104,6 +107,7 @@ export default class SliderFeedback extends Component {
         }
     }
 
+    
     _onPressButton() {
         Alert.alert('Feedback submitted successfully');
 
@@ -113,20 +117,27 @@ export default class SliderFeedback extends Component {
         let fatigue = this.state.fatigue;
         let painIntensity = Math.floor(this.state.sliderValue);
 
-        firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/eventCounter').once('value', function (snapshot) {
-            let eventCounter = snapshot.val();
+        let counter = 0;
 
-            firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Feedback/Event' + eventCounter).set({
-                completedActivity,
-                legPain,
-                chestPain,
-                fatigue,
-                painIntensity
-            }).then((data) => {
-            }).catch((error) => {
-                //error callback
+        firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/eventCounter').once('value', (snapshot) => {
+            counter = snapshot.val();
+            
+            firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/Event' + counter + '/timestamp').once('value', (snapshot) => {
+                let timestamp = snapshot.val();
+                firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Feedback/Event' + counter).set({
+                    completedActivity,
+                    legPain,
+                    chestPain,
+                    fatigue,
+                    painIntensity,
+                    timestamp
+                }).then((data) => {
+                }).catch((error) => {
+                    //error callback
+                })
             })
-        });
+            
+        })
 
         Alert.alert(
             'Feedback successfully submitted',

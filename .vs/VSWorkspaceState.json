@@ -1,16 +1,16 @@
 {
   "ExpandedNodes": [
     "",
+    "\\android",
+    "\\android\\app",
+    "\\android\\app\\src",
+    "\\android\\app\\src\\main",
+    "\\android\\gradle",
     "\\src",
     "\\src\\components",
     "\\src\\components\\PatientNav",
-    "\\src\\components\\PatientNav\\currentActivity",
-    "\\src\\components\\PatientNav\\currentActivity\\images",
-    "\\src\\components\\PatientNav\\feedback",
-    "\\src\\components\\PatientNav\\MainPage",
-    "\\src\\components\\PatientNav\\MainPage\\Images",
-    "\\src\\navigation"
+    "\\src\\components\\PatientNav\\currentActivity"
   ],
-  "SelectedNode": "\\src\\assets",
+  "SelectedNode": "\\android\\app\\src\\main\\AndroidManifest.xml",
   "PreviewInSolutionExplorer": false
 }
