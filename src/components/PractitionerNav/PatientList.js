@@ -21,6 +21,36 @@ var name, uid, email;
 
 
 export default class PatientList extends Component {
+  static navigationOptions = ({
+    navigation,
+  }: {
+    navigation: NavigationScreenProp<NavigationState>;
+  }) => ({
+    title: 'Chats',
+    headerStyle: {
+      backgroundColor: '#8ae2ad',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+      fontSize: 24,
+    },
+    tabBarIcon: ({
+      tintColor,
+      focused,
+      horizontal,
+    }: {
+      tintColor: string;
+      focused: boolean;
+      horizontal: boolean;
+    }) => (
+      <Ionicons
+        name={focused ? 'ios-people' : 'ios-people'}
+        size={horizontal ? 20 : 26}
+        style={{ color: tintColor }}
+      />
+    ),
+  });
 
   state = {
     name: "",
