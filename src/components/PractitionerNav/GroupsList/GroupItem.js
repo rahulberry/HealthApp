@@ -8,7 +8,10 @@ import PropTypes from 'prop-types';
 
 export default class GroupItem extends Component {
     onPress = () => {
-        this.props.navigation.navigate('StatsNavigation');
+        this.props.navigation.navigate("StatsNavigation", {
+            name: item.name,
+            uid: item.uid, 
+          });
     };
     render() {
         const { item } = this.props;

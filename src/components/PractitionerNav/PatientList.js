@@ -79,7 +79,8 @@ export default class PatientList extends Component {
           });
         }}
         style={{
-          marginBottom: 10,
+          marginBottom: 15,
+          marginTop: 15,
           borderBottomColor: '#d3d3d3',
           borderBottomWidth: 1,
           borderRadius: 5,
@@ -149,14 +150,14 @@ const styles = StyleSheet.create({
   profileContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 8,
+    marginTop: 10,
     marginLeft: 6,
-    marginBottom: 8
+    marginBottom: 10
   },
   profileImage: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
+    width: 35,
+    height: 35,
+    borderRadius: 20,
     marginLeft: 6
   },
   profileName: {
