@@ -12,6 +12,8 @@ target 'HealthApp' do
     # Pods for testing
     pod 'RNSVG', :path => '../node_modules/react-native-svg'
 
+    pod 'react-native-maps', :path => '../node_modules/react-native-maps'
+
   end
 
   target 'HealthAppTests' do

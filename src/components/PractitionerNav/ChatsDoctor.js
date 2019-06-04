@@ -116,7 +116,7 @@ export default class Chat extends Component {
         onSend={this.onSend.bind(this)}
         user={{
           _id: this.user.uid,
-          name: 'Rahul'
+          name: firebase.auth().currentUser.displayName
         }}
         renderBubble={this.renderBubble}
         />
