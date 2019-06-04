@@ -7,15 +7,24 @@ import {
     View,
     ScrollView,
     Dimensions,
-    StyleSheet
+    StyleSheet,
+    Platform
 } from 'react-native';
 import {
     NavigationScreenProp,
     NavigationState,
 } from 'react-navigation';
-//import MapView from 'react-native-maps';
 import { Button } from '../commonComponents/ButtonWithMargin';
 import { Header } from './Header'
+
+import MapView, { Marker, AnimatedRegion } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
+
+const LATITUDE= 51.499500;
+const LONGITUDE= -0.174757;
+/* delta values set the zoom along the lat and long directions */
+const LATITUDEDELTA = 0.015;
+const LONGITUDEDELTA = 0.015;
+
 
 interface Props {
     navigation: NavigationScreenProp<NavigationState>;
@@ -31,6 +40,27 @@ export class EventInformationScreen extends React.Component<Props> {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            latitude: LATITUDE,
+            longitude: LONGITUDE,
+            routeCoordinates: [],
+            distanceTravelled: 0,
+            prevLatLng: {},
+            coords: {},
+            coordinate: new AnimatedRegion({
+                latitude: LATITUDE,
+                longitude: LONGITUDE,
+                latitudeDelta: LATITUDEDELTA,
+                longitudeDelta: LONGITUDEDELTA
+            }),
+            markers: [{
+                coordinates: {
+                  latitude: LATITUDE,
+                  longitude: LONGITUDE
+                },
+              }]
+        };
     }
 
     wentOrGoing = (time) => {
@@ -49,9 +79,10 @@ export class EventInformationScreen extends React.Component<Props> {
         const time = test.time;
         const going = test.going;
         const unixTime = test.key;
+        const coords = test.coords;
         const {goBack} = this.props.navigation;
         return (
-            <View>
+            <View style={{paddingBottom: 0.25 * Dimensions.get('window').width}}>
             <Header title='Event Information' emergencyButton={false}/>
             <ScrollView>
                 <View >
@@ -61,11 +92,25 @@ export class EventInformationScreen extends React.Component<Props> {
                     <Text style={styles.locationHeader}>Location: </Text>
                     <View style = {{alignItems : 'center'}}>
                         <View style={styles.locationView} >
-                            <Text>Map view here.</Text>
-                            {/* <MapView
+                            <MapView
                                 style={styles.map}
-                                initialRegion={region}
-                            /> */}
+                                showsUserLocation = {false}
+                                followsUserLocation = {false}
+                                loadingEnabled
+                                region={{
+                                    latitude: coords.latitude,
+                                    longitude: coords.longitude,
+                                    latitudeDelta: 0.015,
+                                    longitudeDelta: 0.015
+                                }}
+                                >
+                                {this.state.markers.map(marker => (
+                                    <Marker
+                                    coordinate={coords}
+                                    title={title}
+                                    />
+                                ))}
+                            </MapView>
                         </View>
                     </View>
                     <Text style={styles.goingHeader}>{this.wentOrGoing(unixTime)}</Text>
@@ -86,13 +131,6 @@ export class EventInformationScreen extends React.Component<Props> {
         );
     }
 }
-
-var region = {
-    latitude: 0.1278,
-    longitude: 51.5074,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-};
 
 const styles = StyleSheet.create({
     title: {

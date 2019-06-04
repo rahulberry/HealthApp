@@ -26,10 +26,17 @@ import {
 import { Button } from '../commonComponents/ButtonWithMargin';
 import Dialog from "react-native-dialog";
 import DateTimePicker from "react-native-modal-datetime-picker";
+import { Header } from './Header'
+import Modal from 'react-native-modal';
+
+import MapView, { Marker, AnimatedRegion } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 
 interface Props {
     navigation: NavigationScreenProp<NavigationState>;
 }
+
+const LATITUDE= 51.499500;
+const LONGITUDE= -0.174757;
 
 export class EventsScreen extends React.Component<Props> {
     static navigationOptions = {
@@ -59,7 +66,9 @@ export class EventsScreen extends React.Component<Props> {
         dateTime: "",
         currentItem: {},
         isFetching: false,
-        account: ""    
+        account: "",
+        isModalVisible: false,
+        markers: []
         };
 
     constructor(props) {
@@ -74,7 +83,14 @@ export class EventsScreen extends React.Component<Props> {
             dateTime: "",
             currentItem: {},
             isFetching: false,
-            account: this.getUser()
+            account: this.getUser(),
+            isModalVisible: false,
+            markers: [{
+                coordinates: {
+                  latitude: LATITUDE,
+                  longitude: LONGITUDE
+                },
+              }]
         };
         //this.readEventData();
         this.realtimeEventsRefresh();
@@ -156,10 +172,10 @@ export class EventsScreen extends React.Component<Props> {
     setTestData = () => {
         // This function is for debugging. It provides 2 events that have happened and two that are upcoming (as of time of coding)
         var events = [
-            {key : '1557837000', name : 'Old Test Event 1', time : '14/05/2019 12:30', going : ['Gary', 'Alfred', 'Amy', 'Josh'], colour : 'red'},
-            {key : '1557857000', name : 'Another Old Test Event', time : '14/05/2019 18:03', going : ['Gary', 'Billy', 'Amy'], colour : 'red'},
-            {key : '1560342934', name : 'New Test Event 1', time : '12/06/2019 12:35', going : ['Jill', 'John', 'Amy', 'Josh'], colour : 'red'},
-            {key : '1560861334', name : 'Another New Test Event', time : '18/06/2019 12:35', going : ['Gary', 'Bill', 'Amy'], colour : 'red'}
+            {key : '1557837000', name : 'Old Test Event 1', time : '14/05/2019 12:30', going : ['Gary', 'Alfred', 'Amy', 'Josh'], colour : 'red', coords : {latitude: LATITUDE, longitude: LONGITUDE}},
+            {key : '1557857000', name : 'Another Old Test Event', time : '14/05/2019 18:03', going : ['Gary', 'Billy', 'Amy'], colour : 'red', coords : {latitude: LATITUDE, longitude: LONGITUDE}},
+            {key : '1560342934', name : 'New Test Event 1', time : '12/06/2019 12:35', going : ['Jill', 'John', 'Amy', 'Josh'], colour : 'red', coords : {latitude: LATITUDE, longitude: LONGITUDE}},
+            {key : '1560861334', name : 'Another New Test Event', time : '18/06/2019 12:35', going : ['Gary', 'Bill', 'Amy'], colour : 'red', coords : {latitude: LATITUDE, longitude: LONGITUDE}}
         ]
         firebase.database().ref('Events/').set({
                 events
@@ -217,9 +233,13 @@ export class EventsScreen extends React.Component<Props> {
         );
     }
 
+    toggleModal = () => {
+        this.setState({ isModalVisible: !this.state.isModalVisible });
+    };
+
     onRefresh = () => {
         this.setState({ isFetching: true }, function() { this.refreshData });
-    }
+    };
 
     showDateTimePicker = () => {
         this.setState({ isDateTimePickerVisible: true });
@@ -303,7 +323,12 @@ export class EventsScreen extends React.Component<Props> {
         this.setState({ eventName : "", eventTime: "", dateTime: "", dialogVisible: false });
     };
 
+    handleLocation = () => {
+        this.toggleModal();
+    }
+
     handleDone = () => {
+        this.toggleModal();
         var name = this.state.eventName;    
         if (name == "") {
             this.invalidNameAlert();
@@ -312,11 +337,15 @@ export class EventsScreen extends React.Component<Props> {
         var events = this.state.eventsArray;
         var time = this.state.dateTime;
         var going = [this.state.account];
-        var joined = [{key : newDateAndTime, name : name, time : time, going : going}].concat(events);
+        var coords = {
+            latitude: this.state.markers[0].coordinates.latitude,
+            longitude: this.state.markers[0].coordinates.longitude
+          };
+        var joined = [{key : newDateAndTime, name : name, time : time, going : going, coords : coords}].concat(events);
         this.setState({ eventsArray : joined.sort((a, b) => (a.key > b.key) ? 1 : -1)}); // In Unix Timestamp Mode so that sort works correctly
         this.writeEventsData(joined);
         this.hideDateTimePicker();
-        this.setState({ eventName : "", eventTime: "", dateTime: "", dialogVisible: false });
+        this.setState({ eventName : "", eventTime: "", dateTime: "", dialogVisible: false, markers: [{coordinates: {latitude: LATITUDE, longitude: LONGITUDE }}] });
         }
     };
 
@@ -366,10 +395,67 @@ export class EventsScreen extends React.Component<Props> {
         }
     };
 
+    logCoordinates = (e) => {
+        console.log(e)
+        this.setState({markers: 
+            [{
+                coordinates: e.coordinate
+            }]
+        })
+    }
+
     render() {
         return (
-                <View style={styles.mainStyle}>
-                        <View style={styles.container}>
+            <View style={styles.mainStyle}>
+                <View style={styles.container}>
+                    <Modal 
+                        isVisible={this.state.isModalVisible}
+                        backdropOpacity={0.0}
+                        backgroundColor={'white'}
+                        onBackButtonPress={this.toggleModal}
+                        coverScreen={true}
+                        animationInTiming={1}
+                        animationOutTiming={1}
+                        style={{ 
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            margin: 0 
+                            }}
+                        >
+                        <View style={{ flex: 1}}>
+                            <Header title='Choose Location'/>
+                                <View style ={{flex: 1, flexDirection: 'column', justifyContent: 'space-between'}}>
+                                    <View>
+                                        <MapView
+                                            style={styles.map}
+                                            showsUserLocation = {true}
+                                            followsUserLocation = {true}
+                                            loadingEnabled
+                                            region={{
+                                                latitude: this.state.markers[0].coordinates.latitude,
+                                                longitude: this.state.markers[0].coordinates.longitude,
+                                                latitudeDelta: 0.015,
+                                                longitudeDelta: 0.015
+                                            }}
+                                            onPress={e => this.logCoordinates(e.nativeEvent)}
+                                            >
+                                            {this.state.markers.map(marker => (
+                                                <Marker
+                                                coordinate={marker.coordinates}
+                                                title={"Start Location"}
+                                                />
+                                            ))}
+                                        </MapView>
+                                        <View style={{flexDirection: 'column', alignContent: 'center', paddingTop: 0.05 * Dimensions.get('window').width, paddingStart: 0.05 * Dimensions.get('window').width}}>
+                                            <Text style={{fontSize : 30, fontWeight : 'bold'}}>Current Location</Text>
+                                            <Text>Longitude: {this.state.markers[0].coordinates.longitude}</Text>
+                                            <Text>Latitude: {this.state.markers[0].coordinates.latitude}</Text>
+                                        </View>
+                                    </View>
+                                <Button title="Done" onPress={this.handleDone} />
+                            </View>
+                        </View>
+                    </Modal>
                 < FlatList
                     onRefresh={() => this.refreshData()}
                     refreshing={this.state.isFetching}
@@ -396,7 +482,7 @@ export class EventsScreen extends React.Component<Props> {
                     </Dialog.Description>
                     <Dialog.Input label = "Event Name" onChangeText = {(name) => this.handleInput(name)} />
                     <Dialog.Button label="Cancel" onPress={this.handleCancel} />
-                    <Dialog.Button label="Done" onPress={this.handleDone} />
+                    <Dialog.Button label="Done" onPress={this.handleLocation} />
                 </Dialog.Container>
             </View>
             <View style = {{flexDirection: 'row', justifyContent: 'flex-end'}}>
@@ -469,7 +555,12 @@ const styles = StyleSheet.create({
         flex: 1, 
         flexDirection: 'column', 
         paddingLeft: 18, 
-        width : Dimensions.get('window').width},
+        width : Dimensions.get('window').width       
+    },
+    map: {
+        width : Dimensions.get('window').width,
+        height: Dimensions.get('window').width
+    },
 })
 
 export default EventsScreen

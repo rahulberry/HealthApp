@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\Josh\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add react-native-slider
+  C:\Program Files\nodejs\node.exe C:\Users\Josh\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add react-native-modal
 
 PATH: 
   C:\windows\system32;C:\windows;C:\windows\System32\Wbem;C:\windows\System32\WindowsPowerShell\v1.0\;C:\windows\System32\OpenSSH\;C:\Program Files\PuTTY\;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\ProgramData\chocolatey\bin;C:\Program Files\Java\jdk1.8.0_211\bin;c:\Users\YOUR_USERNAME\AppData\Local\Android\Sdk\platform-tools;C:\Program Files\nodejs\;C:\Ruby25-x64\bin;C:\Users\Josh\AppData\Local\Microsoft\WindowsApps;C:\Users\Josh\AppData\Local\GitHubDesktop\bin;C:\Users\Josh\AppData\Local\Programs\Microsoft VS Code\bin;c:\Users\YOUR_USERNAME\AppData\Local\Android\Sdk\platform-tools;C:\Users\Josh\AppData\Roaming\npm
@@ -14,7 +14,7 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: EPERM: operation not permitted, unlink 'c:\Users\Josh\Documents\GitHub\HealthApp\node_modules\@expo\react-native-action-sheet\node_modules\hoist-non-react-statics\dist'
+  Error: EPERM: operation not permitted, unlink 'C:\Users\Josh\Documents\GitHub\HealthApp\node_modules\@expo\react-native-action-sheet\node_modules\hoist-non-react-statics\dist'
 
 npm manifest: 
   {
@@ -29,7 +29,7 @@ npm manifest:
       "firebase": "^5.11.1",
       "haversine": "^1.1.1",
       "react": "16.8.3",
-      "react-native": "0.59.5",
+      "react-native": "0.59.8",
       "react-native-animatable": "^1.3.2",
       "react-native-dialog": "^5.6.0",
       "react-native-elements": "^1.1.0",
@@ -39,7 +39,9 @@ npm manifest:
       "react-native-modal-datetime-picker": "^7.4.0",
       "react-native-paper": "^2.15.2",
       "react-native-phone-call": "^1.0.9",
+      "react-native-progress": "^3.6.0",
       "react-native-progress-circle": "^2.0.1",
+      "react-native-slider": "^0.11.0",
       "react-native-stopwatch-timer": "^0.0.20",
       "react-native-svg": "^9.4.0",
       "react-native-svg-charts": "^5.2.0",
@@ -5485,7 +5487,7 @@ Lockfile:
       kleur "^3.0.2"
       sisteransi "^1.0.0"
   
-  prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
+  prop-types@^15.5.10, prop-types@^15.5.6, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
     version "15.7.2"
     resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
     integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -5711,6 +5713,13 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/react-native-progress-circle/-/react-native-progress-circle-2.0.1.tgz#6a034bef69a13c3b7f1a33722527046d088c233d"
     integrity sha512-Cb2bBJ+m4DIcUnv7zaRvhMuaZAb1cWrd0UUMFJz/F7Z5yMga3A7SrQGDhtUrcpBju4peyqtUMoQG8dOFEuCVog==
   
+  react-native-progress@^3.6.0:
+    version "3.6.0"
+    resolved "https://registry.yarnpkg.com/react-native-progress/-/react-native-progress-3.6.0.tgz#feaf37491f91bb421207fd761e20cb7258a2a3a6"
+    integrity sha512-zzTe595xaaskyfR5OzaGrU4O0R+YkgdEw+EspgGD7wh8Hu0fs6ue3xLW+HEbTjOCn62pCRivwi3NxbpWNBCC7Q==
+    dependencies:
+      prop-types "^15.7.2"
+  
   react-native-ratings@^6.3.0:
     version "6.3.1"
     resolved "https://registry.yarnpkg.com/react-native-ratings/-/react-native-ratings-6.3.1.tgz#4e4bd87f376423dc62c933f570fc1932c78adaa4"
@@ -5737,6 +5746,13 @@ Lockfile:
     version "1.0.0-alpha.22"
     resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-1.0.0-alpha.22.tgz#7a120377b52aa9bbb94d0b8541a014026be9289b"
     integrity sha512-kSyAt0AeVU6N7ZonfV6dP6iZF8B7Bce+tk3eujXhzBGsLg0VSLnU7uE9VqJF0xdQrHR91ZjGgVMieo/8df9KTA==
+  
+  react-native-slider@^0.11.0:
+    version "0.11.0"
+    resolved "https://registry.yarnpkg.com/react-native-slider/-/react-native-slider-0.11.0.tgz#b68a0bc43c8422b24cd57947cc5ac2bcdb58fadc"
+    integrity sha512-jV9K87eu9uWr0uJIyrSpBLnCKvVlOySC2wynq9TFCdV9oGgjt7Niq8Q1A8R8v+5GHsuBw/s8vEj1AAkkUi+u+w==
+    dependencies:
+      prop-types "^15.5.6"
   
   react-native-status-bar-height@^2.2.0:
     version "2.3.1"
@@ -5788,10 +5804,10 @@ Lockfile:
       keymirror "0.1.1"
       prop-types "^15.5.10"
   
-  react-native@0.59.5:
-    version "0.59.5"
-    resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.59.5.tgz#79500d2885a3dc83216715e1fc6effa878ad6ea9"
-    integrity sha512-8Q/9cS6IMsGNiFhJgzmncbUeuacXQMe5EJl0c63fW30DvjEjeTVCvhM08eGzSpsNlOvL2XDRa4YOiCrwI7S1TA==
+  react-native@0.59.8:
+    version "0.59.8"
+    resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.59.8.tgz#ade4141c777c60f5ec4889d9811d0f80a9d56547"
+    integrity sha512-x1T+/pEXrjgdH9uDzd5doJy5aFlBqW04j7ljDKIGALchhnvdFbtXXrUZ/1PfWHMrIdZxtaDt4tkSttp662GSQA==
     dependencies:
       "@babel/runtime" "^7.0.0"
       "@react-native-community/cli" "^1.2.1"
