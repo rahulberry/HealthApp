@@ -1,10 +1,4 @@
-// Events.js
-
-// To Do:
-// 
-// Need to add a location picker modal and show location in view on the EventInformation page
-// Need to send a notification 1 hour before an event
-// Add getName from firebase and use that for the account
+// EventsDoctor.js
 
 import React from 'react';
 import {
@@ -18,7 +12,6 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import firebase from "firebase";
-import Fire from '../../components/PractitionerNav/Fire';
 import {
     NavigationScreenProp,
     NavigationState,
@@ -29,7 +22,7 @@ import DateTimePicker from "react-native-modal-datetime-picker";
 import { Header } from '../PatientNav/Header'
 import Modal from 'react-native-modal';
 
-import MapView, { Marker, AnimatedRegion } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
+import MapView, { Marker } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 
 interface Props {
     navigation: NavigationScreenProp<NavigationState>;
@@ -92,7 +85,6 @@ export class EventsScreen extends React.Component<Props> {
                 },
               }]
         };
-        //this.readEventData();
         this.realtimeEventsRefresh();
     };
 
@@ -168,23 +160,6 @@ export class EventsScreen extends React.Component<Props> {
         })
         this.readEventData();
     };
-
-    setTestData = () => {
-        // This function is for debugging. It provides 2 events that have happened and two that are upcoming (as of time of coding)
-        var events = [
-            {key : '1557837000', name : 'Old Test Event 1', time : '14/05/2019 12:30', going : ['Gary', 'Alfred', 'Amy', 'Josh'], colour : 'red', coords : {latitude: LATITUDE, longitude: LONGITUDE}},
-            {key : '1557857000', name : 'Another Old Test Event', time : '14/05/2019 18:03', going : ['Gary', 'Billy', 'Amy'], colour : 'red', coords : {latitude: LATITUDE, longitude: LONGITUDE}},
-            {key : '1560342934', name : 'New Test Event 1', time : '12/06/2019 12:35', going : ['Jill', 'John', 'Amy', 'Josh'], colour : 'red', coords : {latitude: LATITUDE, longitude: LONGITUDE}},
-            {key : '1560861334', name : 'Another New Test Event', time : '18/06/2019 12:35', going : ['Gary', 'Bill', 'Amy'], colour : 'red', coords : {latitude: LATITUDE, longitude: LONGITUDE}}
-        ]
-        firebase.database().ref('Events/').set({
-                events
-        }).then((data)=>{
-                console.log('Events written to firebase ' , data)
-        }).catch((error)=>{
-                console.log('Error writing events to firebase ' , error)
-        })
-    }
 
     invalidNameAlert = () => {
         Alert.alert(
@@ -286,38 +261,6 @@ export class EventsScreen extends React.Component<Props> {
         this.handleDelete(item)
     };
 
-    onGoingPress = (item) => {
-        if (item.going == null) {
-            var goingArray = [];
-        } else {
-            var goingArray = item.going;
-        }
-
-        var name = this.state.account;
-        if (goingArray.includes(name) == true) {
-            let filteredItems = goingArray.filter(item => item != name);
-            item.going = filteredItems;
-        } else {
-            var joined = goingArray.concat(name);
-            item.going = joined;
-        }
-
-        /*
-        firebase.database().ref('Events/').remove()
-            .then(()=>{
-                this.setState({firebaseArray: this.state.eventsArray})
-                this.writeEventsData([]);
-            })
-        */
-        
-        var events = this.state.eventsArray;
-        firebase.database().ref('Events/').update({
-            events,
-        })
-
-        //this.setState({isFetching : this.state.isFetching});
-    };
-
     handleCancel = () => {
         this.hideDateTimePicker();
         this.setState({ eventName : "", eventTime: "", dateTime: "", dialogVisible: false });
@@ -378,20 +321,6 @@ export class EventsScreen extends React.Component<Props> {
             this.setState({eventTime : unixDateAndTime.toString()});
             this.setState({dateTime : today});
             this.showNameDialog();
-        }
-    };
-
-    changeButtonColour = (item) => {
-        if (item.going == null) {
-            var goingArray = [];
-        } else {
-            var goingArray = item.going;
-        }
-        var name = this.state.account;
-        if (goingArray.includes(name) == true) {
-            return "green";
-        } else {
-            return "red";
         }
     };
 
@@ -485,7 +414,6 @@ export class EventsScreen extends React.Component<Props> {
                 </Dialog.Container>
             </View>
             <View style = {{flexDirection: 'row', justifyContent: 'flex-end'}}>
-                {/* Uncomment this for debugging <Button title="Set Firebase" onPress={this.setTestData} />{/* */}
                 <Button title="Add Event" onPress={this.showDateTimePicker} />
                     <DateTimePicker
                         isVisible={this.state.isDateTimePickerVisible}
