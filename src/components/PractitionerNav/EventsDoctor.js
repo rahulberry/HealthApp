@@ -40,7 +40,7 @@ const LONGITUDE= -0.174757;
 
 export class EventsScreen extends React.Component<Props> {
     static navigationOptions = {
-	tabBarLabel: 'All Events',
+	tabBarLabel: 'Events',
         tabBarIcon: ({
             tintColor,
             focused,
@@ -336,7 +336,7 @@ export class EventsScreen extends React.Component<Props> {
         var newDateAndTime = this.state.eventTime;
         var events = this.state.eventsArray;
         var time = this.state.dateTime;
-        var going = [this.state.account];
+        var going = [];
         var coords = {
             latitude: this.state.markers[0].coordinates.latitude,
             longitude: this.state.markers[0].coordinates.longitude
@@ -407,8 +407,55 @@ export class EventsScreen extends React.Component<Props> {
     render() {
         return (
             <View style={styles.mainStyle}>
-              <Header title="Events" />
                 <View style={styles.container}>
+                    <Modal 
+                        isVisible={this.state.isModalVisible}
+                        backdropOpacity={0.0}
+                        backgroundColor={'white'}
+                        onBackButtonPress={this.toggleModal}
+                        coverScreen={true}
+                        animationInTiming={1}
+                        animationOutTiming={1}
+                        style={{ 
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            margin: 0 
+                            }}
+                        >
+                        <View style={{ flex: 1}}>
+                            <Header title='Choose Location'/>
+                                <View style ={{flex: 1, flexDirection: 'column', justifyContent: 'space-between'}}>
+                                    <View>
+                                        <MapView
+                                            style={styles.map}
+                                            showsUserLocation = {true}
+                                            followsUserLocation = {true}
+                                            loadingEnabled
+                                            region={{
+                                                latitude: this.state.markers[0].coordinates.latitude,
+                                                longitude: this.state.markers[0].coordinates.longitude,
+                                                latitudeDelta: 0.015,
+                                                longitudeDelta: 0.015
+                                            }}
+                                            onPress={e => this.logCoordinates(e.nativeEvent)}
+                                            >
+                                            {this.state.markers.map(marker => (
+                                                <Marker
+                                                coordinate={marker.coordinates}
+                                                title={"Start Location"}
+                                                />
+                                            ))}
+                                        </MapView>
+                                        <View style={{flexDirection: 'column', alignContent: 'center', paddingTop: 0.05 * Dimensions.get('window').width, paddingStart: 0.05 * Dimensions.get('window').width}}>
+                                            <Text style={{fontSize : 30, fontWeight : 'bold'}}>Current Location</Text>
+                                            <Text>Longitude: {this.state.markers[0].coordinates.longitude}</Text>
+                                            <Text>Latitude: {this.state.markers[0].coordinates.latitude}</Text>
+                                        </View>
+                                    </View>
+                                <Button title="Done" onPress={this.handleDone} />
+                            </View>
+                        </View>
+                    </Modal>
                 < FlatList
                     onRefresh={() => this.refreshData()}
                     refreshing={this.state.isFetching}
@@ -417,7 +464,8 @@ export class EventsScreen extends React.Component<Props> {
                         <View style={styles.touchableUpcoming}>
                             <TouchableOpacity
                                 style={styles.touchableUpcoming1}
-                                onPress={() => this.onPress(item)}>
+                                onPress={() => this.onPress(item)}
+                                onLongPress={() => this.onLongPress(item)}>
                                 <View style={styles.touchableUpcomingTextView}>
                                     <Text style={{fontSize : 18}}>{item.name}</Text>
                                     <Text style={{fontSize : 12}}>{item.time}</Text>
@@ -426,8 +474,26 @@ export class EventsScreen extends React.Component<Props> {
                         </View> 
                     )}
                 />            
-                
+                <Dialog.Container visible={this.state.dialogVisible}>
+                    <Dialog.Title>Create Event</Dialog.Title>
+                    <Dialog.Description>
+                        Please enter a name for your event.
+                    </Dialog.Description>
+                    <Dialog.Input label = "Event Name" onChangeText = {(name) => this.handleInput(name)} />
+                    <Dialog.Button label="Cancel" onPress={this.handleCancel} />
+                    <Dialog.Button label="Done" onPress={this.handleLocation} />
+                </Dialog.Container>
             </View>
+            <View style = {{flexDirection: 'row', justifyContent: 'flex-end'}}>
+                {/* Uncomment this for debugging <Button title="Set Firebase" onPress={this.setTestData} />{/* */}
+                <Button title="Add Event" onPress={this.showDateTimePicker} />
+                    <DateTimePicker
+                        isVisible={this.state.isDateTimePickerVisible}
+                        onConfirm={this.handleDatePicked}
+                        onCancel={this.hideDateTimePicker}
+                        mode={'datetime'}
+                    />
+                </View>
             </View>
         );
     }

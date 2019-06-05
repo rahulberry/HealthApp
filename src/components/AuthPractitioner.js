@@ -137,6 +137,9 @@ class AuthPatient extends Component {
     const { visibleForm } = this.state;
     // The following style is responsible of the "bounce-up from bottom" animation of the form
     const formStyle = !visibleForm ? { height: 0 } : { marginTop: 40 };
+
+    console.disableYellowBox = true;
+
     return (
       // <ImageBackground
       //   source={require("../assets/auth_background2.png")}

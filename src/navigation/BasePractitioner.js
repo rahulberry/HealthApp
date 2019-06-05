@@ -18,7 +18,7 @@ interface Props {
 }
 
 import MainChat from '../components/PractitionerNav/MainChat'
-import EventNavigation from '../components/PractitionerNav/EventsDoctor'; //The thing that is actually imported is EventTopBarScreen
+import EventNavigation from '../components/PractitionerNav/EventNavigationDoctor'; //The thing that is actually imported is EventTopBarScreen
 import MainPage from '../components/PractitionerNav/MainPage';
 
 const SimpleTabs = createMaterialTopTabNavigator({
@@ -61,8 +61,9 @@ class TabNavigator extends React.Component<Props> {
     let bottom = null; 
     return (
       <View style={{ flex: 1 }}>
-        <StatusBar barStyle="default" />
-        <SafeAreaView
+        <StatusBar barStyle="default" 
+         backgroundColor="#7ccc9c"/>
+        <View
           style={{ flex: 1, backgroundColor: "#8ae2ad"}}
           forceInset={{ horizontal: 'always', top: 'never' }}
         >
@@ -70,7 +71,7 @@ class TabNavigator extends React.Component<Props> {
           <SimpleTabs navigation={navigation} />
 
           </View>
-        </SafeAreaView>
+        </View>
         {bottom}
       </View>
     );
