@@ -15,7 +15,7 @@ import EmergencyButton from '../PatientNav/currentActivity/EmergencyButton'
 const Header = (props) => {
     if (props.emergencyButton == true) {
         return (
-            <View style={styles.headerStyle} >
+            <View style={styles.headerStyle1} >
                 {/*<Button
                     onPress={() => goBack(null)}
                 title="Back"/>*/}
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
         alignItems : 'center'
     },
     titleStyle: {
-        marginTop: 35,
+        //marginTop: 35,
         fontSize : 30, 
         fontWeight : 'bold', 
         color: 'white'

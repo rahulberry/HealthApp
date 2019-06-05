@@ -76,7 +76,7 @@ export class EventsScreen extends React.Component<Props> {
             isFetching: false,
             account: this.getUser()
         };
-        //this.readEventData();
+        this.readEventData(); // May need to comment this out?
         this.realtimeEventsRefresh();
     };
 
