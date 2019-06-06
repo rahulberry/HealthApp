@@ -18,7 +18,6 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import firebase from "firebase";
-import Fire from '../../components/PractitionerNav/Fire';
 import {
     NavigationScreenProp,
     NavigationState,
@@ -91,9 +90,11 @@ export class EventsScreen extends React.Component<Props> {
                   longitude: LONGITUDE
                 },
               }]
+            //markers: []
         };
         this.readEventData(); // May need to comment this out?
         this.realtimeEventsRefresh();
+        this.readStats();
     };
 
     readEventData = () => {
@@ -122,7 +123,7 @@ export class EventsScreen extends React.Component<Props> {
         if (data != [] && data != null) {
             var currentTime = Math.round((new Date()).getTime() / 1000);
             let filteredItems = data.filter(item => item.key <= currentTime);
-            return filteredItems;
+            return filteredItems.reverse();
         } else {
             return [];
         }
@@ -172,10 +173,10 @@ export class EventsScreen extends React.Component<Props> {
     setTestData = () => {
         // This function is for debugging. It provides 2 events that have happened and two that are upcoming (as of time of coding)
         var events = [
-            {key : '1557837000', name : 'Old Test Event 1', time : '14/05/2019 12:30', going : ['Gary', 'Alfred', 'Amy', 'Josh'], colour : 'red', coords : {latitude: LATITUDE, longitude: LONGITUDE}},
-            {key : '1557857000', name : 'Another Old Test Event', time : '14/05/2019 18:03', going : ['Gary', 'Billy', 'Amy'], colour : 'red', coords : {latitude: LATITUDE, longitude: LONGITUDE}},
-            {key : '1560342934', name : 'New Test Event 1', time : '12/06/2019 12:35', going : ['Jill', 'John', 'Amy', 'Josh'], colour : 'red', coords : {latitude: LATITUDE, longitude: LONGITUDE}},
-            {key : '1560861334', name : 'Another New Test Event', time : '18/06/2019 12:35', going : ['Gary', 'Bill', 'Amy'], colour : 'red', coords : {latitude: LATITUDE, longitude: LONGITUDE}}
+            {key : '1557837000', name : 'Old Test Event 1', time : '14/05/2019 12:30', going : ['Gary', 'Alfred', 'Amy', 'Josh'], colour : 'red', coords : {latitude: LATITUDE, longitude: LONGITUDE}, stats : []},
+            {key : '1557857000', name : 'Another Old Test Event', time : '14/05/2019 18:03', going : ['Gary', 'Billy', 'Amy'], colour : 'red', coords : {latitude: LATITUDE, longitude: LONGITUDE}, stats : []},
+            {key : '1560342934', name : 'New Test Event 1', time : '12/06/2019 12:35', going : ['Jill', 'John', 'Amy', 'Josh'], colour : 'red', coords : {latitude: LATITUDE, longitude: LONGITUDE}, stats : []},
+            {key : '1560861334', name : 'Another New Test Event', time : '18/06/2019 12:35', going : ['Gary', 'Bill', 'Amy'], colour : 'red', coords : {latitude: LATITUDE, longitude: LONGITUDE}, stats : []}
         ]
         firebase.database().ref('Events/').set({
                 events
@@ -341,7 +342,7 @@ export class EventsScreen extends React.Component<Props> {
             latitude: this.state.markers[0].coordinates.latitude,
             longitude: this.state.markers[0].coordinates.longitude
           };
-        var joined = [{key : newDateAndTime, name : name, time : time, going : going, coords : coords}].concat(events);
+        var joined = [{key : newDateAndTime, name : name, time : time, going : going, coords : coords, stats : []}].concat(events);
         this.setState({ eventsArray : joined.sort((a, b) => (a.key > b.key) ? 1 : -1)}); // In Unix Timestamp Mode so that sort works correctly
         this.writeEventsData(joined);
         this.hideDateTimePicker();
@@ -404,6 +405,80 @@ export class EventsScreen extends React.Component<Props> {
         })
     }
 
+    filterOutCurrent = (data) => {
+        if (data != [] && data != null) {
+            var currentTime = Math.round((new Date()).getTime() / 1000);
+            let filteredItems = data.filter(item => item.key <= currentTime);
+            return filteredItems;
+        } else {
+            return [];
+        }
+    }
+
+    readStats = () => {
+        var firebaseRef = firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats');
+        if (firebaseRef === null || firebaseRef === undefined) {
+            console.log('No stats data for current patient. Merge abrted.')
+        } else {
+            console.log('Data found, and being merged.')
+        }
+        return firebaseRef.once('value')
+            .then((dataSnapshot) => {
+                var obj = dataSnapshot.val()
+                var statsArray = Object.keys(obj).map((key) => {
+                    return obj[key];
+                }).slice(0, -1).map((x) => {
+                    return {
+                        ...x,
+                        timestamp: Math.floor((new Date(x.timestamp)).getTime() / 1000),
+                        user: this.getUser(),
+                        uid: firebase.auth().currentUser.uid
+                      };   
+                    }
+                );
+                //console.log('User Stats Array: ', statsArray);
+
+                let stillToHappenEvents = this.filterOutOld(this.state.eventsArray);
+                let doneEvents = this.filterOutCurrent(this.state.eventsArray);
+                
+                doneEvents = doneEvents.map((el) => {
+                    var stats = el.stats;
+                    if (statsArray === undefined || statsArray.length == 0) {
+                        return el;
+                    } else {
+                        console.log('User Stats Array: ', statsArray);
+                        if (stats === undefined) {
+                            stats = [];
+                        }
+                        var statsValue = statsArray[0];
+                        //console.log('Stats Value: ', statsValue);
+                        //console.log('Stats Value Concat: ', stats.concat([statsValue]));
+                        statsArray = statsArray.slice(1);
+                        return {
+                            ...el,
+                            stats: stats.concat([statsValue])
+                        }
+                    }
+                })
+
+                console.log('Done Events: ', doneEvents);
+                let events = stillToHappenEvents.concat(doneEvents);
+                this.setState({eventsArray: events});
+                firebase.database().ref('Events/').set({
+                    events
+                }).then((data)=>{
+                        console.log('Events written to firebase ' , data)
+                }).catch((error)=>{
+                        console.log('Error writing events to firebase ' , error)
+                })
+
+                firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats').remove().then(() => {
+                    console.log('Old Events Delted.');
+                })
+            }
+        );
+    };
+
     render() {
         return (
             <View style={styles.mainStyle}>
@@ -429,11 +504,13 @@ export class EventsScreen extends React.Component<Props> {
                                         <MapView
                                             style={styles.map}
                                             showsUserLocation = {true}
-                                            followsUserLocation = {true}
+                                            showsMyLocationButton = {true}
                                             loadingEnabled
                                             region={{
                                                 latitude: this.state.markers[0].coordinates.latitude,
                                                 longitude: this.state.markers[0].coordinates.longitude,
+                                                //latitude: this.returnCoords().latitude,
+                                                //longitude: this.returnCoords().longitude,
                                                 latitudeDelta: 0.015,
                                                 longitudeDelta: 0.015
                                             }}
@@ -450,6 +527,8 @@ export class EventsScreen extends React.Component<Props> {
                                             <Text style={{fontSize : 30, fontWeight : 'bold'}}>Current Location</Text>
                                             <Text>Longitude: {this.state.markers[0].coordinates.longitude}</Text>
                                             <Text>Latitude: {this.state.markers[0].coordinates.latitude}</Text>
+                                            {/* <Text>Longitude: {this.returnCoords().longitude}</Text>
+                                            <Text>Latitude: {this.returnCoords().latitude}</Text> */}
                                         </View>
                                     </View>
                                 <Button title="Done" onPress={this.handleDone} />
@@ -486,7 +565,7 @@ export class EventsScreen extends React.Component<Props> {
                 </Dialog.Container>
             </View>
             <View style = {{flexDirection: 'row', justifyContent: 'flex-end'}}>
-                {/* Uncomment this for debugging */}<Button title="Set Firebase" onPress={this.setTestData} />{/* */}
+                {/* Uncomment this for debugging */}<Button title="Don't Press" onPress={this.setTestData} />{/* */}
                 <Button title="Add Event" onPress={this.showDateTimePicker} />
                     <DateTimePicker
                         isVisible={this.state.isDateTimePickerVisible}

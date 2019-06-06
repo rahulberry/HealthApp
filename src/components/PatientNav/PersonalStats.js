@@ -79,7 +79,7 @@ export class PersonalStatsScreen extends React.Component<Props> {
         if (data != [] && data != null) {
             var currentTime = Math.round((new Date()).getTime() / 1000);
             let filteredItems = data.filter(item => item.key <= currentTime);
-            return filteredItems;
+            return filteredItems.reverse();
         } else {
             return [];
         }

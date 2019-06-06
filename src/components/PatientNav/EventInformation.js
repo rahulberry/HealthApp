@@ -72,6 +72,20 @@ export class EventInformationScreen extends React.Component<Props> {
         }
     }
 
+    goingArray = (going, time) => {
+        var currentTime = Math.round((new Date()).getTime() / 1000);
+        console.log('Going:', going);
+        if (going == [] || going == undefined) {
+            if (time < currentTime) {
+                return ["Nobody went to this event."]
+            } else {
+                return ["Nobody is going to this event."]
+            }
+        } else {
+            return going
+        }
+    }
+
     render() {
         const { navigation } = this.props;
         const test = navigation.getParam('item', {name : 'You should not see this'});
@@ -95,7 +109,6 @@ export class EventInformationScreen extends React.Component<Props> {
                             <MapView
                                 style={styles.map}
                                 showsUserLocation = {false}
-                                followsUserLocation = {false}
                                 loadingEnabled
                                 region={{
                                     latitude: coords.latitude,
@@ -115,7 +128,7 @@ export class EventInformationScreen extends React.Component<Props> {
                     </View>
                     <Text style={styles.goingHeader}>{this.wentOrGoing(unixTime)}</Text>
                     <FlatList
-                        data={going}
+                        data={this.goingArray(going, unixTime)}
                         renderItem={({item}) => (
                             <View style={styles.goingListItem}>
                                 <Text style={styles.goingListItem1}>{item}</Text>
