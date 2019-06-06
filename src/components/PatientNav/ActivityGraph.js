@@ -12,7 +12,9 @@ class ActivityGraph extends React.PureComponent {
       super(props);
       this.state = {
         data: [ 10, 10, 28, 60, 75, 68, 69, 24, 18, 28, 60, 75, 68, 69, 24, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 ],
+        info: 25
       }
+      this.props.callbackFromParent(27);
       this.getdata()
     }
 
@@ -32,7 +34,6 @@ class ActivityGraph extends React.PureComponent {
     }
 
     render() {
-
         var d = new Date();
         var n = d.getDay();
 
@@ -43,7 +44,10 @@ class ActivityGraph extends React.PureComponent {
         var colour = ["#7ccc9c"]
 
         for(var i = 1; i < 28; i++){
-          if (dataset[i] > dataset[i-1]){
+          if (this.props.currentday == i){
+            colour.push('rgb(240, 64, 122)')
+          }
+          else if (dataset[i] > dataset[i-1]){
             colour.push('rgb(69, 204, 122)')
           } else {
             colour.push("#7ccc9c")
@@ -114,173 +118,202 @@ class ActivityGraph extends React.PureComponent {
                 data: data1,
                 svg: {
                     fill: colour[0],
+                    onPress: () => this.props.callbackFromParent('0'),
                 },
             },
             {
                 data: data2,
                 svg: {
                     fill: colour[1],
+                    onPress: () => this.props.callbackFromParent('1'),
                 },
             },
             {
                 data: data3,
                 svg: {
                     fill: colour[2],
+                    onPress: () => this.props.callbackFromParent('2'),
                 },
             },
             {
                 data: data4,
                 svg: {
                     fill: colour[3],
+                    onPress: () => this.props.callbackFromParent(3),
                 },
             },
             {
                 data: data5,
                 svg: {
                     fill: colour[4],
+                    onPress: () => this.props.callbackFromParent(4),
                 },
             },
             {
                 data: data6,
                 svg: {
                     fill: colour[5],
+                    onPress: () => this.props.callbackFromParent(5),
                 },
             },
             {
                 data: data7,
                 svg: {
                     fill: colour[6],
+                    onPress: () => this.props.callbackFromParent(6),
                 },
             },
             {
                 data: data8,
                 svg: {
                     fill: colour[7],
+                    onPress: () => this.props.callbackFromParent('7'),
                 },
             },
             {
                 data: data9,
                 svg: {
                     fill: colour[8],
+                    onPress: () => this.props.callbackFromParent('8'),
                 },
             },
             {
                 data: data10,
                 svg: {
                     fill: colour[9],
+                    onPress: () => this.props.callbackFromParent(9),
                 },
             },
             {
                 data: data11,
                 svg: {
                     fill: colour[10],
+                    onPress: () => this.props.callbackFromParent(10),
                 },
             },
             {
                 data: data12,
                 svg: {
                     fill: colour[11],
+                    onPress: () => this.props.callbackFromParent(11),
                 },
             },
             {
                 data: data13,
                 svg: {
                     fill: colour[12],
+                    onPress: () => this.props.callbackFromParent(12),
                 },
             },
             {
                 data: data14,
                 svg: {
                     fill: colour[13],
+                    onPress: () => this.props.callbackFromParent('13'),
                 },
             },
             {
                 data: data15,
                 svg: {
                     fill: colour[14],
+                    onPress: () => this.props.callbackFromParent('14'),
                 },
             },
             {
                 data: data16,
                 svg: {
                     fill: colour[15],
+                    onPress: () => this.props.callbackFromParent('15'),
                 },
             },
             {
                 data: data17,
                 svg: {
                     fill: colour[16],
+                    onPress: () => this.props.callbackFromParent('16'),
                 },
             },
             {
                 data: data18,
                 svg: {
                     fill: colour[17],
+                    onPress: () => this.props.callbackFromParent('17'),
                 },
             },
             {
                 data: data19,
                 svg: {
                     fill: colour[18],
+                    onPress: () => this.props.callbackFromParent('18'),
                 },
             },
             {
                 data: data20,
                 svg: {
                     fill: colour[19],
+                    onPress: () => this.props.callbackFromParent('19'),
                 },
             },
             {
                 data: data21,
                 svg: {
                     fill: colour[20],
+                    onPress: () => this.props.callbackFromParent('20'),
                 },
             },
             {
                 data: data22,
                 svg: {
                     fill: colour[21],
+                    onPress: () => this.props.callbackFromParent('21'),
                 },
             },
             {
                 data: data23,
                 svg: {
                     fill: colour[22],
+                    onPress: () => this.props.callbackFromParent('22'),
                 },
             },
             {
                 data: data24,
                 svg: {
                     fill: colour[23],
+                    onPress: () => this.props.callbackFromParent('23'),
                 },
             },
             {
                 data: data25,
                 svg: {
                     fill: colour[24],
+                    onPress: () => this.props.callbackFromParent('24'),
                 },
             },
             {
                 data: data26,
                 svg: {
                     fill: colour[25],
+                    onPress: () => this.props.callbackFromParent('25'),
                 },
             },
             {
                 data: data27,
                 svg: {
                     fill: colour[26],
+                    onPress: () => this.props.callbackFromParent('26'),
                 },
             },
             {
                 data: data28,
                 svg: {
                     fill: colour[27],
+                    onPress: () => this.props.callbackFromParent('27'),
                 },
             },
         ]
 
         return (
+          <View>
             <ScrollView horizontal={true}
                         snapToAlignment = 'end'
                         ref= "scrollref"
@@ -307,6 +340,7 @@ class ActivityGraph extends React.PureComponent {
                 </BarChart>
 
               </ScrollView>
+            </View>
         )
     }
 

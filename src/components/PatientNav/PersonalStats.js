@@ -56,6 +56,8 @@ export class PersonalStatsScreen extends React.Component<Props> {
             account: this.getUser(),
             eventsArray: [],
             isFetching: false,
+            day: 27,
+            wording: 'Today',
         };
         this.readEventData();
     };
@@ -79,6 +81,10 @@ export class PersonalStatsScreen extends React.Component<Props> {
         if (data != [] && data != null) {
             var currentTime = Math.round((new Date()).getTime() / 1000);
             let filteredItems = data.filter(item => item.key <= currentTime);
+            var currentDay = currentTime - (currentTime % 86400);
+            currentDay = currentDay - (86400 * (27 - this.state.day))
+            var currentTommorrow = currentDay + 86400;
+            filteredItems = filteredItems.filter(item => (item.key < currentTommorrow) && (item.key > currentDay))
             return filteredItems.reverse();
         } else {
             return [];
@@ -127,6 +133,38 @@ export class PersonalStatsScreen extends React.Component<Props> {
         }
     };
 
+    myCallback = (dataFromChild) => {
+      var date = new Date().getDate(); //Current Date
+      var month = new Date().getMonth() + 1; //Current Month
+      var year = new Date().getFullYear();
+
+      if ((this.state.day > dataFromChild) || (this.state.day < dataFromChild)){
+        this.setState({ day: dataFromChild })
+        if (dataFromChild == 27){
+            this.setState({ wording: 'Today' })
+        }
+        else if (dataFromChild == 26) {
+            this.setState({ wording: 'Yesterday' })
+        }
+
+        else {
+          var x = 27 - dataFromChild;
+          var temp_date = 0
+          var temp_month = 0
+          if (date <= x){
+            temp_date = 31 - (x - date);
+            temp_month = month - 1;
+          }
+          else {
+            temp_date = date - x;
+            temp_month = month;
+          }
+          var fulldate = ('on ' + temp_date + '/' + temp_month + '/' + year)
+          this.setState({ wording: fulldate })
+        }
+      }
+    };
+
     render() {
         const { navigation } = this.props;
         return (
@@ -134,13 +172,14 @@ export class PersonalStatsScreen extends React.Component<Props> {
                 <View>
                     <View style = {{alignItems : 'center'}}>
                         <View style={styles.statsView} >
-                          <ActivityGraph id = 'Graphdata'/>
+                          <ActivityGraph id = 'Graphdata' callbackFromParent={this.myCallback} currentday = {this.state.day}/>
+                          { this.myCallback() }
                         </View>
                     </View>
                     <View style = {{alignItems : 'center'}}>
                         <View style={styles.distanceView} >
                             <Text style={styles.distanceText}>4.8 km</Text>
-                            <Text style={{color: 'black', fontWeight: 'bold', fontSize: 20}}>Distance Today</Text>
+                            <Text style={{color: 'black', fontWeight: 'bold', fontSize: 20}}>Distance {this.state.wording}</Text>
                         </View>
                     </View>
                     <FlatList
