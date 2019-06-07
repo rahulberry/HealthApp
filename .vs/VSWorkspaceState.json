@@ -9,8 +9,8 @@
     "\\src",
     "\\src\\components",
     "\\src\\components\\PatientNav",
-    "\\src\\components\\PatientNav\\currentActivity"
+    "\\src\\components\\PatientNav\\Profile"
   ],
-  "SelectedNode": "\\android\\app\\src\\main\\AndroidManifest.xml",
+  "SelectedNode": "\\src\\components\\PatientNav\\Profile\\Profile.js",
   "PreviewInSolutionExplorer": false
 }

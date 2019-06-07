@@ -9,7 +9,7 @@ export default class ProfilePicture extends Component {
                     style={styles.profilePicture}
                     source={require('./images/userProfilePicture.png')}
                 />
-                <Text style={styles.dataStyle} > Harry Potter </Text>
+                <Text style={styles.dataStyle} > {this.props.name} </Text>
                 <Text style={styles.achievementStyle}> Personal Achievements </Text>
             </View>
         );

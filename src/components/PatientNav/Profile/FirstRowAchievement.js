@@ -9,9 +9,9 @@ export default class FirstRowAchievement extends Component {
         return (
             <View style={{ flexDirection: 'row' }}>
                 <View style={{ alignItems: 'center', marginTop: 20 }}>
-                    <View style={{ flex: 1, alignItems: 'center', marginLeft: 45 }}>
+                    <View style={{ flex: 1, alignItems: 'center', marginLeft: 30 }}>
                         <ProgressCircle
-                            percent={this.props.streak}
+                            percent={this.props.walkedThreeHours}
                             radius={55}
                             borderWidth={7}
                             color="#8ae2ad"
@@ -20,16 +20,16 @@ export default class FirstRowAchievement extends Component {
                         >
                         </ProgressCircle>
                         <Image
-                            source={require('./images/7daystreak.png')}
+                            source={require('./images/threeHours.png')}
                             style={styles.badgeConstraints}
                         />
                     </View>
-                    <Text style={styles.achievementTextStyle} > 7 day streak </Text>
+                    <Text style={[styles.achievementTextStyle, {marginLeft: 35}]} > Walked 3 hours </Text>
                 </View>
                 <View style={{ alignItems: 'center' }}>
-                    <View style={{ flex: 1, alignItems: 'center', marginTop: 17, marginLeft: 25 }}>
+                    <View style={{ flex: 1, alignItems: 'center', marginTop: 17, marginLeft: 45,  }}>
                         <ProgressCircle
-                            percent={this.props.leaderboard}
+                            percent={this.props.walkedFifteenMiles}
                             radius={55}
                             borderWidth={7}
                             color="#8ae2ad"
@@ -38,12 +38,14 @@ export default class FirstRowAchievement extends Component {
                         >
                         </ProgressCircle>
                         <Image
-                            source={require('./images/topOfLeaderboard.png')}
+                            source={require('./images/fifteenMiles.png')}
                             style={styles.badgeConstraints}
                         />
                     </View>
-                    <Text style={{ marginTop: 20, fontWeight: 'bold', fontSize: 17, marginLeft: 25 }}> Walked 100 miles </Text>
-                </View>
+                    <View style={{ marginTop: 5}}>
+                        <Text style={{ fontWeight: 'bold', fontSize: 17, marginLeft: 40 }}> Walked 15 miles </Text>
+                    </View>
+                 </View>
             </View>
         );
     }
@@ -68,7 +70,7 @@ const styles = StyleSheet.create({
     achievementTextStyle: {
         alignSelf: 'center',
         textAlign: 'center',
-        width: 100,
+        marginTop: 10,
         marginLeft: 50,
         fontSize: 17,
         fontWeight: 'bold'
