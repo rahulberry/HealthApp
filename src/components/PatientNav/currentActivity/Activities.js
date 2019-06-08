@@ -37,6 +37,9 @@ const LONGITUDEDELTA = 0.0121;
 var THRESHOLD = 0.5;
 var DISTANCETHRESHOLD = 100;
 
+const cities = ["London", "Berlin"];
+const cityDistances = [8370, 21670]
+
 export default class Activities extends Component {
 
     static navigationOptions = {
@@ -52,6 +55,7 @@ export default class Activities extends Component {
             longitude: LONGITUDE,
             routeCoordinates: [],
             distanceTravelled: 0,
+            eventDistanceTravelled: 0,
             prevLatLng: {},
             coordinate: new AnimatedRegion({
                 latitude: LATITUDE,
@@ -75,6 +79,7 @@ export default class Activities extends Component {
 
         this._onPress = this._onPress.bind(this);
         this.writeStats = this.writeStats.bind(this);
+        this.mainActivityPageCalculations = this.mainActivityPageCalculations.bind(this);
     }
 
     //Mapview functions
@@ -164,10 +169,92 @@ export default class Activities extends Component {
 
     }
 
+    mainActivityPageCalculations() {
+        let cityIndex = 0;
+        let groupIndex = 0
+        let groupDistanceTravelled = 0;
+        let distanceTravelledOldCity = 0;
+        let distanceTravelledNewCity = 0;
+
+        let totalDistanceTravelled = 0;
+        let distanceTravelledLondon = 0;
+        let distanceTravelledBerlin = 0;
+
+        var firebaseRef = firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Account Details/group');
+        firebaseRef.once('value', (snapshot) => {
+            groupIndex = snapshot.val();
+
+            firebase.database().ref('/Groups/' + groupIndex + '/totalDistanceTravelled').once('value', (snapshot) => {
+                groupDistanceTravelled = snapshot.val();
+
+                firebase.database().ref('/Groups/' + groupIndex + '/cityIndex').once('value', (snapshot) => {
+                    cityIndex = snapshot.val();
+
+                    firebase.database().ref('/Groups/' + groupIndex + '/Patients/' + firebase.auth().currentUser.uid + '/distanceTravelled' + cities[0]).once('value', (snapshot) => {
+                        distanceTravelledLondon = snapshot.val();
+
+                        firebase.database().ref('/Groups/' + groupIndex + '/Patients/' + firebase.auth().currentUser.uid + '/distanceTravelled' + cities[1]).once('value', (snapshot) => {
+                            distanceTravelledBerlin = snapshot.val();
+
+                            groupDistanceTravelled += this.state.eventDistanceTravelled;
+                            distanceTravelledLondon += this.state.eventDistanceTravelled;
+
+                            if (groupDistanceTravelled >= cityDistances[cityIndex]) {
+                                distanceTravelledBerlin = groupDistanceTravelled - cityDistances[cityIndex];
+                                distanceTravelledLondon -= distanceTravelledBerlin;
+
+
+                                if (cityIndex < cities.length - 1) {
+                                    cityIndex++;
+                                }
+
+                            }
+
+                            else if (cityIndex === 1) {
+                                distanceTravelledLondon -= this.state.eventDistanceTravelled;
+                                distanceTravelledBerlin += this.state.eventDistanceTravelled;
+                            }
+
+
+                            totalDistanceTravelled = groupDistanceTravelled;
+
+                            firebase.database().ref('/Groups/' + groupIndex).update({
+                                totalDistanceTravelled,
+                                cityIndex
+                            }).then((data) => {
+
+                            }).catch((error) => {
+
+                            })
+
+                            firebase.database().ref('/Groups/' + groupIndex + '/Patients/' + firebase.auth().currentUser.uid).update({
+                                distanceTravelledLondon,
+                                distanceTravelledBerlin
+                            }).then((data) => {
+
+                            }).catch((error) => {
+
+                            })
+
+                        })
+                    
+                    })
+
+
+                });
+
+            });
+
+        });
+
+    }
 
     _onPress() {
 
         let distanceTravelled = this.state.distanceTravelled;
+        this.setState({
+            eventDistanceTravelled: distanceTravelled
+        })
         let pace = this.state.pace;
         let timeElapsed = this.state.timeElapsed;
 
@@ -200,6 +287,8 @@ export default class Activities extends Component {
                 //error callback
             })
         });
+
+        this.mainActivityPageCalculations();
 
         this.props.navigation.navigate('FeedbackPage')
     }

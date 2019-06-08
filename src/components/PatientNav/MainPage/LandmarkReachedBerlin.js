@@ -73,6 +73,7 @@ export default class LandmarksReachedBerlin extends Component {
         }
         else if (value >= 1400 && value < 3200) {
             this.setState({
+                reachedLandmark1: true,
                 reachedLandmark2: true,
                 progressValue: 0.4 + ((value - 1400) / 9000),
                 distanceToLandmark3: 3200 - value,
@@ -85,6 +86,8 @@ export default class LandmarksReachedBerlin extends Component {
         }
         else if (value >= 3200 && value < 3700) {
             this.setState({
+                reachedLandmark1: true,
+                reachedLandmark2: true,
                 reachedLandmark3: true,
                 progressValue: 0.6 + ((value - 3200) / 2500),
                 distanceToLandmark4: 3700 - value,
@@ -97,6 +100,9 @@ export default class LandmarksReachedBerlin extends Component {
         }
         else if (value >= 3700 && value < 13300) {
             this.setState({
+                reachedLandmark1: true,
+                reachedLandmark2: true,
+                reachedLandmark3: true,
                 reachedLandmark4: true,
                 progressValue: 0.8 + ((value - 3700) / 48000),
                 distanceToLandmark5: 13300 - value,
@@ -110,6 +116,10 @@ export default class LandmarksReachedBerlin extends Component {
         }
         else if (value === 13300) {
             this.setState({
+                reachedLandmark1: true,
+                reachedLandmark2: true,
+                reachedLandmark3: true,
+                reachedLandmark4: true,
                 reachedLandmark5: true,
                 progressValue: 1.0,
                 displayDistancetoLandmark1: false,

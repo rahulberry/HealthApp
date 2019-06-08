@@ -94,7 +94,7 @@ export class EventsScreen extends React.Component<Props> {
         };
         this.readEventData(); // May need to comment this out?
         this.realtimeEventsRefresh();
-        this.readStats();
+        //this.readStats();
     };
 
     readEventData = () => {
