@@ -66,6 +66,7 @@ export default class LandmarksReachedLondon extends Component {
         }
         else if (value >= 1450 && value < 2900) {
             this.setState({
+                reachedLandmark1: true,
                 reachedLandmark2: true,
                 progressValue: 0.4 + ((value - 1450) / 7250),
                 distanceToLandmark3: 2900 - value,
@@ -78,6 +79,8 @@ export default class LandmarksReachedLondon extends Component {
         }
         else if (value >= 2900 && value < 4830) {
             this.setState({
+                reachedLandmark1: true,
+                reachedLandmark2: true,
                 reachedLandmark3: true,
                 progressValue: 0.6 + ((value - 2900) / 9650),
                 distanceToLandmark4: 4830 - value,
@@ -90,6 +93,9 @@ export default class LandmarksReachedLondon extends Component {
         }
         else if (value >= 4830 && value < 8370) {
             this.setState({
+                reachedLandmark1: true,
+                reachedLandmark2: true,
+                reachedLandmark3: true,
                 reachedLandmark4: true,
                 progressValue: 0.8 + ((value - 4830) / 17700),
                 distanceToLandmark5: 8370 - value,
@@ -102,6 +108,10 @@ export default class LandmarksReachedLondon extends Component {
         }
         else if (value === 8370) {
             this.setState({
+                reachedLandmark1: true,
+                reachedLandmark2: true,
+                reachedLandmark3: true,
+                reachedLandmark4: true,
                 reachedLandmark5: true,
                 progressValue: 1.0,
                 displayDistancetoLandmark1: false,

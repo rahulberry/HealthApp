@@ -11,6 +11,8 @@ import Modal from './Modal'
 import LandmarksReachedLondon from './LandnmarksReachedLondon'
 import LandmarksReachedBerlin from './LandmarkReachedBerlin'
 
+import firebase from 'firebase'
+
 import { Header } from '../Header'
 
 const icons = {
@@ -355,6 +357,7 @@ export default class MainActivityPage extends Component {
             reachedMadrid: false,
             reachedLisbon: false,
             percentageCompleted: 0,
+            patientNames: [],
             LondonData: [...LondonData],
             BerlinData: [...BerlinData],
             RomeData: [...RomeData],
@@ -366,36 +369,144 @@ export default class MainActivityPage extends Component {
         this.setCurrentCity = this.setCurrentCity.bind(this);
         this.renderLandmarks = this.renderLandmarks.bind(this);
         this.setDestinationArray = this.setDestinationArray.bind(this);
+        this.fetchPatientData = this.fetchPatientData.bind(this);
+        this.fetchPatientNames = this.fetchPatientNames.bind(this);
+        this.populateLondonDistanceArray = this.populateLondonDistanceArray.bind(this);
+        this.populateBerlinDistanceArray = this.populateBerlinDistanceArray.bind(this);
+        this.populateNameFieldOfArray = this.populateNameFieldOfArray.bind(this);
+    } 
 
+    populateLondonDistanceArray = (distanceTravelledCity) => {
+
+        let distanceAccumulated = 0;
+        let tmpArrayLondon = [...this.state.LondonData];
+
+        tmpArrayLondon[5].amount = 8370;
+
+
+        for (let i = 0; i < distanceTravelledCity.length; i++) {
+            //tmpArrayLondon[i].name = this.state.patientNames[i];
+            tmpArrayLondon[i].amount = distanceTravelledCity[i];
+            distanceAccumulated += distanceTravelledCity[i];
+        }
+
+        tmpArrayLondon[5].amount = tmpArrayLondon[5].amount - distanceAccumulated;
+
+        console.log(tmpArrayLondon);
+
+        this.setState({
+            LondonData: tmpArrayLondon
+        })    
     }
 
-    componentWillMount() {
-        //fetch data from firebase
-        let distanceTravelled = this.props.distanceTravelled;
-        const patientData = [
-            {
-                name: "Fred",
-                distanceTravelled: 1300
-            },
-            {
-                name: "Hannah",
-                distanceTravelled: 1300,
-            },
-            {
-                name: "You",
-                distanceTravelled: 1300,
-            },
-            {
-                name: "David",
-                distanceTravelled: 1300,
-            },
-            {
-                name: "Reepicheep",
-                distanceTravelled: 1300,
-            }
-        ];
+    populateBerlinDistanceArray = (distanceTravelledCity) => {
 
-        this.setCurrentCity(distanceTravelled, patientData);
+        let distanceAccumulated = 0;
+        let tmpArrayBerlin = [...this.state.BerlinData];
+        tmpArrayBerlin[5].amount = 13300;
+
+        for (let i = 0; i < distanceTravelledCity.length; i++) {
+            tmpArrayBerlin[i].amount = distanceTravelledCity[i];
+            distanceAccumulated += distanceTravelledCity[i];
+        }
+
+        tmpArrayBerlin[5].amount = tmpArrayBerlin[5].amount - distanceAccumulated;
+
+        console.log(tmpArrayBerlin);
+
+        this.setState({
+            BerlinData: tmpArrayBerlin
+        })
+    }
+
+    populateNameFieldOfArray = (namesArray) => {
+        let tmpArrayLondon = [...this.state.LondonData];
+        let tmpArrayBerlin = [...this.state.BerlinData];
+
+        for (let i = 0; i < namesArray.length; i++) {
+            tmpArrayLondon[i].name = namesArray[i];
+            tmpArrayBerlin[i].name = namesArray[i];
+        }
+        
+        this.setState({
+            LondonData: tmpArrayLondon,
+            BerlinData: tmpArrayBerlin
+        })
+    }
+
+    fetchPatientNames = (patientUID) => {
+
+        var patientNameArray = [];
+        let nameOfIndividualPatient = ""
+        
+        for (let i = 0; i < patientUID.length; i++) {
+
+            var firebaseRef = firebase.database().ref('/Patients/' + patientUID[i] + '/Account Details/name');
+            firebaseRef.on('value', (snapshot) => {
+                nameOfIndividualPatient = snapshot.val();
+                patientNameArray.push(nameOfIndividualPatient);
+                if (i === 4) {
+                    //this.setState({
+                    //    patientNames: patientNameArray
+                    //})
+
+                    this.populateNameFieldOfArray(patientNameArray);
+
+                }
+            })
+
+        }
+
+    }
+      
+    fetchPatientData() {
+
+        let groupIndex = 0;
+        let cityIndex = 0;
+        let individualPatient;
+        var patientUID = [];
+        var distanceTravelledBerlinArray = [];
+        var distanceTravelledLondonArray = [];
+        let patientData = {};
+        //let distanceTravelled = this.props.distanceTravelled;
+
+        let distanceTravelled = 0;
+
+        var firebaseRef = firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Account Details/group');
+        firebaseRef.on('value', (snapshot) => {
+            groupIndex = snapshot.val();
+
+            var patientDataRef = firebase.database().ref('/Groups/' + groupIndex + '/Patients')
+            patientDataRef.on('value', (snapshot) => {
+                patientData = snapshot.val();
+
+                console.log(patientData);
+
+                for (var key in patientData) {
+                    patientUID.push(key);
+                    distanceTravelledLondonArray.push(patientData[key].distanceTravelledLondon);
+                    distanceTravelledBerlinArray.push(patientData[key].distanceTravelledBerlin);
+                }
+
+                this.fetchPatientNames(patientUID);
+                this.populateLondonDistanceArray(distanceTravelledLondonArray);
+                this.populateBerlinDistanceArray(distanceTravelledBerlinArray);
+
+                patientUID = [];
+                distanceTravelledLondonArray = [];
+                distanceTravelledBerlinArray = [];
+                    
+            });
+
+            var groupAccumulatedDistanceRef = firebase.database().ref('/Groups/' + groupIndex + '/totalDistanceTravelled');
+            groupAccumulatedDistanceRef.on('value', (snapshot) => {
+                distanceTravelled = snapshot.val()
+                this.setCurrentCity(distanceTravelled);
+
+            })
+
+        });
+
     }
 
     setDestinationArray = (value) => {
@@ -422,28 +533,15 @@ export default class MainActivityPage extends Component {
 
     }
 
-    setCurrentCity = (totalDistanceTravelled, patientData) => {
-
-        let distanceAccumulated = 0;
+    setCurrentCity = (totalDistanceTravelled) => {
 
         if (totalDistanceTravelled >= 0 && totalDistanceTravelled <= 8370) {
-
-            let tmpArrayLondon = [...this.state.LondonData];
-
-            for (let i = 0; i < 5; i++) {
-                tmpArrayLondon[i].name = patientData[i].name;
-                tmpArrayLondon[i].amount = patientData[i].distanceTravelled;
-                distanceAccumulated += patientData[i].distanceTravelled;
-            }
-
-            tmpArrayLondon[5].amount = tmpArrayLondon[5].amount - distanceAccumulated;
 
             this.setState({
                 destination: 0,
                 distanceCovered: totalDistanceTravelled,
                 distanceLeft: 8370 - totalDistanceTravelled,
                 percentageCompleted: (totalDistanceTravelled / 8370) * 100,
-                LondonData: tmpArrayLondon
             })
         }
         else if (totalDistanceTravelled > 8370 && totalDistanceTravelled <= 21670) {
@@ -506,25 +604,29 @@ export default class MainActivityPage extends Component {
     renderLandmarks = (destinationIndex) => {
         switch (destinationIndex) {
             case 0:
-                return <LandmarksReachedLondon progressValue={750} />
+                return <LandmarksReachedLondon progressValue={this.state.distanceCovered} />
                 break;
             case 1:
-                return <LandmarksReachedBerlin progressValue={2000} />
+                return <LandmarksReachedBerlin progressValue={this.state.distanceCovered} />
                 break;
             case 2:
-                return <LandmarksReachedLondon progressValue={750} />
+                return <LandmarksReachedLondon progressValue={this.state.distanceCovered} />
                 break;
             case 3:
-                return <LandmarksReachedBerlin progressValue={2000} />
+                return <LandmarksReachedBerlin progressValue={this.state.distanceCovered} />
                 break;
             case 4:
-                return <LandmarksReachedLondon progressValue={750} />
+                return <LandmarksReachedLondon progressValue={this.state.distanceCovered} />
                 break;
             case 5:
-                return <LandmarksReachedBerlin progressValue={2000} />
+                return <LandmarksReachedBerlin progressValue={this.state.distanceCovered} />
                 break;
 
         }
+    }
+
+    componentWillMount() {
+        this.fetchPatientData();
     }
 
     _onPressButton() {
@@ -547,7 +649,7 @@ export default class MainActivityPage extends Component {
 
                     <View style={{ marginTop: 20, marginBottom: 20 }}>
                     <ProgressBar
-                        data={this.setDestinationArray(0)}
+                        data={this.setDestinationArray(this.state.destination)}
                     />
                         <Image
                             source={milestones[this.state.destination].currentCityImage}

@@ -4,7 +4,7 @@ import { AppRegistry, Alert, Text, TouchableOpacity, StyleSheet, View, Image } f
 import call from 'react-native-phone-call'
 
 const args = {
-    number: '07450210095',
+    number: '999',
     prompt: false
 }
 
