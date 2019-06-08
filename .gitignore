@@ -57,3 +57,5 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+android/.gradle/4.10.2/taskHistory/taskHistory.bin
+android/.gradle/4.10.2/taskHistory/taskHistory.lock
