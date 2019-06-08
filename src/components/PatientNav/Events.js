@@ -151,6 +151,18 @@ export class EventsScreen extends React.Component<Props> {
         return result
     }
 
+    filterByUid = (data) => {
+        const result = [];
+        const map = new Map();
+        for (const item of data) {
+            if(!map.has(item.uid)){
+                map.set(item.uid, true);        // set any value to Map
+                result.push(item);
+            }
+        }
+        return result
+    }
+
     writeEventsData = (events1) => {
         this.readEventData();
         if (this.state.firebaseArray == null) {
@@ -222,6 +234,7 @@ export class EventsScreen extends React.Component<Props> {
     };
 
     refreshData = () => {
+        this.readStats();
         var firebaseRef = firebase.database().ref('Events/events');
         firebaseRef.once('value')
             .then((dataSnapshot) => {
@@ -415,6 +428,7 @@ export class EventsScreen extends React.Component<Props> {
         }
     }
 
+    // THIS FUNCTION IS HORRIBLE AND HACKY AND PROBABLY HAS ISSUES IF MULTIPLE USERS TRY TO UPDATE THE EVENT AT ONCE I DON'T CARE
     readStats = () => {
         var firebaseRef = firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats');
         if (firebaseRef === null || firebaseRef === undefined) {
@@ -425,56 +439,62 @@ export class EventsScreen extends React.Component<Props> {
         return firebaseRef.once('value')
             .then((dataSnapshot) => {
                 var obj = dataSnapshot.val()
-                var statsArray = Object.keys(obj).map((key) => {
-                    return obj[key];
-                }).slice(0, -1).map((x) => {
-                    return {
-                        ...x,
-                        timestamp: Math.floor((new Date(x.timestamp)).getTime() / 1000),
-                        user: this.getUser(),
-                        uid: firebase.auth().currentUser.uid
-                      };   
-                    }
-                );
-                //console.log('User Stats Array: ', statsArray);
-
-                let stillToHappenEvents = this.filterOutOld(this.state.eventsArray);
-                let doneEvents = this.filterOutCurrent(this.state.eventsArray);
-                
-                doneEvents = doneEvents.map((el) => {
-                    var stats = el.stats;
-                    if (statsArray === undefined || statsArray.length == 0) {
-                        return el;
-                    } else {
-                        console.log('User Stats Array: ', statsArray);
-                        if (stats === undefined) {
-                            stats = [];
-                        }
-                        var statsValue = statsArray[0];
-                        //console.log('Stats Value: ', statsValue);
-                        //console.log('Stats Value Concat: ', stats.concat([statsValue]));
-                        statsArray = statsArray.slice(1);
+                console.log('obj', obj)
+                if (obj != null) {
+                    var statsArray = Object.keys(obj).map((key) => {
+                        return obj[key];
+                    }).slice(0, -1).map((x) => {
                         return {
-                            ...el,
-                            stats: stats.concat([statsValue])
+                            ...x,
+                            timestamp: Math.floor((new Date(x.timestamp)).getTime() / 1000),
+                            user: this.getUser(),
+                            uid: firebase.auth().currentUser.uid
+                        };   
                         }
-                    }
-                })
+                    );
+                    //console.log('User Stats Array: ', statsArray);
 
-                console.log('Done Events: ', doneEvents);
-                let events = stillToHappenEvents.concat(doneEvents);
-                this.setState({eventsArray: events});
-                firebase.database().ref('Events/').set({
-                    events
-                }).then((data)=>{
-                        console.log('Events written to firebase ' , data)
-                }).catch((error)=>{
-                        console.log('Error writing events to firebase ' , error)
-                })
+                    let stillToHappenEvents = this.filterOutOld(this.state.eventsArray);
+                    let doneEvents = this.filterOutCurrent(this.state.eventsArray);
+                    
+                    doneEvents = doneEvents.map((el) => {
+                        var stats = el.stats;
+                        if (statsArray === undefined || statsArray.length == 0) {
+                            return el;
+                        } else {
+                            console.log('User Stats Array: ', statsArray);
+                            if (stats === undefined) {
+                                stats = [];
+                            }
+                            var statsValue = statsArray[0];
+                            //console.log('Stats Value: ', statsValue);
+                            //console.log('Stats Value Concat: ', stats.concat([statsValue]));
+                            statsArray = statsArray.slice(1);
+                            //console.log('test', this.filterByUid(stats.concat([statsValue])))
+                            return {
+                                ...el,
+                                stats: this.filterByUid(stats.concat([statsValue]))
+                            }
+                        }
+                    })
 
-                firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats').remove().then(() => {
-                    console.log('Old Events Delted.');
-                })
+                    // Need to add code so that if you have already been to the most recent planned event, it askes you to create another event (time fixed at the timestamp of this event.)
+
+                    console.log('Done Events: ', doneEvents);
+                    let events = stillToHappenEvents.concat(doneEvents);
+                    this.setState({eventsArray: events});
+                    firebase.database().ref('Events/').set({
+                        events
+                    }).then((data)=>{
+                            console.log('Events written to firebase ' , data)
+                    }).catch((error)=>{
+                            console.log('Error writing events to firebase ' , error)
+                    })
+
+                    firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats').remove().then(() => {
+                        console.log('Old Events Delted.');
+                    })
+                }
             }
         );
     };

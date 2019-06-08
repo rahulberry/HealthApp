@@ -86,6 +86,23 @@ export class EventInformationScreen extends React.Component<Props> {
         }
     }
 
+    getDistanceTravelled = (stats) => {
+        console.log('stats: ', stats)
+        if (stats != null) {
+            return 'Distance Travelled: ' + stats[0].distanceTravelled;
+        } else {
+            return 'Goal distance: 1km'; // See if we can get a goal distance from firebase
+        }
+    }
+
+    getAveragePace = (stats) => {
+        if (stats != null) {
+            return 'Average Pace: ' + stats[0].pace;
+        } else {
+            return 'Goal Pace: 30 minutes per mile'; // See if we can get goal pace from firebase
+        }
+    }
+
     render() {
         const { navigation } = this.props;
         const test = navigation.getParam('item', {name : 'You should not see this'});
@@ -94,6 +111,7 @@ export class EventInformationScreen extends React.Component<Props> {
         const going = test.going;
         const unixTime = test.key;
         const coords = test.coords;
+        const stats = test.stats;
         const {goBack} = this.props.navigation;
         return (
             <View style={{paddingBottom: 0.25 * Dimensions.get('window').width}}>
@@ -104,7 +122,7 @@ export class EventInformationScreen extends React.Component<Props> {
                     <Text style={styles.timeHeader}>Time and Date:</Text>
                     <Text style={styles.time}>{time}</Text>
                     <Text style={styles.locationHeader}>Location: </Text>
-                    <View style = {{alignItems : 'center'}}>
+                    <View style = {{alignItems : 'center', paddingBottom : 30}}>
                         <View style={styles.locationView} >
                             <MapView
                                 style={styles.map}
@@ -126,6 +144,8 @@ export class EventInformationScreen extends React.Component<Props> {
                             </MapView>
                         </View>
                     </View>
+                    <Text style={styles.time}>{this.getDistanceTravelled(stats)}</Text>
+                    <Text style={styles.time}>{this.getAveragePace(stats)}</Text>
                     <Text style={styles.goingHeader}>{this.wentOrGoing(unixTime)}</Text>
                     <FlatList
                         data={this.goingArray(going, unixTime)}
