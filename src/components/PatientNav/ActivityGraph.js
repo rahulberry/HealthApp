@@ -19,12 +19,12 @@ class ActivityGraph extends React.PureComponent {
     }
 
     getdata(){
-      var userId = this.props.id;
-      var firebaseRef = firebase.database().ref('/Patients/Testing/' + userId);
+      var uID = this.props.id;
+      var firebaseRef = firebase.database().ref('/Patients/' + uID + '/Stats');
       return firebaseRef.once('value')
         .then((dataSnapshot) => {
-          console.log('getting data', dataSnapshot.val());
-          this.setState({ data: dataSnapshot.val().data });
+          console.log('getting data', dataSnapshot.val().distanceArray);
+          this.setState({ data: dataSnapshot.val().distanceArray });
         }
       );
     }

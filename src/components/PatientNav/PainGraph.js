@@ -21,11 +21,13 @@ class PainGraph extends React.PureComponent {
 
     getdata(){
       var userId = this.props.id;
-      var firebaseRef = firebase.database().ref('/Patients/Testing/' + userId);
+      var firebaseRef = firebase.database().ref('/Patients/' + uID + '/Stats');
       return firebaseRef.once('value')
         .then((dataSnapshot) => {
           console.log('getting data', dataSnapshot.val());
-          this.setState({ data: dataSnapshot.val().data });
+          this.setState({ data: dataSnapshot.val().distanceArray,
+                          pain: dataSnapshot.val().painArray
+                        });
         }
       );
     }

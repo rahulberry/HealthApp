@@ -172,7 +172,7 @@ export class PersonalStatsScreen extends React.Component<Props> {
                 <View>
                     <View style = {{alignItems : 'center'}}>
                         <View style={styles.statsView} >
-                          <ActivityGraph id = 'Graphdata' callbackFromParent={this.myCallback} currentday = {this.state.day}/>
+                          <ActivityGraph id = {firebase.auth().currentUser.uid} callbackFromParent={this.myCallback} currentday = {this.state.day}/>
                           { this.myCallback() }
                         </View>
                     </View>

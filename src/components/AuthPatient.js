@@ -35,7 +35,7 @@ class AuthPatient extends Component {
       .signInWithEmailAndPassword(email, password)
       .then(this.onLoginSuccess.bind(this))
       .catch(() => {
-        
+
           this.onLoginFail();
       });
   }
@@ -52,12 +52,17 @@ class AuthPatient extends Component {
     this.setState({ loading: false });
     this.props.navigation.navigate('BasePatient');
   }
-  
+
   onCreateAccountSuccess() {
       firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/Account Details/")
         .set({
           'name': this.state.name,
           'email': this.state.email
+          })
+      firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/Stats/")
+        .set({
+          'distanceArray': [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 11, 11, 11 ],
+          'painArray': [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 11, 21, 31 ]
           })
       firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/DoctorInfo/")
         .set({
@@ -131,7 +136,7 @@ class AuthPatient extends Component {
     console.disableYellowBox = true;
 
     return (
-      
+
         <View style={styles.container}>
           <Image
             animation={"fadeIn"}
