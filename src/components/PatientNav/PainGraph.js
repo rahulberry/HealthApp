@@ -26,7 +26,7 @@ class PainGraph extends React.PureComponent {
         .then((dataSnapshot) => {
           console.log('getting data', dataSnapshot.val());
           this.setState({ data: dataSnapshot.val().distanceArray,
-                          pain: dataSnapshot.val().painArray
+                          paindata: dataSnapshot.val().painArray
                         });
         }
       );
