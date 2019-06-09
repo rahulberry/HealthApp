@@ -3,7 +3,6 @@ import { Animated, Easing, Platform } from 'react-native';
 
 import { createStackNavigator, createAppContainer } from 'react-navigation'; // Version can be specified in package.json
 
-import StatsNavigation from '../../components/PatientNav/StatsNavigation'
 import statsScreen from './PatientStats'
 import GroupList from './GroupsList'
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -43,8 +42,7 @@ const TransitionConfiguration = () => {
 export default App = createAppContainer(createStackNavigator(
     {
         MainPage: GroupList,
-      //  AddPatient: AddPatient,
-        StatsNavigation: statsScreen
+        PatientStats: statsScreen,
     },
     {
         initialRouteName: 'MainPage',
