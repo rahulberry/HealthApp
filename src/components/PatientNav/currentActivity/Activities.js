@@ -12,8 +12,13 @@ import {
     Vibration,
     Platform,
     PermissionsAndroid,
-    TouchableOpacity
+    TouchableOpacity,
+    Dimensions,
+    FlatList
 } from 'react-native'
+
+import Modal from 'react-native-modal'
+import { Button } from '../../commonComponents/ButtonWithMargin'
 
 import { Header } from '../Header'
 
@@ -76,6 +81,8 @@ export default class Activities extends Component {
             eventCounter: 1,
             timeElapsed: 0,
             numberOfBreaks: 0,
+            isModalVisible: false,
+            eventsArray: [],
         };
 
         this._onPress = this._onPress.bind(this);
@@ -272,8 +279,22 @@ export default class Activities extends Component {
         })
     }
 
-    _onPress() {
+    writeStats(distanceTravelled, timeElapsed, pace, eventCounter) {
 
+        firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/Event' + eventCounter).set({
+            distanceTravelled,
+            pace,
+            timeElapsed,
+            eventCounter
+        }).then((data) => {
+            //success callback
+        }).catch((error) => {
+            //error callback
+        })
+
+    }
+
+    handleFeedback = () => {
         let distanceTravelled = this.state.distanceTravelled;
         this.setState({
             eventDistanceTravelled: distanceTravelled
@@ -294,8 +315,13 @@ export default class Activities extends Component {
         firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/eventCounter').once('value', function (snapshot) {
             let counter = snapshot.val();
             let eventCounter = counter + 1;
+            var eventCounterString = eventCounter.toString();
 
-            firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/Event' + eventCounter).set({
+            if (eventCounter < 10) {
+                eventCounterString = '0' + eventCounterString
+            }
+
+            firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/Event' + eventCounterString).set({
                 distanceTravelled,
                 pace,
                 timeElapsed,
@@ -319,6 +345,10 @@ export default class Activities extends Component {
         this.props.navigation.navigate('FeedbackPage')
     }
 
+    _onPress() {
+        this.openModal();
+    }
+
     incrementBreaks() {
         this.setState({
             numberOfBreaks: this.state.numberOfBreaks+1,
@@ -331,9 +361,176 @@ export default class Activities extends Component {
         })
     }
 
+    handleCancel = () => {
+        this.toggleModal();
+    }
+
+    getUser = () => {
+        return firebase.auth().currentUser.displayName;
+    }
+
+    filterByUid = (data) => {
+        const result = [];
+        const map = new Map();
+        for (const item of data) {
+            if(!map.has(item.uid)){
+                map.set(item.uid, true);        // set any value to Map
+                result.push(item);
+            }
+        }
+        return result
+    }
+
+    handleEventChosen = (item) => {
+        console.log('Event to save: ', item.name)
+
+        var firebaseRef = firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats');
+        var currentEvent = []
+        firebaseRef.once('value')
+            .then((dataSnapshot) => {
+                var obj = dataSnapshot.val()
+                console.log('obj: ', obj)
+                if (obj != null) {
+                    var statsArray = Object.keys(obj).map((key) => {
+                        return obj[key];
+                    })
+                    console.log('statsArray', statsArray)
+                    
+                    // Need to make it actually filter out the non event stuff instead of popping()
+                    statsArray.pop();
+                    statsArray.pop();
+                    statsArray.pop();
+                    statsArray.pop();
+                    statsArray.pop();
+
+                    if (statsArray != [] && statsArray != null) {
+                        statsArray = statsArray.map((x) => {
+                            console.log('test: ', Math.floor((new Date(x.timestamp)).getTime() / 1000))
+                            return {
+                                ...x,
+                                timestamp: Math.floor((new Date(x.timestamp)).getTime() / 1000),
+                                user: this.getUser(),
+                                uid: firebase.auth().currentUser.uid
+                            };   
+                        } 
+                    );
+                    if (statsArray.length > 1) {
+                        currentEvent = statsArray.slice(-1).pop();
+                    } else {
+                        currentEvent = statsArray[0];
+                    }
+                    console.log('CurrentEvent: ', currentEvent)
+
+                    var events = this.state.eventsArray;
+
+                    console.log('EventsArray', events)
+
+                    events.map((el) => {
+                        if (el.key === item.key) {
+                            if (el.stats === undefined) {
+                                el.stats = [currentEvent]
+                            } else {
+                                el.stats = this.filterByUid(el.stats.concat([currentEvent]))
+                            }
+                            return el
+                        } else {
+                            return el 
+                        }
+                    })
+
+                    console.log('New Events Array: ', events)
+                    this.setState({eventsArray: events})
+
+                    firebase.database().ref('Events/').set({
+                        events
+                    }).then((data)=>{
+                            console.log('Events written to firebase ' , data)
+                    }).catch((error)=>{
+                            console.log('Error writing events to firebase ' , error)
+                    })
+
+                    this.handleFeedback();
+                    this.toggleModal();
+
+                }            
+            }
+        })
+    }
+
+    toggleModal = () => {
+        this.setState({ isModalVisible: !this.state.isModalVisible });
+    };
+
+    openModal = () => {
+        this.readEventData();
+        this.toggleModal();
+    }
+
+    readEventData = () => {
+        var firebaseRef = firebase.database().ref('Events/events');
+        return firebaseRef.once('value')
+            .then((dataSnapshot) => {
+                //console.log('test1', dataSnapshot.val());
+                this.setState({ eventsArray: dataSnapshot.val() });
+            }
+        );
+    };
+
+    filterOutCurrent = (data) => {
+        if (data != [] && data != null) {
+            var currentTime = Math.round((new Date()).getTime() / 1000);
+            let filteredItems = data.filter(item => item.key < currentTime);
+            return filteredItems;
+        } else {
+            return [];
+        }
+    }
+
     render() {
         return (
             <View>
+                <Modal 
+                    isVisible={this.state.isModalVisible}
+                    backdropOpacity={0.0}
+                    backgroundColor={'white'}
+                    onBackButtonPress={this.toggleModal}
+                    coverScreen={true}
+                    animationInTiming={1}
+                    animationOutTiming={1}
+                    style={{ 
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        margin: 0 
+                        }}
+                    >
+                    <View style={{ flex: 1}}>
+                        <Header title='Finish Event'/>
+                        <View style ={{flex: 1, flexDirection: 'column', justifyContent: 'space-between'}}>
+                            <View>
+                                <Text style={{margin: 20, fontSize: 20}}>Choose which event you just went too.</Text>
+                                <View>
+                                    < FlatList
+                                        data={this.filterOutCurrent(this.state.eventsArray)}
+                                        renderItem={({item}) => (
+                                            <TouchableOpacity
+                                                style={styles.touchableUpcoming1}
+                                                onPress={() => this.handleEventChosen(item)}>
+                                                <View style={styles.touchableUpcomingTextView}>
+                                                    <Text style={{fontSize : 18}}>{item.name}</Text>
+                                                    <Text style={{fontSize : 12}}>{item.time}</Text>
+                                                </View>
+                                            </TouchableOpacity>
+                                        )}
+                                    />  
+                                    </View>
+                                </View>
+                            <View>
+                                <Text style={{margin: 20, fontSize: 20}}>If you didn't make an event, press the cancel button and go to the Events Page to create a new event.</Text>
+                                <Button title="Cancel" onPress={this.handleCancel} />
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
                 <Header title='Activities' emergencyButton = {true} />
                 <ScrollView style={{marginBottom: 75}}>
 
@@ -481,6 +678,20 @@ const styles = StyleSheet.create({
         paddingTop: 5,
         fontWeight: 'bold',
         fontSize: 20
+    },
+
+    touchableUpcoming1 : {
+        flex: 1, 
+        flexDirection: 'row',    
+        justifyContent: 'space-between', 
+        backgroundColor: 'transparent', 
+        paddingBottom: 20},
+
+    touchableUpcomingTextView: {
+        flex: 1, 
+        flexDirection: 'column', 
+        paddingLeft: 18, 
+        width : Dimensions.get('window').width       
     },
 
 });

@@ -101,7 +101,7 @@ export class EventsScreen extends React.Component<Props> {
         var firebaseRef = firebase.database().ref('Events/events');
         return firebaseRef.once('value')
             .then((dataSnapshot) => {
-                console.log('test1', dataSnapshot.val());
+                //console.log('test1', dataSnapshot.val());
                 this.setState({ eventsArray: dataSnapshot.val() });
             }
         );
@@ -234,7 +234,7 @@ export class EventsScreen extends React.Component<Props> {
     };
 
     refreshData = () => {
-        this.readStats();
+        //this.readStats();
         var firebaseRef = firebase.database().ref('Events/events');
         firebaseRef.once('value')
             .then((dataSnapshot) => {
@@ -366,7 +366,7 @@ export class EventsScreen extends React.Component<Props> {
     handleDatePicked = (dateTime) => {
         var unixDateAndTime = Math.floor(dateTime.getTime() / 1000);
         var currentTime = Math.round((new Date()).getTime() / 1000);
-        if (unixDateAndTime < currentTime) {
+        if (unixDateAndTime < currentTime - 3600) {
             this.invalidTimeAlert(); 
             this.hideDateTimePicker();
         } else {
@@ -438,62 +438,73 @@ export class EventsScreen extends React.Component<Props> {
         }
         return firebaseRef.once('value')
             .then((dataSnapshot) => {
+                var eventCounter = 0;
                 var obj = dataSnapshot.val()
-                console.log('obj', obj)
+                //console.log('obj', obj)
                 if (obj != null) {
                     var statsArray = Object.keys(obj).map((key) => {
                         return obj[key];
-                    }).slice(0, -1).map((x) => {
-                        return {
-                            ...x,
-                            timestamp: Math.floor((new Date(x.timestamp)).getTime() / 1000),
-                            user: this.getUser(),
-                            uid: firebase.auth().currentUser.uid
-                        };   
-                        }
-                    );
-                    //console.log('User Stats Array: ', statsArray);
-
-                    let stillToHappenEvents = this.filterOutOld(this.state.eventsArray);
-                    let doneEvents = this.filterOutCurrent(this.state.eventsArray);
-                    
-                    doneEvents = doneEvents.map((el) => {
-                        var stats = el.stats;
-                        if (statsArray === undefined || statsArray.length == 0) {
-                            return el;
-                        } else {
-                            console.log('User Stats Array: ', statsArray);
-                            if (stats === undefined) {
-                                stats = [];
-                            }
-                            var statsValue = statsArray[0];
-                            //console.log('Stats Value: ', statsValue);
-                            //console.log('Stats Value Concat: ', stats.concat([statsValue]));
-                            statsArray = statsArray.slice(1);
-                            //console.log('test', this.filterByUid(stats.concat([statsValue])))
+                    })
+                    eventCounter = statsArray.pop();
+                    //console.log('eventCounter', eventCounter)
+                    //console.log('statsArray', statsArray)
+                    if (statsArray != [] && statsArray != null) {
+                        statsArray = statsArray.map((x) => {
                             return {
-                                ...el,
-                                stats: this.filterByUid(stats.concat([statsValue]))
+                                ...x,
+                                timestamp: Math.floor((new Date(x.timestamp)).getTime() / 1000),
+                                user: this.getUser(),
+                                uid: firebase.auth().currentUser.uid
+                            };   
                             }
-                        }
-                    })
+                        );
+                        //console.log('User Stats Array: ', statsArray);
 
-                    // Need to add code so that if you have already been to the most recent planned event, it askes you to create another event (time fixed at the timestamp of this event.)
+                        let stillToHappenEvents = this.filterOutOld(this.state.eventsArray);
+                        let doneEvents = this.filterOutCurrent(this.state.eventsArray);
+                        
+                        doneEvents = doneEvents.map((el) => {
+                            var stats = el.stats;
+                            if (statsArray === undefined || statsArray.length == 0) {
+                                return el;
+                            } else {
+                                //console.log('User Stats Array: ', statsArray);
+                                if (stats === undefined) {
+                                    stats = [];
+                                }
+                                var statsValue = statsArray[0];
+                                console.log('Stats Value: ', statsValue);
+                                //console.log('Stats Value Concat: ', stats.concat([statsValue]));
+                                statsArray = statsArray.slice(1);
+                                //console.log('test', this.filterByUid(stats.concat([statsValue])))
+                                return {
+                                    ...el,
+                                    stats: this.filterByUid(stats.concat([statsValue]))
+                                }
+                            }
+                        })
 
-                    console.log('Done Events: ', doneEvents);
-                    let events = stillToHappenEvents.concat(doneEvents);
-                    this.setState({eventsArray: events});
-                    firebase.database().ref('Events/').set({
-                        events
-                    }).then((data)=>{
-                            console.log('Events written to firebase ' , data)
-                    }).catch((error)=>{
-                            console.log('Error writing events to firebase ' , error)
-                    })
+                        // Need to add code so that if you have already been to the most recent planned event, it askes you to create another event (time fixed at the timestamp of this event.)
 
-                    firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats').remove().then(() => {
-                        console.log('Old Events Delted.');
+                        //console.log('Done Events: ', doneEvents);
+                        let events = stillToHappenEvents.concat(doneEvents);
+                        this.setState({eventsArray: events});
+                        firebase.database().ref('Events/').set({
+                            events
+                        }).then((data)=>{
+                                console.log('Events written to firebase ' , data)
+                        }).catch((error)=>{
+                                console.log('Error writing events to firebase ' , error)
+                        })
+
+                        //firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats').remove().then(() => {
+                        //    console.log('Old Events Delted.');
+                        //})
+                        eventCounter = eventCounter + 1;
+                        firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats').set({
+                            eventCounter
                     })
+                    }
                 }
             }
         );
