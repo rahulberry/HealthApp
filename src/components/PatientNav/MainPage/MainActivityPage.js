@@ -328,6 +328,14 @@ const milestones = [
         image: require('./Images/currentCity/Lisbon.png'),
         cityIcon: require('./Images/ModalAssets/citiesReached/Lisbon.png'),
         greyScaleCity: require('./Images/ModalAssets/greyScaleCities/PortugalGrayscale.png')
+    },
+    {
+        key: 7,
+        destination: "Moon",
+        currentCityImage: require('./Images/targets/Lisbon.png'),
+        image: require('./Images/currentCity/Lisbon.png'),
+        cityIcon: require('./Images/ModalAssets/citiesReached/Lisbon.png'),
+        greyScaleCity: require('./Images/ModalAssets/greyScaleCities/MoonGrayscale.png')
     }
 ];
 
@@ -787,6 +795,12 @@ export default class MainActivityPage extends Component {
                                 data={this.setDestinationArray(5)}
                                 city={milestones[5].destination}
                                 showModal={this.state.reachedLisbon}
+                            />
+                            <Modal
+                                countryFlag={milestones[6].greyScaleCity}
+                                data={this.setDestinationArray(5)}
+                                city={milestones[6].destination}
+                                showModal={false}
                             />
                         </ScrollView>
                     </View>

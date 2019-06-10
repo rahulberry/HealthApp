@@ -9,7 +9,7 @@ import {
   Dimensions,
   ImageBackground,
   Alert,
-  Text
+  Text,
 } from "react-native";
 import { Image, View } from "react-native-animatable";
 import imgLogo from "../assets/patient.png";
@@ -140,7 +140,7 @@ class AuthPatient extends Component {
     const formStyle = !visibleForm ? { height: 0 } : { marginTop: 40 };
 
     console.disableYellowBox = true;
-
+     
     return (
 
         <View style={styles.container}>
@@ -152,7 +152,10 @@ class AuthPatient extends Component {
             style={styles.logoImg}
             source={imgLogo}
           />
-        <Text style={styles.headerStyle}>ORBIS</Text>
+          <Image
+                source={require('./frontPageLogo.png')}
+                style={{alignSelf: 'center', height: 50, width: 160}}
+          />
           {!visibleForm && (
             <Opening
               onCreateAccountPress={() => this._setVisibleForm("SIGNUP")}

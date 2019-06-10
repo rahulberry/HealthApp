@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Dimensions,
   Alert,
-  Text
+  Text,
 } from "react-native";
 import { Image, View } from "react-native-animatable";
 import imgLogo from "../assets/practitioner.png";
@@ -160,7 +160,10 @@ class AuthPatient extends Component {
             style={styles.logoImg}
             source={imgLogo}
           />
-        <Text style={styles.headerStyle}>ORBIS</Text>
+        <Image
+            source={require('./frontPageLogo.png')}
+                style={{ alignSelf: 'center', height: 50, width: 160 }}
+        />
           {!visibleForm && (
             <Opening
               onCreateAccountPress={() => this._setVisibleForm("SIGNUP")}
