@@ -54,7 +54,7 @@ export default class Activities extends Component {
             latitude: LATITUDE,
             longitude: LONGITUDE,
             routeCoordinates: [],
-            distanceTravelled: 0,
+            distanceTravelled: 400,
             eventDistanceTravelled: 0,
             prevLatLng: {},
             coordinate: new AnimatedRegion({
@@ -75,11 +75,15 @@ export default class Activities extends Component {
             //EventCounter
             eventCounter: 1,
             timeElapsed: 0,
+            numberOfBreaks: 0,
         };
 
         this._onPress = this._onPress.bind(this);
         this.writeStats = this.writeStats.bind(this);
         this.mainActivityPageCalculations = this.mainActivityPageCalculations.bind(this);
+        this.incrementBreaks = this.incrementBreaks.bind(this);
+        this.decrementBreaks = this.decrementBreaks.bind(this);
+        this.updateIndividualTotalDistancegTravelled = this.updateIndividualTotalDistancegTravelled.bind(this);
     }
 
     //Mapview functions
@@ -249,6 +253,25 @@ export default class Activities extends Component {
 
     }
 
+    updateIndividualTotalDistancegTravelled = (eventDistanceTravelled) => {
+
+        let totalDistanceTravelled = 0;
+
+        firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/totalDistanceTravelled').once('value', function (snapshot) {
+            totalDistanceTravelled = snapshot.val() + eventDistanceTravelled;
+
+            firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats').update({
+                totalDistanceTravelled
+            }).then((data) => {
+
+            }).catch((error) => {
+
+            })
+
+
+        })
+    }
+
     _onPress() {
 
         let distanceTravelled = this.state.distanceTravelled;
@@ -264,6 +287,8 @@ export default class Activities extends Component {
         var hours = new Date().getHours(); //Current Hours
         var min = new Date().getMinutes(); //Current Minutes
 
+        let numberOfBreaks = this.state.numberOfBreaks;
+
         let timestamp = date + '/' + month + '/' + year + ' ' + hours + ':' + min;
 
         firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/eventCounter').once('value', function (snapshot) {
@@ -274,7 +299,8 @@ export default class Activities extends Component {
                 distanceTravelled,
                 pace,
                 timeElapsed,
-                timestamp
+                timestamp,
+                numberOfBreaks
             }).then((data) => {
                 firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats').update({
                     eventCounter
@@ -289,8 +315,20 @@ export default class Activities extends Component {
         });
 
         this.mainActivityPageCalculations();
-
+        this.updateIndividualTotalDistancegTravelled(distanceTravelled);
         this.props.navigation.navigate('FeedbackPage')
+    }
+
+    incrementBreaks() {
+        this.setState({
+            numberOfBreaks: this.state.numberOfBreaks+1,
+        })
+    }
+
+    decrementBreaks() {
+        this.setState({
+            numberOfBreaks: (this.state.numberOfBreaks !== 0) ? this.state.numberOfBreaks-1 : 0
+        })
     }
 
     render() {
@@ -328,6 +366,38 @@ export default class Activities extends Component {
                         <Text style={styles.dataStyle}> {parseFloat(this.state.pace).toFixed(2)} m/s </Text>
                     </View>
 
+                    <View style={styles.separator}>
+                    </View>
+
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
+                        <Image
+                            source={require('./numberOfBreaksAssets/bench.png')}
+                            style={{ width: 50, height: 29, marginLeft: 15, marginTop: 15 }}
+                        />
+
+                        <Text
+                            style={[styles.shoeDescriptorStyle, {marginLeft: -85}]}
+                        >
+                            Breaks
+                        </Text>
+                        <View
+                            style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+                        >
+                            <TouchableOpacity onPress={this.decrementBreaks}>
+                                <Image
+                                    source={require('./numberOfBreaksAssets/minus.png')}
+                                    style={{width: 28, height: 28, marginTop: 16, marginRight: 15}}
+                                />
+                            </TouchableOpacity>    
+                            <Text style={styles.dataStyle}> {this.state.numberOfBreaks} </Text>
+                            <TouchableOpacity onPress={this.incrementBreaks}>
+                                <Image
+                                    source={require('./numberOfBreaksAssets/plus.png')}
+                                    style={{ width: 29, height: 28, marginTop: 16, marginRight: 15 }}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
                 </ScrollView>
             </View>
         );
@@ -340,6 +410,13 @@ const styles = StyleSheet.create({
     container: {
         justifyContent: "flex-end",
         alignItems: "center"
+    },
+    separator: {
+        width: 265,
+        marginTop: 15,
+        marginLeft: 81,
+        borderBottomWidth: 1,
+        borderColor: '#979797'
     },
     map: {
         width: 400,
@@ -368,15 +445,15 @@ const styles = StyleSheet.create({
         backgroundColor: "transparent"
     },
     shoeDescriptorStyle: {
-        paddingTop: 20,
-        marginLeft: 15,
+        marginTop: 15,
+        marginLeft: 20,
         fontSize: 20,
         fontWeight: 'bold'
     },
     dataStyle: {
         marginLeft: 'auto',
         marginRight: 15,
-        marginTop: 20,
+        marginTop: 15,
         fontSize: 20,
         fontWeight: 'bold'
     },
@@ -392,7 +469,7 @@ const styles = StyleSheet.create({
         borderWidth: 3,
         borderColor: '#E78282',
         marginTop: 30,
-        marginBottom: 30,
+        marginBottom: 20,
         width: 225,
         height: 44,
         alignItems: 'center',

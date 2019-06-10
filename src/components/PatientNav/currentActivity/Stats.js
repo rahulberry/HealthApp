@@ -26,7 +26,7 @@ export default class Stats extends Component {
                     >
                         Distance covered:
                     </Text>
-                    <Text style={styles.dataStyle}> {this.state.statistic} km </Text>
+                    <Text style={styles.dataStyle}> {this.state.statistic} m </Text>
                 
                 </View>
 

@@ -427,6 +427,11 @@ export default class MainActivityPage extends Component {
             tmpArrayLondon[i].name = namesArray[i];
             tmpArrayBerlin[i].name = namesArray[i];
         }
+
+        for (let i = 4; i > namesArray.length - 1; i--) {
+            tmpArrayLondon[i].name = "";
+            tmpArrayBerlin[i].name = "";
+        }
         
         this.setState({
             LondonData: tmpArrayLondon,
@@ -445,10 +450,7 @@ export default class MainActivityPage extends Component {
             firebaseRef.on('value', (snapshot) => {
                 nameOfIndividualPatient = snapshot.val();
                 patientNameArray.push(nameOfIndividualPatient);
-                if (i === 4) {
-                    //this.setState({
-                    //    patientNames: patientNameArray
-                    //})
+                if (i === patientUID.length-1) {
 
                     this.populateNameFieldOfArray(patientNameArray);
 
@@ -625,7 +627,7 @@ export default class MainActivityPage extends Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.fetchPatientData();
     }
 
@@ -678,7 +680,7 @@ export default class MainActivityPage extends Component {
                         icon={icons.shoe}
                         iconStyle={iconstyles.shoe}
                         dataContext={"Distance covered"}
-                        data={this.state.distanceCovered}
+                        data={parseFloat(this.state.distanceCovered).toFixed(0)}
                         metric={"m"}
                         showBorder={true}
                     />
@@ -686,7 +688,7 @@ export default class MainActivityPage extends Component {
                         icon={icons.flag}
                         iconStyle={iconstyles.flag}
                         dataContext={"Distance left"}
-                        data={this.state.distanceLeft}
+                        data={parseFloat(this.state.distanceLeft).toFixed(0)}
                         metric={"m"}
                         showBorder={false}
                     />
@@ -733,50 +735,49 @@ export default class MainActivityPage extends Component {
 
                     <Text style={[styles.subheadingStyles, { marginTop: 250 }]}>Cities reached</Text>
 
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginLeft: 5, marginBottom: 5 }}>
-                        <Modal
-                            countryFlag={milestones[0].cityIcon}
-                            data={this.setDestinationArray(0)}
-                            city={milestones[0].destination}
-                            showModal={true}
-                            greeting={"Hello!"}
-                            fact={"With over 4,000 trees, a large lake, a meadow and ornamental flower gardens, Hyde Park is the largest park in London."}
-                        />
-                        <Modal
-                            countryFlag={this.state.reachedBerlin ? milestones[1].cityIcon : milestones[1].greyScaleCity}
-                            data={this.setDestinationArray(1)}
-                            city={milestones[1].destination}
-                            showModal={this.state.reachedBerlin}
-                            greeting={"Hallo!"}
-                            fact={"Founded in the 17th century, Berlin's Botanical Garden spans 42 hectares of land and contains over 18,000 species of plants."}
-                        />
-                        <Modal
-                            countryFlag={this.state.reachedRome ? milestones[2].cityIcon : milestones[2].greyScaleCity}
-                            data={this.setDestinationArray(2)}
-                            city={milestones[2].destination}
-                            showModal={this.state.reachedRome}
-                        />
-                    </View>
-
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 15, marginLeft: 5, marginBottom: 5 }}>
-                        <Modal
-                            countryFlag={this.state.reachedParis ? milestones[3].cityIcon : milestones[3].greyScaleCity}
-                            data={this.setDestinationArray(3)}
-                            city={milestones[3].destination}
-                            showModal={this.state.reachedParis}
-                        />
-                        <Modal
-                            countryFlag={this.state.reachedMadrid ? milestones[4].cityIcon : milestones[4].greyScaleCity}
-                            data={this.setDestinationArray(4)}
-                            city={milestones[4].destination}
-                            showModal={this.state.Madrid}
-                        />
-                        <Modal
-                            countryFlag={this.state.reachedLisbon ? milestones[5].cityIcon : milestones[5].greyScaleCity}
-                            data={this.setDestinationArray(5)}
-                            city={milestones[5].destination}
-                            showModal={this.state.reachedLisbon}
-                        />
+                    <View style={{ justifyContent: 'space-around', marginLeft: 5, marginBottom: 5, marginRight: 5 }}>
+                        <ScrollView horizontal={true}>
+                            <Modal
+                                countryFlag={milestones[0].cityIcon}
+                                data={this.setDestinationArray(0)}
+                                city={milestones[0].destination}
+                                showModal={true}
+                                greeting={"Hello!"}
+                                fact={"With over 4,000 trees, a large lake, a meadow and ornamental flower gardens, Hyde Park is the largest park in London."}
+                            />
+                            <Modal
+                                countryFlag={this.state.reachedBerlin ? milestones[1].cityIcon : milestones[1].greyScaleCity}
+                                data={this.setDestinationArray(1)}
+                                city={milestones[1].destination}
+                                showModal={this.state.reachedBerlin}
+                                greeting={"Hallo!"}
+                                fact={"Founded in the 17th century, Berlin's Botanical Garden spans 42 hectares of land and contains over 18,000 species of plants."}
+                            />
+                            <Modal
+                                countryFlag={this.state.reachedRome ? milestones[2].cityIcon : milestones[2].greyScaleCity}
+                                data={this.setDestinationArray(2)}
+                                city={milestones[2].destination}
+                                showModal={this.state.reachedRome}
+                            />
+                            <Modal
+                                countryFlag={this.state.reachedParis ? milestones[3].cityIcon : milestones[3].greyScaleCity}
+                                data={this.setDestinationArray(3)}
+                                city={milestones[3].destination}
+                                showModal={this.state.reachedParis}
+                            />
+                            <Modal
+                                countryFlag={this.state.reachedMadrid ? milestones[4].cityIcon : milestones[4].greyScaleCity}
+                                data={this.setDestinationArray(4)}
+                                city={milestones[4].destination}
+                                showModal={this.state.Madrid}
+                            />
+                            <Modal
+                                countryFlag={this.state.reachedLisbon ? milestones[5].cityIcon : milestones[5].greyScaleCity}
+                                data={this.setDestinationArray(5)}
+                                city={milestones[5].destination}
+                                showModal={this.state.reachedLisbon}
+                            />
+                        </ScrollView>
                     </View>
             </ScrollView>
         );

@@ -61,7 +61,7 @@ export default class Mynewproject extends Component {
 
         return (
 
-            <View>
+            <View style={{marginLeft: 10, marginRight: 10}}>
 
                 <Modal
                     transparent={true}

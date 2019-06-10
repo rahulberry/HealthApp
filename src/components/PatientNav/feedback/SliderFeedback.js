@@ -339,14 +339,14 @@ const styles = StyleSheet.create({
 
     submitButtoncontainer: {
         alignItems: 'center',
-        marginTop: 40,
+        marginTop: 20,
     },
 
     submitbutton: {
         borderRadius: 40,
         borderWidth: 3,
         borderColor: '#8ae2ad',
-        marginTop: 20,
+        marginTop: 10,
         width: 184,
         height: 44,
         alignItems: 'center',

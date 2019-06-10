@@ -21,9 +21,30 @@ export default class Profile extends Component {
         };
 
         this.updateDistanceTravelledAchievements = this.updateDistanceTravelledAchievements.bind(this);
+        this.updateGroupProgress = this.updateGroupProgress.bind(this);
     }
 
     //Update states storing progress of achievements from firebase
+
+    updateGroupProgress = () => {
+
+        let groupIndex = 0;
+
+        var firebaseRef = firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Account Details/group');
+        firebaseRef.on('value', (snapshot) => {
+            groupIndex = snapshot.val();
+
+            var groupRef = firebase.database().ref('/Groups/' + groupIndex + '/totalDistanceTravelled');
+            groupRef.on('value', (snapshot) => {
+                this.setState({
+                    walkedAroundTheWorld: (snapshot.val() / 836.70),
+                })
+            });
+
+        });
+
+    }
+
 
     updateDistanceTravelledAchievements = () => {
 
@@ -38,7 +59,6 @@ export default class Profile extends Component {
         firebaseRef.on('value', (snapshot) => {
             this.setState({
                 fifteenMiles: (snapshot.val() / 241.402),
-                walkedAroundTheWorld: (snapshot.val() / 836.70)
             })
         });
 
@@ -55,6 +75,8 @@ export default class Profile extends Component {
                 walkedThreeHours: snapshot.val() / 108,
             })
         });
+
+        this.updateGroupProgress();
 
     };
 
