@@ -33,6 +33,15 @@ const LONGITUDE= -0.174757;
 
 export class EventsScreen extends React.Component<Props> {
     static navigationOptions = {
+        title: "Events",
+        headerStyle: {
+            backgroundColor: "#8ae2ad"
+        },
+        headerTintColor: "#fff",
+        headerTitleStyle: {
+            fontWeight: "bold", 
+            fontSize: 24
+        },
 	tabBarLabel: 'Events',
         tabBarIcon: ({
             tintColor,

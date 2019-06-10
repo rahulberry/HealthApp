@@ -5,21 +5,21 @@ import {
     NavigationState,
 } from 'react-navigation';
 
-import MainPageNav from './MainPageNav'
+import EventNavigationDoctor from './EventNavigationDoctor'
 
 interface Props {
     navigation: NavigationScreenProp<NavigationState>;
 }
 
-export class MainPage extends React.Component<Props> {
+export class MainChat extends React.Component<Props> {
     static navigationOptions = ({
         navigation,
     }: {
         navigation: NavigationScreenProp<NavigationState>;
     }) => ({
-        title: "Events",
+        title: "Patients",
         headerStyle: {
-            backgroundColor: "#0"
+            backgroundColor: "#007AFF"
         },
         headerTintColor: "#fff",
         headerTitleStyle: {
@@ -35,7 +35,7 @@ export class MainPage extends React.Component<Props> {
             horizontal: boolean;
         }) => (
             <Ionicons
-                name={focused ? 'ios-people' : 'ios-people'}
+                name={focused ? 'ios-chatboxes' : 'ios-chatboxes'}
                 size={horizontal ? 20 : 26}
                 style={{ color: tintColor }}
           />
@@ -46,9 +46,9 @@ export class MainPage extends React.Component<Props> {
     render() {
         const { navigation } = this.props; 
         return (
-            <MainPageNav />
+            <EventNavigationDoctor />
         );
     }
 }
 
-export default MainPage
+export default MainChat
