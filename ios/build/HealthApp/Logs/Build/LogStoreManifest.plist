@@ -6,7 +6,7 @@
 	<integer>9</integer>
 	<key>logs</key>
 	<dict>
-		<key>4083D00B-CAEF-4821-881B-8E71047BFB1A</key>
+		<key>1BE8A96A-05DF-466D-9340-964C10D38D16</key>
 		<dict>
 			<key>className</key>
 			<string>IDECommandLineBuildLog</string>
@@ -15,9 +15,9 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>4083D00B-CAEF-4821-881B-8E71047BFB1A.xcactivitylog</string>
+			<string>1BE8A96A-05DF-466D-9340-964C10D38D16.xcactivitylog</string>
 			<key>highLevelStatus</key>
-			<string>W</string>
+			<string>S</string>
 			<key>schemeIdentifier-containerName</key>
 			<string>HealthApp project</string>
 			<key>schemeIdentifier-schemeName</key>
@@ -27,13 +27,42 @@
 			<key>signature</key>
 			<string>Building project HealthApp with scheme HealthApp and configuration Debug</string>
 			<key>timeStartedRecording</key>
-			<real>581860827.17358601</real>
+			<real>581892813.427405</real>
 			<key>timeStoppedRecording</key>
-			<real>581860899.857831</real>
+			<real>581892825.42364597</real>
 			<key>title</key>
 			<string>Building project HealthApp with scheme HealthApp and configuration Debug</string>
 			<key>uniqueIdentifier</key>
-			<string>4083D00B-CAEF-4821-881B-8E71047BFB1A</string>
+			<string>1BE8A96A-05DF-466D-9340-964C10D38D16</string>
+		</dict>
+		<key>E0CD503A-AF65-471B-9E63-ED74309A3B13</key>
+		<dict>
+			<key>className</key>
+			<string>IDECommandLineBuildLog</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>E0CD503A-AF65-471B-9E63-ED74309A3B13.xcactivitylog</string>
+			<key>highLevelStatus</key>
+			<string>S</string>
+			<key>schemeIdentifier-containerName</key>
+			<string>HealthApp project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>HealthApp</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Building project HealthApp with scheme HealthApp and configuration Debug</string>
+			<key>timeStartedRecording</key>
+			<real>581896485.94321096</real>
+			<key>timeStoppedRecording</key>
+			<real>581896497.14554596</real>
+			<key>title</key>
+			<string>Building project HealthApp with scheme HealthApp and configuration Debug</string>
+			<key>uniqueIdentifier</key>
+			<string>E0CD503A-AF65-471B-9E63-ED74309A3B13</string>
 		</dict>
 	</dict>
 </dict>

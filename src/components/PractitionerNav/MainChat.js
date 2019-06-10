@@ -17,7 +17,7 @@ export class MainChat extends React.Component<Props> {
     }: {
         navigation: NavigationScreenProp<NavigationState>;
     }) => ({
-        title: "Patients",
+        title: "Chats",
         headerStyle: {
             backgroundColor: "#007AFF"
         },

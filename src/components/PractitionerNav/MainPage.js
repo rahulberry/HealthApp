@@ -17,7 +17,7 @@ export class MainPage extends React.Component<Props> {
     }: {
         navigation: NavigationScreenProp<NavigationState>;
     }) => ({
-        title: "Events",
+        title: "Patients",
         headerStyle: {
             backgroundColor: "#0"
         },
