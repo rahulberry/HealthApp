@@ -383,6 +383,10 @@ export default class MainActivityPage extends Component {
 
         tmpArrayLondon[5].amount = 8370;
 
+        for (let i = 0; i < distanceTravelledCity.length; i++) {
+            console.log('Distance Travelled London: ' + distanceTravelledCity[i]);
+            console.log('tmpArrayLondon: ' + tmpArrayLondon[i].amount);
+        }
 
         for (let i = 0; i < distanceTravelledCity.length; i++) {
             //tmpArrayLondon[i].name = this.state.patientNames[i];
@@ -443,13 +447,20 @@ export default class MainActivityPage extends Component {
 
         var patientNameArray = [];
         let nameOfIndividualPatient = ""
-        
+         
         for (let i = 0; i < patientUID.length; i++) {
 
             var firebaseRef = firebase.database().ref('/Patients/' + patientUID[i] + '/Account Details/name');
             firebaseRef.on('value', (snapshot) => {
-                nameOfIndividualPatient = snapshot.val();
+                if (patientUID[i] === firebase.auth().currentUser.uid) {
+                    nameOfIndividualPatient = "You";
+                }
+                else {
+                    nameOfIndividualPatient = snapshot.val();
+                }
+
                 patientNameArray.push(nameOfIndividualPatient);
+                
                 if (i === patientUID.length-1) {
 
                     this.populateNameFieldOfArray(patientNameArray);
