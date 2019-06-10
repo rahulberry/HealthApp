@@ -60,6 +60,7 @@ export class PersonalStatsScreen extends React.Component<Props> {
             wording: 'Today',
         };
         this.readEventData();
+        this.realtimeEventsRefresh();
     };
 
     readEventData() {
@@ -71,6 +72,13 @@ export class PersonalStatsScreen extends React.Component<Props> {
             }
         );
     };
+
+    realtimeEventsRefresh() {
+        var firebaseRef = firebase.database().ref('Events/events');
+        firebaseRef.on("value", (snapshot) => {
+            this.setState({ eventsArray: snapshot.val() });
+      });
+    }
 
     getUser = () => {
         console.log('User (current screen \'Events\'):', firebase.auth().currentUser.displayName)

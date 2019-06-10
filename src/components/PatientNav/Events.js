@@ -14,7 +14,9 @@ import {
     Text,
     View,
     TouchableOpacity,
-    Dimensions
+    Dimensions,
+    TextInput,
+    KeyboardAvoidingView
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import firebase from "firebase";
@@ -67,7 +69,9 @@ export class EventsScreen extends React.Component<Props> {
         isFetching: false,
         account: "",
         isModalVisible: false,
-        markers: []
+        markers: [],
+        pace: '',
+        distance: '',
         };
 
     constructor(props) {
@@ -89,7 +93,9 @@ export class EventsScreen extends React.Component<Props> {
                   latitude: LATITUDE,
                   longitude: LONGITUDE
                 },
-              }]
+              }],
+            pace: '2.0',
+            distance: '200'
             //markers: []
         };
         this.readEventData(); // May need to comment this out?
@@ -185,10 +191,10 @@ export class EventsScreen extends React.Component<Props> {
     setTestData = () => {
         // This function is for debugging. It provides 2 events that have happened and two that are upcoming (as of time of coding)
         var events = [
-            {key : '1557837000', name : 'Old Test Event 1', time : '14/05/2019 12:30', going : ['Gary', 'Alfred', 'Amy', 'Josh'], colour : 'red', coords : {latitude: LATITUDE, longitude: LONGITUDE}, stats : []},
-            {key : '1557857000', name : 'Another Old Test Event', time : '14/05/2019 18:03', going : ['Gary', 'Billy', 'Amy'], colour : 'red', coords : {latitude: LATITUDE, longitude: LONGITUDE}, stats : []},
-            {key : '1560342934', name : 'New Test Event 1', time : '12/06/2019 12:35', going : ['Jill', 'John', 'Amy', 'Josh'], colour : 'red', coords : {latitude: LATITUDE, longitude: LONGITUDE}, stats : []},
-            {key : '1560861334', name : 'Another New Test Event', time : '18/06/2019 12:35', going : ['Gary', 'Bill', 'Amy'], colour : 'red', coords : {latitude: LATITUDE, longitude: LONGITUDE}, stats : []}
+            {key : '1557837000', name : 'Old Test Event 1', time : '14/05/2019 12:30', going : ['Gary', 'Alfred', 'Amy', 'Josh'], colour : 'red', coords : {latitude: LATITUDE, longitude: LONGITUDE}, stats : [], pace: '2.0', distance: '200'},
+            {key : '1557857000', name : 'Another Old Test Event', time : '14/05/2019 18:03', going : ['Gary', 'Billy', 'Amy'], colour : 'red', coords : {latitude: LATITUDE, longitude: LONGITUDE}, stats : [], pace: '2.0', distance: '200'},
+            {key : '1560342934', name : 'New Test Event 1', time : '12/06/2019 12:35', going : ['Jill', 'John', 'Amy', 'Josh'], colour : 'red', coords : {latitude: LATITUDE, longitude: LONGITUDE}, stats : [], pace: '2.0', distance: '200'},
+            {key : '1560861334', name : 'Another New Test Event', time : '18/06/2019 12:35', going : ['Gary', 'Bill', 'Amy'], colour : 'red', coords : {latitude: LATITUDE, longitude: LONGITUDE}, stats : [], pace: '2.0', distance: '200'}
         ]
         firebase.database().ref('Events/').set({
                 events
@@ -342,6 +348,8 @@ export class EventsScreen extends React.Component<Props> {
     }
 
     handleDone = () => {
+        console.log('pace', this.state.pace)
+        console.log('distance', this.state.distance)
         this.toggleModal();
         var name = this.state.eventName;    
         if (name == "") {
@@ -355,11 +363,13 @@ export class EventsScreen extends React.Component<Props> {
             latitude: this.state.markers[0].coordinates.latitude,
             longitude: this.state.markers[0].coordinates.longitude
           };
-        var joined = [{key : newDateAndTime, name : name, time : time, going : going, coords : coords, stats : []}].concat(events);
+        var distance = this.state.distance;
+        var pace = this.state.pace;
+        var joined = [{key : newDateAndTime, name : name, time : time, going : going, coords : coords, stats : [], pace : pace, distance : distance}].concat(events);
         this.setState({ eventsArray : joined.sort((a, b) => (a.key > b.key) ? 1 : -1)}); // In Unix Timestamp Mode so that sort works correctly
         this.writeEventsData(joined);
         this.hideDateTimePicker();
-        this.setState({ eventName : "", eventTime: "", dateTime: "", dialogVisible: false, markers: [{coordinates: {latitude: LATITUDE, longitude: LONGITUDE }}] });
+        this.setState({ eventName : "", eventTime: "", dateTime: "", dialogVisible: false, markers: [{coordinates: {latitude: LATITUDE, longitude: LONGITUDE }}], pace: '2.0', distance: '200' });
         }
     };
 
@@ -512,7 +522,7 @@ export class EventsScreen extends React.Component<Props> {
 
     render() {
         return (
-            <View style={styles.mainStyle}>
+            <View style={styles.mainStyle} >
                 <View style={styles.container}>
                     <Modal 
                         isVisible={this.state.isModalVisible}
@@ -528,11 +538,34 @@ export class EventsScreen extends React.Component<Props> {
                             margin: 0 
                             }}
                         >
-                        <View style={{ flex: 1}}>
+                        <View style={{ flex: 1}} behavior="padding" enabled>
                             <Header title='Choose Location'/>
-                                <View style ={{flex: 1, flexDirection: 'column', justifyContent: 'space-between'}}>
+                                <View style ={{flex: 1, flexDirection: 'column', justifyContent: 'space-between'}} >
                                     <View>
-                                        <MapView
+                                        <View style={{flexDirection: 'column', alignContent: 'center', paddingTop: 0.05 * Dimensions.get('window').width, paddingStart: 0.05 * Dimensions.get('window').width}}>
+                                            <View style={{flexDirection: 'row'}}>
+                                                <Text style={{fontSize : 30, fontWeight: 'bold'}}>Goal Pace: </Text>
+                                                <TextInput
+                                                    style={{height: 52, borderColor: 'white', fontSize: 30, borderWidth: 1}}
+                                                    onChangeText={(pace) => this.setState({pace})}
+                                                    value={this.state.pace}
+                                                />
+                                                <Text style={{fontSize : 20, paddingTop: 10}}>m/s.</Text>
+                                            </View>
+                                            <View style={{flexDirection: 'row'}}>
+                                                <Text style={{fontSize : 30, fontWeight: 'bold'}}>Goal Distance: </Text>
+                                                <TextInput
+                                                    style={{height: 52, borderColor: 'white', fontSize: 30, borderWidth: 1}}
+                                                    onChangeText={(distance) => this.setState({distance})}
+                                                    value={this.state.distance}
+                                                />
+                                                <Text style={{fontSize : 20, paddingTop: 10}}>m.</Text>
+                                            </View>
+                                            {/* <Text>Longitude: {this.returnCoords().longitude}</Text>
+                                            <Text>Latitude: {this.returnCoords().latitude}</Text> */}
+                                        </View>
+                                    </View>
+                                    <MapView
                                             style={styles.map}
                                             showsUserLocation = {true}
                                             showsMyLocationButton = {true}
@@ -554,13 +587,10 @@ export class EventsScreen extends React.Component<Props> {
                                                 />
                                             ))}
                                         </MapView>
-                                        <View style={{flexDirection: 'column', alignContent: 'center', paddingTop: 0.05 * Dimensions.get('window').width, paddingStart: 0.05 * Dimensions.get('window').width}}>
-                                            <Text style={{fontSize : 30, fontWeight : 'bold'}}>Current Location</Text>
-                                            <Text>Longitude: {this.state.markers[0].coordinates.longitude}</Text>
-                                            <Text>Latitude: {this.state.markers[0].coordinates.latitude}</Text>
-                                            {/* <Text>Longitude: {this.returnCoords().longitude}</Text>
-                                            <Text>Latitude: {this.returnCoords().latitude}</Text> */}
-                                        </View>
+                                    <View style={{flexDirection: 'column', alignContent: 'center', paddingTop: 0.05 * Dimensions.get('window').width, paddingStart: 0.05 * Dimensions.get('window').width}}>                                    
+                                        <Text style={{fontSize : 30, fontWeight : 'bold'}}>Current Location</Text>
+                                        <Text>Longitude: {this.state.markers[0].coordinates.longitude}</Text>
+                                        <Text>Latitude: {this.state.markers[0].coordinates.latitude}</Text>
                                     </View>
                                 <Button title="Done" onPress={this.handleDone} />
                             </View>

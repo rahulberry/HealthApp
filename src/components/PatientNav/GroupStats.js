@@ -60,17 +60,25 @@ export class GroupStatsScreen extends React.Component<Props> {
                 wording: 'Today',
         };
         this.readEventData();
+        this.realtimeEventsRefresh();
     };
 
     readEventData() {
         var firebaseRef = firebase.database().ref('Events/events');
         return firebaseRef.once('value')
             .then((dataSnapshot) => {
-                console.log('test1', dataSnapshot.val());
+                //console.log('test1', dataSnapshot.val());
                 this.setState({ eventsArray: dataSnapshot.val() });
             }
         );
     };
+
+    realtimeEventsRefresh() {
+        var firebaseRef = firebase.database().ref('Events/events');
+        firebaseRef.on("value", (snapshot) => {
+            this.setState({ eventsArray: snapshot.val() });
+      });
+    }
 
     getUser = () => {
         console.log('User (current screen \'Events\'):', firebase.auth().currentUser.displayName)

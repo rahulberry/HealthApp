@@ -342,7 +342,7 @@ export default class Activities extends Component {
 
         this.mainActivityPageCalculations();
         this.updateIndividualTotalDistancegTravelled(distanceTravelled);
-        this.props.navigation.navigate('FeedbackPage')
+        //this.props.navigation.navigate('FeedbackPage')
     }
 
     _onPress() {
@@ -403,9 +403,10 @@ export default class Activities extends Component {
                     statsArray.pop();
                     statsArray.pop();
 
+                    console.log('Hey look at this: ', statsArray)
+
                     if (statsArray != [] && statsArray != null) {
                         statsArray = statsArray.map((x) => {
-                            console.log('test: ', Math.floor((new Date(x.timestamp)).getTime() / 1000))
                             return {
                                 ...x,
                                 timestamp: Math.floor((new Date(x.timestamp)).getTime() / 1000),
@@ -451,6 +452,7 @@ export default class Activities extends Component {
 
                     this.handleFeedback();
                     this.toggleModal();
+                    this.props.navigation.navigate('FeedbackPage');
 
                 }            
             }

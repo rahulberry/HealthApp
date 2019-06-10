@@ -98,7 +98,7 @@ class MainDoctorEventsTab extends React.Component<Props> {
 
 const MainNavigator = createStackNavigator(
     {
-        Events: {screen: MainDoctorEventsTab},
+        Events: {screen: EventsScreen},
         EventsInformation: {screen: EventInformationScreen},
     },
     {
