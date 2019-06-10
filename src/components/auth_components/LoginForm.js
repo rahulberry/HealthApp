@@ -35,7 +35,7 @@ export default class LoginForm extends Component {
 
   render () {
     const { email, password } = this.state
-    const { isLoading, onSignupLinkPress, onLoginPress } = this.props
+    const { isLoading, onSignupLinkPress, onLoginPress, onBackPressed, changeLoginText} = this.props
     const isValid = email !== '' && password !== ''
     return (
       <View style={styles.container}>
@@ -86,6 +86,16 @@ export default class LoginForm extends Component {
           >
             {'Not registered yet?'}
           </Text>
+          <Text
+            ref={(ref) => this.linkRef = ref}
+            style={styles.signupLink}
+            onPress={onBackPressed}
+            animation={'fadeIn'}
+            duration={600}
+            delay={400}
+          >
+            {changeLoginText}
+          </Text>
         </View>
       </View>
     )
@@ -100,7 +110,7 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   footer: {
-    height: 100,
+    height: 150,
     justifyContent: 'center'
   },
   loginButton: {

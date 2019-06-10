@@ -35,7 +35,6 @@ class AuthPatient extends Component {
       .signInWithEmailAndPassword(email, password)
       .then(this.onLoginSuccess.bind(this))
       .catch(() => {
-
           this.onLoginFail();
       });
   }
@@ -52,6 +51,10 @@ class AuthPatient extends Component {
     this.setState({ loading: false });
     this.props.navigation.navigate('BasePatient');
   }
+  onBackPress() {
+    this.props.navigation.navigate('AuthPractitioner');
+  }
+
 
   onCreateAccountSuccess() {
       firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/Account Details/")
@@ -177,6 +180,8 @@ class AuthPatient extends Component {
                 onSignupLinkPress={() => this._setVisibleForm("SIGNUP")}
                 onLoginPress={this.onLoginPress.bind(this)}
                 isLoading={this.state.loading}
+                onBackPressed={this.onBackPress.bind(this)}
+                changeLoginText={'Practitioner Login'}
               />
             )}
           </KeyboardAvoidingView>

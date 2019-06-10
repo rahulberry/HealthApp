@@ -71,7 +71,7 @@ export default class PatientList extends Component {
   } 
 
   listenForItems(PatientsRef) {
-    PatientsRef.once("value", snap => {
+    PatientsRef.on("value", snap => {
       // get children as an array
       var items = [];
       snap.forEach(child => {

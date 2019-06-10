@@ -43,6 +43,11 @@ class AuthPatient extends Component {
     });
     this.forceUpdate;
   }
+  
+  onBackPress(){
+    this.props.navigation.navigate("AuthPatient")
+  }
+
 
   onLoginSuccess( ) {
     if(firebase.database().ref("/Doctors/" + firebase.auth().currentUser.uid)==null){
@@ -183,6 +188,8 @@ class AuthPatient extends Component {
                 onSignupLinkPress={() => this._setVisibleForm("SIGNUP")}
                 onLoginPress={this.onLoginPress.bind(this)}
                 isLoading={this.state.loading}
+                onBackPressed={this.onBackPress.bind(this)}
+                changeLoginText={'Patient Login'}
               />
             )}
           </KeyboardAvoidingView>

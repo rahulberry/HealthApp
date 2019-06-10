@@ -67,7 +67,7 @@ export default class GroupsList extends React.Component<Props>{
 
   listenForItems() {
     firebase.database().ref('/Doctors/' + firebase.auth().currentUser.uid + '/Patients/')
-    .once("value", snap => {
+    .on("value", snap => {
       var items = [];
       // get children as an array
       snap.forEach(child => {
