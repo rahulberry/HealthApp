@@ -59,7 +59,7 @@ export default class Activities extends Component {
             latitude: LATITUDE,
             longitude: LONGITUDE,
             routeCoordinates: [],
-            distanceTravelled: 400,
+            distanceTravelled: 0,
             eventDistanceTravelled: 0,
             prevLatLng: {},
             coordinate: new AnimatedRegion({
