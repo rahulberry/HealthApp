@@ -626,7 +626,7 @@ export class EventsScreen extends React.Component<Props> {
                 </Dialog.Container>
             </View>
             <View style = {{flexDirection: 'row', justifyContent: 'flex-end'}}>
-                {/* Uncomment this for debugging */}<Button title="Don't Press" onPress={this.setTestData} />{/* */}
+                {/* Uncomment this for debugging <Button title="Don't Press" onPress={this.setTestData} />{/* */}
                 <Button title="Add Event" onPress={this.showDateTimePicker} />
                     <DateTimePicker
                         isVisible={this.state.isDateTimePickerVisible}
