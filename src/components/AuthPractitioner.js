@@ -71,17 +71,6 @@ class AuthPatient extends Component {
       firebase.auth().currentUser.updateProfile({
         displayName: this.state.name
       })
-      firebase.database().ref("/Doctors/" + firebase.auth().currentUser.uid + "/Patients/")
-        .set({
-          '1234123412': {
-            'name': 'asdaf',
-            'email': 'asdfa'
-          },
-          '1234123': {
-            'name': 'asdaf',
-            'email': 'asdfa'
-          }
-        }) 
     this.setState({ loading: false });
     this.props.navigation.navigate("BasePractitioner");
   }

@@ -60,7 +60,9 @@ class AuthPatient extends Component {
       firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/Account Details/")
         .set({
           'name': this.state.name,
-          'email': this.state.email
+          'email': this.state.email,
+          'group': 1, 
+          'display_image': 'https://www.iconfinder.com/icons/628284/avatar_male_man_mature_old_person_user_icon'
           })
       firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/Stats/")
         .set({
@@ -70,11 +72,20 @@ class AuthPatient extends Component {
             'totalDistanceTravelled': 0,
             'totalTimeElapsed': 0
           })
-      firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/DoctorInfo/")
-        .set({
+        firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/DoctorInfo/")
+          .set({
           'name': 'Dr. Pitt',
-          'uid': 'nVyOFGjdBTen4shIr0zz4R3APGi2'
+          'uid': '5ZC8hJedHfV6IP4ziVgqoBnpHfN2'
       });
+      firebase.database().ref("/Groups/1/Patients/" + firebase.auth().currentUser.uid).set({
+        'distanceTravelledBerlin': 0,
+        'distanceTravelledLondon': 0,
+      })
+      firebase.database().ref("Doctors/5ZC8hJedHfV6IP4ziVgqoBnpHfN2/Patients/" + firebase.auth().currentUser.uid).set({
+        'name': this.state.name,
+        'display_image': "https://cdn4.iconfinder.com/data/icons/avatars-circle-2/72/142-512.png",
+        'uid': firebase.auth().currentUser.uid
+      })
       firebase.auth().currentUser.updateProfile({
         displayName: this.state.name
       })

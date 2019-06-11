@@ -78,10 +78,6 @@ export default class GroupsList extends React.Component<Props>{
             display_image: child.val().display_image
           });
       });
-      items.push({
-        name: 'Add Patient',
-        display_image: 'https://cdn4.iconfinder.com/data/icons/avatars-circle-2/72/142-512.png'
-      })
       this.setState({
         data: items,
         loading: false
