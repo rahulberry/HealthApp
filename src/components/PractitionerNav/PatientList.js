@@ -83,7 +83,7 @@ export default class PatientList extends Component {
             display: child.val().display_image
           });
       });
-
+      console.log(items);
       this.setState({
         dataSource: this.state.dataSource.cloneWithRows(items),
         loading: false

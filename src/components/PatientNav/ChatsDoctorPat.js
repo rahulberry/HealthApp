@@ -41,7 +41,7 @@ export default class ChatDoctorPat extends Component {
     this.user = firebase.auth().currentUser;
     console.log("User:" + this.user.uid);
 
-    uid = 'nVyOFGjdBTen4shIr0zz4R3APGi2';
+    uid = '5ZC8hJedHfV6IP4ziVgqoBnpHfN2';
     name = 'Dr.Pitt'
     console.log("User:" + uid);
 
@@ -130,7 +130,7 @@ export default class ChatDoctorPat extends Component {
         onSend={this.onSend.bind(this)}
         user={{
           _id: this.user.uid,
-          name: 'Rahul'
+          name: firebase.auth().currentUser.displayName
         }}
         renderBubble={this.renderBubble}
         />
