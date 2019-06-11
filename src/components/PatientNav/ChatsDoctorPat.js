@@ -5,6 +5,7 @@ import {
 import { GiftedChat, Bubble} from "react-native-gifted-chat";
 import firebase from  'firebase';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Fire from '../PractitionerNav/Fire'
 
 var name, uid, email;
 
@@ -74,7 +75,7 @@ export default class ChatDoctorPat extends Component {
           createdAt: new Date(child.val().createdAt),
           user: {
             _id: child.val().uid
-            //avatar: avatar
+            
           }
         });
       });
@@ -105,6 +106,7 @@ export default class ChatDoctorPat extends Component {
       />
     )
   }
+
   onSend(messages = []) {
     // this.setState({
     //     messages: GiftedChat.append(this.state.messages, messages),
@@ -129,8 +131,7 @@ export default class ChatDoctorPat extends Component {
         messages={this.state.messages}
         onSend={this.onSend.bind(this)}
         user={{
-          _id: this.user.uid,
-          name: firebase.auth().currentUser.displayName
+          _id: this.user.uid
         }}
         renderBubble={this.renderBubble}
         />
