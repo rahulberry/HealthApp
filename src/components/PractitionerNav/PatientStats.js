@@ -42,6 +42,7 @@ export class statsScreen extends React.Component<Props> {
             isFetching: false,
             day: 27,
             wording: 'Today',
+            dataArray: [ 10, 10, 28, 60, 75, 68, 69, 24, 18, 28, 60, 75, 68, 69, 24, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 ],
         };
     };
 
@@ -80,12 +81,59 @@ export class statsScreen extends React.Component<Props> {
         return firebase.auth().currentUser.displayName;
     }
 
+    myCallback = (dataFromChild) => {
 
+      var firebaseRef = firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/');
+      firebaseRef.once('value')
+        .then((dataSnapshot) => {
+
+          this.setState({
+                            dataArray: dataSnapshot.val().distanceArray,
+                        });
+        }
+      )
+
+        const { navigation } = this.props;
+        const uid = navigation.getParam('uid', 69)
+
+
+        var date = new Date().getDate(); //Current Date
+        var month = new Date().getMonth() + 1; //Current Month
+        var year = new Date().getFullYear();
+
+        if ((this.state.day > dataFromChild) || (this.state.day < dataFromChild)){
+          this.setState({ day: dataFromChild })
+          if (dataFromChild == 27){
+              this.setState({ wording: 'Today' })
+          }
+          else if (dataFromChild == 26) {
+              this.setState({ wording: 'Yesterday' })
+          }
+
+          else {
+            var x = 27 - dataFromChild;
+            var temp_date = 0
+            var temp_month = 0
+            if (date <= x){
+              temp_date = 31 - (x - date);
+              temp_month = month - 1;
+            }
+            else {
+              temp_date = date - x;
+              temp_month = month;
+            }
+            var fulldate = ('on ' + temp_date + '/' + temp_month + '/' + year)
+            this.setState({ wording: fulldate })
+          }
+        }
+    };
 
     render() {
         let bottom = null;
         const { navigation } = this.props;
         const itemname = navigation.getParam('name', 'shiet')
+        const uid = navigation.getParam('uid', 69)
+
 
         return (
           <ScrollView>
@@ -96,11 +144,12 @@ export class statsScreen extends React.Component<Props> {
                       </View>
                   </View>
                   <View>
-                      <PainGraph id = 'Graphdata' />
+                      <PainGraph id = {uid} callbackFromParent={this.myCallback} currentday = {this.state.day}/>
+                      { this.myCallback() }
                   </View>
                   <View>
                       <View style={styles.distanceView} >
-                          <Text style={styles.distanceText}> 4.8 km</Text>
+                          <Text style={styles.distanceText}>{this.state.dataArray[this.state.day]} km</Text>
                           <Text style={{color: 'black', fontWeight: 'bold', fontSize: 20}}>Distance {this.props.name} {this.state.wording}</Text>
                       </View>
                   </View>

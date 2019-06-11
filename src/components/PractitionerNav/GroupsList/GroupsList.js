@@ -50,7 +50,7 @@ interface Props {
 
 
 export default class GroupsList extends React.Component<Props>{
-  
+
  state = {
     name: "",
     last_active: "",
@@ -74,6 +74,7 @@ export default class GroupsList extends React.Component<Props>{
        // if (child.val().email != user.email)
           items.push({
             name: child.val().name,
+            uid: child.val().uid,
             display_image: child.val().display_image
           });
       });
@@ -90,11 +91,11 @@ export default class GroupsList extends React.Component<Props>{
   componentDidMount() {
     this.listenForItems();
   }
-  
+
     renderItem = ({ item }) => {
-        return <GroupsItem 
-        item={item} navigation={this.props.navigation} 
-        id={item.name}   
+        return <GroupsItem
+        item={item} navigation={this.props.navigation}
+        id={item.name}
         selected={!!this.state.selected.get(item.id)}
         />;
     };

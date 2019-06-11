@@ -58,6 +58,7 @@ export class GroupStatsScreen extends React.Component<Props> {
                 isFetching: false,
                 day: 27,
                 wording: 'Today',
+                dataArray: [ 10, 10, 28, 60, 75, 68, 69, 24, 18, 28, 60, 75, 68, 69, 24, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 ],
         };
         this.readEventData();
         this.realtimeEventsRefresh();
@@ -70,7 +71,18 @@ export class GroupStatsScreen extends React.Component<Props> {
                 //console.log('test1', dataSnapshot.val());
                 this.setState({ eventsArray: dataSnapshot.val() });
             }
-        );
+        ).then( () => {
+
+          var firebaseRef = firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/');
+          firebaseRef.once('value')
+            .then((dataSnapshot) => {
+
+              this.setState({
+                                dataArray: dataSnapshot.val().distanceArray,
+                            });
+            }
+          )
+        })
     };
 
     realtimeEventsRefresh() {
@@ -112,7 +124,19 @@ export class GroupStatsScreen extends React.Component<Props> {
                 this.setState({ eventsArray: sorted })
                 this.setState({isFetching : false})
             }
-        );
+        ).then( () => {
+
+          var firebaseRef = firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/');
+          firebaseRef.once('value')
+            .then((dataSnapshot) => {
+
+              this.setState({
+                                dataArray: dataSnapshot.val().distanceArray,
+                            });
+            }
+          )
+
+        });
     }
 
     filterByKey = (data) => {
@@ -180,13 +204,13 @@ export class GroupStatsScreen extends React.Component<Props> {
                 <View>
                     <View style = {{alignItems : 'center'}}>
                         <View style={styles.statsView} >
-                          <ActivityGraph id = 'Graphdata' callbackFromParent={this.myCallback} currentday = {this.state.day}/>
+                          <ActivityGraph id = {firebase.auth().currentUser.uid} callbackFromParent={this.myCallback} currentday = {this.state.day}/>
                           { this.myCallback() }
                         </View>
                     </View>
                     <View style = {{alignItems : 'center'}}>
                         <View style={styles.distanceView} >
-                            <Text style={styles.distanceText}>20.0 km</Text>
+                            <Text style={styles.distanceText}>{this.state.dataArray[this.state.day]} km</Text>
                             <Text style={{color: 'black', fontWeight: 'bold', fontSize: 20}}>Distance {this.state.wording}</Text>
                         </View>
                     </View>

@@ -248,7 +248,7 @@ export default class Activities extends Component {
                             })
 
                         })
-                    
+
                     })
 
 
@@ -263,6 +263,40 @@ export default class Activities extends Component {
     updateIndividualTotalDistancegTravelled = (eventDistanceTravelled) => {
 
         let totalDistanceTravelled = 0;
+
+        //
+        var currentTime = Math.round((new Date()).getTime() / 1000);
+        var currentDay = currentTime - (currentTime % 86400);
+
+        var firebaseRef = firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/');
+        firebaseRef.once('value')
+          .then((dataSnapshot) => {
+
+            this.setState({
+                              dataArray: dataSnapshot.val().distanceArray,
+                              lastupdate: dataSnapshot.val().lastupdate,
+                          });
+          }
+        ).then( () => {
+              var lastchange = this.state.lastupdate;
+              var newdistance = this.state.dataArray;
+              var dayspassed = (currentDay - lastchange)/86400;
+
+              newdistance.splice(0,dayspassed);
+              for (i = 0; i < dayspassed; i++) {
+                newdistance.push(dayspassed);
+              }
+
+              newdistance[27] = newdistance[27] + eventDistanceTravelled;
+
+              firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/Stats/")
+                .update({
+                    'distanceArray': newdistance,
+                    'lastupdate': currentDay,
+                });
+          }
+        )
+
 
         firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/totalDistanceTravelled').once('value', function (snapshot) {
             totalDistanceTravelled = snapshot.val() + eventDistanceTravelled;
@@ -331,7 +365,7 @@ export default class Activities extends Component {
                 firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats').update({
                     eventCounter
                 }).then((data) => {
-                    
+
                     }).catch((error) => {
 
                     })
@@ -395,7 +429,7 @@ export default class Activities extends Component {
                         return obj[key];
                     })
                     console.log('statsArray', statsArray)
-                    
+
                     // Need to make it actually filter out the non event stuff instead of popping()
                     statsArray.pop();
                     statsArray.pop();
@@ -412,8 +446,8 @@ export default class Activities extends Component {
                                 timestamp: Math.floor((new Date(x.timestamp)).getTime() / 1000),
                                 user: this.getUser(),
                                 uid: firebase.auth().currentUser.uid
-                            };   
-                        } 
+                            };
+                        }
                     );
                     if (statsArray.length > 1) {
                         currentEvent = statsArray.slice(-1).pop();
@@ -435,7 +469,7 @@ export default class Activities extends Component {
                             }
                             return el
                         } else {
-                            return el 
+                            return el
                         }
                     })
 
@@ -454,7 +488,7 @@ export default class Activities extends Component {
                     this.toggleModal();
                     this.props.navigation.navigate('FeedbackPage');
 
-                }            
+                }
             }
         })
     }
@@ -491,7 +525,7 @@ export default class Activities extends Component {
     render() {
         return (
             <View>
-                <Modal 
+                <Modal
                     isVisible={this.state.isModalVisible}
                     backdropOpacity={0.0}
                     backgroundColor={'white'}
@@ -499,10 +533,10 @@ export default class Activities extends Component {
                     coverScreen={true}
                     animationInTiming={1}
                     animationOutTiming={1}
-                    style={{ 
+                    style={{
                         justifyContent: 'center',
                         alignItems: 'center',
-                        margin: 0 
+                        margin: 0
                         }}
                     >
                     <View style={{ flex: 1}}>
@@ -523,7 +557,7 @@ export default class Activities extends Component {
                                                 </View>
                                             </TouchableOpacity>
                                         )}
-                                    />  
+                                    />
                                     </View>
                                 </View>
                             <View>
@@ -587,7 +621,7 @@ export default class Activities extends Component {
                                     source={require('./numberOfBreaksAssets/minus.png')}
                                     style={{width: 28, height: 28, marginTop: 16, marginRight: 15}}
                                 />
-                            </TouchableOpacity>    
+                            </TouchableOpacity>
                             <Text style={styles.dataStyle}> {this.state.numberOfBreaks} </Text>
                             <TouchableOpacity onPress={this.incrementBreaks}>
                                 <Image
@@ -683,17 +717,17 @@ const styles = StyleSheet.create({
     },
 
     touchableUpcoming1 : {
-        flex: 1, 
-        flexDirection: 'row',    
-        justifyContent: 'space-between', 
-        backgroundColor: 'transparent', 
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        backgroundColor: 'transparent',
         paddingBottom: 20},
 
     touchableUpcomingTextView: {
-        flex: 1, 
-        flexDirection: 'column', 
-        paddingLeft: 18, 
-        width : Dimensions.get('window').width       
+        flex: 1,
+        flexDirection: 'column',
+        paddingLeft: 18,
+        width : Dimensions.get('window').width
     },
 
 });

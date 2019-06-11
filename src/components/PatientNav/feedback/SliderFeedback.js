@@ -34,7 +34,10 @@ export default class SliderFeedback extends Component {
             image: require('./sliderImages/mild.png'),
 
             eventCounter: 0,
-            timestamp: "0"
+            timestamp: "0",
+
+            lastupdate: 0,
+            painArray: [0],
 
         };
 
@@ -107,7 +110,7 @@ export default class SliderFeedback extends Component {
         }
     }
 
-    
+
     _onPressButton() {
         Alert.alert('Feedback submitted successfully');
 
@@ -119,9 +122,48 @@ export default class SliderFeedback extends Component {
 
         let counter = 0;
 
+
+        //Updating arrays
+        var currentTime = Math.round((new Date()).getTime() / 1000);
+        var currentDay = currentTime - (currentTime % 86400);
+
+        var firebaseRef = firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/');
+        firebaseRef.once('value')
+          .then((dataSnapshot) => {
+
+            this.setState({
+                              dataArray: dataSnapshot.val().painArray,
+                              lastupdate: dataSnapshot.val().lastupdate,
+                          });
+          }
+        ).then( () => {
+              var lastchange = this.state.lastupdate;
+              var newpain = this.state.dataArray;
+              var dayspassed = (currentDay - lastchange)/86400;
+
+              newpain.splice(0,dayspassed);
+              for (i = 0; i < dayspassed; i++) {
+                newpain.push(dayspassed);
+              }
+
+              if (newpain[27] < painIntensity){
+                newpain[27] = painIntensity;
+              }
+
+              firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/Stats/")
+                .update({
+                    'painArray': newpain,
+                    'lastupdate': currentDay,
+                });
+          }
+        )
+
+
+        //finish updating arrays
+
         firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/eventCounter').once('value', (snapshot) => {
             counter = snapshot.val();
-            
+
             firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/Event' + counter + '/timestamp').once('value', (snapshot) => {
                 let timestamp = snapshot.val();
                 firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Feedback/Event' + counter).set({
@@ -136,7 +178,7 @@ export default class SliderFeedback extends Component {
                     //error callback
                 })
             })
-            
+
         })
 
         Alert.alert(
@@ -223,7 +265,7 @@ export default class SliderFeedback extends Component {
                         onValueChange={value => this.setBackgroundColor(value)}
                     />
                 </View>
-                
+
                 <View style={styles.submitButtoncontainer}>
                     <TouchableWithoutFeedback onPress={this._onPressButton}>
                         <View style={styles.submitbutton}>
@@ -231,7 +273,7 @@ export default class SliderFeedback extends Component {
                         </View>
                     </TouchableWithoutFeedback>
                 </View>
-                
+
             </ScrollView>
             </View>
         );

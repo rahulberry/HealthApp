@@ -20,8 +20,8 @@ class PainGraph extends React.PureComponent {
     }
 
     getdata(){
-      var uid = this.props.id;
-      var firebaseRef = firebase.database().ref('/Patients/' + uid + '/Stats');
+      var uID = this.props.id;
+      var firebaseRef = firebase.database().ref('/Patients/' + uID + '/Stats');
       return firebaseRef.once('value')
         .then((dataSnapshot) => {
           console.log('getting data', dataSnapshot.val());
@@ -246,72 +246,84 @@ class PainGraph extends React.PureComponent {
                   data: data17,
                   svg: {
                       fill: colour[16],
+                      onPress: () => this.props.callbackFromParent('16'),
                   },
               },
               {
                   data: data18,
                   svg: {
                       fill: colour[17],
+                      onPress: () => this.props.callbackFromParent('17'),
                   },
               },
               {
                   data: data19,
                   svg: {
                       fill: colour[18],
+                      onPress: () => this.props.callbackFromParent('18'),
                   },
               },
               {
                   data: data20,
                   svg: {
                       fill: colour[19],
+                      onPress: () => this.props.callbackFromParent('19'),
                   },
               },
               {
                   data: data21,
                   svg: {
                       fill: colour[20],
+                      onPress: () => this.props.callbackFromParent('20'),
                   },
               },
               {
                   data: data22,
                   svg: {
                       fill: colour[21],
+                      onPress: () => this.props.callbackFromParent('21'),
                   },
               },
               {
                   data: data23,
                   svg: {
                       fill: colour[22],
+                      onPress: () => this.props.callbackFromParent('22'),
                   },
               },
               {
                   data: data24,
                   svg: {
                       fill: colour[23],
+                      onPress: () => this.props.callbackFromParent('23'),
                   },
               },
               {
                   data: data25,
                   svg: {
                       fill: colour[24],
+                      onPress: () => this.props.callbackFromParent('24'),
                   },
               },
               {
                   data: data26,
                   svg: {
                       fill: colour[25],
+                      onPress: () => this.props.callbackFromParent('25'),
                   },
               },
               {
                   data: data27,
                   svg: {
                       fill: colour[26],
+                      onPress: () => this.props.callbackFromParent('26'),
                   },
               },
               {
                   data: data28,
                   svg: {
                       fill: colour[27],
+                      onPress: () => this.props.callbackFromParent('27'),
                   },
               },
           ]

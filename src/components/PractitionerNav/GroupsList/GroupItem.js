@@ -11,19 +11,21 @@ export default class GroupItem extends Component {
         super(props);
         this.state = {
           name: 'Steven',
+          uid: 0,
         };
     };
 
     onPress = (item) => {
         this.props.navigation.navigate("PatientStats", {
             name: this.state.name,//item.name,
-            uid: item.uid,
+            uid: this.state.uid,
           });
     };
     render() {
         const { item } = this.props;
         if (this.state.name != item.name){
-          this.setState({name: item.name})
+          this.setState({name: item.name,
+                        uid: item.uid })
         }
         return (
             <Card style={styles.card} onPress={this.onPress}>

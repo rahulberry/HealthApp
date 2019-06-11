@@ -58,9 +58,9 @@ export class PersonalStatsScreen extends React.Component<Props> {
             isFetching: false,
             day: 27,
             wording: 'Today',
+            dataArray: [ 10, 10, 28, 60, 75, 68, 69, 24, 18, 28, 60, 75, 68, 69, 24, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 ],
         };
         this.readEventData();
-        this.realtimeEventsRefresh();
     };
 
     readEventData() {
@@ -70,15 +70,19 @@ export class PersonalStatsScreen extends React.Component<Props> {
                 console.log('test1', dataSnapshot.val());
                 this.setState({ eventsArray: dataSnapshot.val() });
             }
-        );
-    };
+        ).then( () => {
 
-    realtimeEventsRefresh() {
-        var firebaseRef = firebase.database().ref('Events/events');
-        firebaseRef.on("value", (snapshot) => {
-            this.setState({ eventsArray: snapshot.val() });
-      });
-    }
+          var firebaseRef = firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/');
+          firebaseRef.once('value')
+            .then((dataSnapshot) => {
+
+              this.setState({
+                                dataArray: dataSnapshot.val().distanceArray,
+                            });
+            }
+          )
+        })
+    };
 
     getUser = () => {
         console.log('User (current screen \'Events\'):', firebase.auth().currentUser.displayName)
@@ -112,7 +116,19 @@ export class PersonalStatsScreen extends React.Component<Props> {
                 this.setState({ eventsArray: sorted })
                 this.setState({isFetching : false})
             }
-        );
+        ).then( () => {
+
+          var firebaseRef = firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/');
+          firebaseRef.once('value')
+            .then((dataSnapshot) => {
+
+              this.setState({
+                                dataArray: dataSnapshot.val().distanceArray,
+                            });
+            }
+          )
+
+        });
     }
 
     filterByKey = (data) => {
@@ -186,7 +202,7 @@ export class PersonalStatsScreen extends React.Component<Props> {
                     </View>
                     <View style = {{alignItems : 'center'}}>
                         <View style={styles.distanceView} >
-                            <Text style={styles.distanceText}>4.8 km</Text>
+                            <Text style={styles.distanceText}>{this.state.dataArray[this.state.day]} km</Text>
                             <Text style={{color: 'black', fontWeight: 'bold', fontSize: 20}}>Distance {this.state.wording}</Text>
                         </View>
                     </View>
