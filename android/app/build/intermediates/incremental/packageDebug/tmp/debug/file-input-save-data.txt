@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Tue Jun 11 14:41:30 BST 2019
+#Tue Jun 11 14:58:20 BST 2019
 56.path=lib/armeabi-v7a/libfb.so
 5.base=C\:\\Users\\Josh\\Documents\\GitHub\\HealthApp\\android\\app\\build\\intermediates\\transforms\\mergeJniLibs\\debug\\0
 42.base=C\:\\Users\\Josh\\Documents\\GitHub\\HealthApp\\android\\app\\build\\intermediates\\merged_assets\\debug\\mergeDebugAssets\\out

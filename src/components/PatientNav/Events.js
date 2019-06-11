@@ -2,9 +2,7 @@
 
 // To Do:
 // 
-// Need to add a location picker modal and show location in view on the EventInformation page
 // Need to send a notification 1 hour before an event
-// Add getName from firebase and use that for the account
 
 import React from 'react';
 import {
@@ -29,6 +27,7 @@ import Dialog from "react-native-dialog";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import { Header } from './Header'
 import Modal from 'react-native-modal';
+import { ScrollView } from 'react-native-gesture-handler';
 
 import MapView, { Marker, AnimatedRegion } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 
@@ -538,7 +537,7 @@ export class EventsScreen extends React.Component<Props> {
                             margin: 0 
                             }}
                         >
-                        <View style={{ flex: 1}} behavior="padding" enabled>
+                        <ScrollView style={{ flex: 1}} >
                             <Header title='Choose Location'/>
                                 <View style ={{flex: 1, flexDirection: 'column', justifyContent: 'space-between'}} >
                                     <View>
@@ -594,7 +593,7 @@ export class EventsScreen extends React.Component<Props> {
                                     </View>
                                 <Button title="Done" onPress={this.handleDone} />
                             </View>
-                        </View>
+                        </ScrollView>
                     </Modal>
                 < FlatList
                     onRefresh={() => this.refreshData()}

@@ -8,7 +8,8 @@ import {
     Text,
     View,
     TouchableOpacity,
-    Dimensions
+    Dimensions,
+    TextInput
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import firebase from "firebase";
@@ -23,6 +24,7 @@ import { Header } from '../PatientNav/Header'
 import Modal from 'react-native-modal';
 
 import MapView, { Marker } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
+import { ScrollView } from 'react-native-gesture-handler';
 
 interface Props {
     navigation: NavigationScreenProp<NavigationState>;
@@ -70,7 +72,9 @@ export class EventsScreen extends React.Component<Props> {
         isFetching: false,
         account: "",
         isModalVisible: false,
-        markers: []
+        markers: [],
+        pace: '',
+        distance: '',
         };
 
     constructor(props) {
@@ -89,10 +93,12 @@ export class EventsScreen extends React.Component<Props> {
             isModalVisible: false,
             markers: [{
                 coordinates: {
-                  latitude: LATITUDE,
-                  longitude: LONGITUDE
+                    latitude: LATITUDE,
+                    longitude: LONGITUDE
                 },
-              }]
+            }],
+            pace: '2.0',
+            distance: '200'
         };
         this.realtimeEventsRefresh();
     };
@@ -293,11 +299,13 @@ export class EventsScreen extends React.Component<Props> {
             latitude: this.state.markers[0].coordinates.latitude,
             longitude: this.state.markers[0].coordinates.longitude
           };
-        var joined = [{key : newDateAndTime, name : name, time : time, going : going, coords : coords}].concat(events);
+        var distance = this.state.distance;
+        var pace = this.state.pace;
+        var joined = [{key : newDateAndTime, name : name, time : time, going : going, coords : coords, stats : [], pace : pace, distance : distance}].concat(events);
         this.setState({ eventsArray : joined.sort((a, b) => (a.key > b.key) ? 1 : -1)}); // In Unix Timestamp Mode so that sort works correctly
         this.writeEventsData(joined);
         this.hideDateTimePicker();
-        this.setState({ eventName : "", eventTime: "", dateTime: "", dialogVisible: false, markers: [{coordinates: {latitude: LATITUDE, longitude: LONGITUDE }}] });
+        this.setState({ eventName : "", eventTime: "", dateTime: "", dialogVisible: false, markers: [{coordinates: {latitude: LATITUDE, longitude: LONGITUDE }}], pace: '2.0', distance: '200' });
         }
     };
 
@@ -360,10 +368,32 @@ export class EventsScreen extends React.Component<Props> {
                             margin: 0 
                             }}
                         >
-                        <View style={{ flex: 1}}>
+                        <ScrollView style={{ flex: 1}}>
                             <Header title='Choose Location'/>
                                 <View style ={{flex: 1, flexDirection: 'column', justifyContent: 'space-between'}}>
                                     <View>
+                                        <View style={{flexDirection: 'column', alignContent: 'center', paddingTop: 0.05 * Dimensions.get('window').width, paddingStart: 0.05 * Dimensions.get('window').width}}>
+                                            <View style={{flexDirection: 'row'}}>
+                                                <Text style={{fontSize : 30, fontWeight: 'bold'}}>Goal Pace: </Text>
+                                                <TextInput
+                                                    style={{height: 52, borderColor: 'white', fontSize: 30, borderWidth: 1}}
+                                                    onChangeText={(pace) => this.setState({pace})}
+                                                    value={this.state.pace}
+                                                />
+                                                <Text style={{fontSize : 20, paddingTop: 10}}>m/s.</Text>
+                                            </View>
+                                            <View style={{flexDirection: 'row'}}>
+                                                <Text style={{fontSize : 30, fontWeight: 'bold'}}>Goal Distance: </Text>
+                                                <TextInput
+                                                    style={{height: 52, borderColor: 'white', fontSize: 30, borderWidth: 1}}
+                                                    onChangeText={(distance) => this.setState({distance})}
+                                                    value={this.state.distance}
+                                                />
+                                                <Text style={{fontSize : 20, paddingTop: 10}}>m.</Text>
+                                            </View>
+                                            {/* <Text>Longitude: {this.returnCoords().longitude}</Text>
+                                            <Text>Latitude: {this.returnCoords().latitude}</Text> */}
+                                        </View>
                                         <MapView
                                             style={styles.map}
                                             showsUserLocation = {true}
@@ -392,7 +422,7 @@ export class EventsScreen extends React.Component<Props> {
                                     </View>
                                 <Button title="Done" onPress={this.handleDone} />
                             </View>
-                        </View>
+                        </ScrollView>
                     </Modal>
                 < FlatList
                     onRefresh={() => this.refreshData()}
