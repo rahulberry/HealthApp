@@ -7,7 +7,7 @@ export default class ProfilePicture extends Component {
             <View>
                 <Image
                     style={styles.profilePicture}
-                    source={require('./images/userProfilePicture.png')}
+                    source={this.props.profilePicture}
                 />
                 <Text style={styles.dataStyle} > {this.props.name} </Text>
                 <Text style={styles.achievementStyle}> Personal Achievements </Text>

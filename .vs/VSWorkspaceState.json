@@ -4,10 +4,11 @@
     "\\src",
     "\\src\\components",
     "\\src\\components\\PatientNav",
-    "\\src\\components\\PatientNav\\currentActivity",
+    "\\src\\components\\PatientNav\\feedback",
     "\\src\\components\\PatientNav\\MainPage",
+    "\\src\\components\\PatientNav\\Profile",
     "\\src\\components\\PractitionerNav"
   ],
-  "SelectedNode": "\\src\\components\\PatientNav\\MainPage\\MainActivityPage.js",
+  "SelectedNode": "\\src\\components\\PatientNav\\feedback\\SliderFeedback.js",
   "PreviewInSolutionExplorer": false
 }

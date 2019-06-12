@@ -17,7 +17,8 @@ export default class Profile extends Component {
             fifteenMiles: 0,
             tenEvents: 0,
             walkedAroundTheWorld: 0,
-            name: ""
+            name: "",
+            displayImageUri: '',
         };
 
         this.updateDistanceTravelledAchievements = this.updateDistanceTravelledAchievements.bind(this);
@@ -45,8 +46,16 @@ export default class Profile extends Component {
 
     }
 
-
     updateDistanceTravelledAchievements = () => {
+
+        var firebaseRef = firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Account Details/display_image');
+        firebaseRef.on('value', (snapshot) => {
+            
+            this.setState({
+                displayImageUri: snapshot.val(),
+            })
+
+        });
 
         var firebaseRef = firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Account Details/name');
         firebaseRef.once('value', (snapshot) => {
@@ -91,8 +100,9 @@ export default class Profile extends Component {
                 <ScrollView style={{ marginBottom: 150 }}>
                     <ProfilePicture
                         name={this.state.name}
+                        profilePicture={{ uri: this.state.displayImageUri }}
                     />
-                    <FirstRowAchievement
+                    <FirstRowAchievement 
                         walkedThreeHours={this.state.walkedThreeHours}
                         walkedFifteenMiles={this.state.fifteenMiles}
                     />

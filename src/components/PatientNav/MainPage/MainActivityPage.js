@@ -256,26 +256,31 @@ var patientData = [
     {
         key: 1,
         image: '',
+        showPlaceHolder: true,
         svg: { fill: '#E28A8A' },
     },
     {
         key: 2,
         image: '',
+        showPlaceHolder: true,
         svg: { fill: '#E2D88A' },
     },
     {
         key: 3,
         image: '',
+        showPlaceHolder: true,
         svg: { fill: '#8AE2AD' },
     },
     {
         key: 4,
         image: '',
+        showPlaceHolder: true,
         svg: { fill: '#8AB6E2' },
     },
     {
         key: 5,
         image: '',
+        showPlaceHolder: false,
         svg: { fill: '#C78AE2' },
     },
 ];
@@ -366,7 +371,7 @@ export default class MainActivityPage extends Component {
             reachedLisbon: false,
             percentageCompleted: 0,
             patientNames: [],
-            patientImages: [...patientData],
+            patientInfo: [...patientData],
             LondonData: [...LondonData],
             BerlinData: [...BerlinData],
             RomeData: [...RomeData],
@@ -457,7 +462,7 @@ export default class MainActivityPage extends Component {
     updateDisplayImage = (patientUID) => {
 
         let displayImageOfPatient = ""
-        let displayImages = [...this.state.patientImages];
+        let displayImages = [...this.state.patientInfo];
 
         for (let i = 0; i < patientUID.length; i++) {
 
@@ -467,16 +472,23 @@ export default class MainActivityPage extends Component {
                 //console.log(displayImageOfPatient);
 
                 displayImages[i].image = displayImageOfPatient;
+                displayImages[i].showPlaceHolder = true;
 
                 if (i === patientUID.length - 1) {
+
+                    for (let i = displayImages.length - 1; i > patientUID.length - 1; i--) {
+                        displayImages[i].showPlaceHolder = false;
+                    }
+
                     this.setState({
-                        patientImages: displayImages
+                        patientInfo: displayImages
                     })
                 }
 
             })
 
         }
+
     }
 
     fetchPatientNames = (patientUID) => {
@@ -745,30 +757,30 @@ export default class MainActivityPage extends Component {
 
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginLeft: 5 }}>
                         <PatientPlaceHolder
-                            profileBorder={borderStyles.patient1}
-                            profilePicture={{ uri: this.state.patientImages[0].image }}
+                            profileBorder={this.state.patientInfo[0].showPlaceHolder ? borderStyles.patient1 : {}}
+                            profilePicture={{ uri: this.state.patientInfo[0].image }}
                             patientName={this.setDestinationArray(this.state.destination)[0].name}
                         />
                         <PatientPlaceHolder
-                            profileBorder={borderStyles.patient2}
-                            profilePicture={{ uri: this.state.patientImages[1].image }}
+                            profileBorder={this.state.patientInfo[1].showPlaceHolder ? borderStyles.patient2 : {}}
+                            profilePicture={{ uri: this.state.patientInfo[1].image }}
                             patientName={this.setDestinationArray(this.state.destination)[1].name}
                         />
                         <PatientPlaceHolder
-                            profileBorder={borderStyles.patient3}
-                            profilePicture={{ uri: this.state.patientImages[2].image }}
+                            profileBorder={this.state.patientInfo[2].showPlaceHolder ? borderStyles.patient3 : {}}
+                            profilePicture={{ uri: this.state.patientInfo[2].image }}
                             patientName={this.setDestinationArray(this.state.destination)[2].name}
                         />
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 15, marginLeft: 5, marginBottom: 5 }}>
                         <PatientPlaceHolder
-                            profileBorder={borderStyles.patient4}
-                            profilePicture={{ uri: this.state.patientImages[3].image }}
+                            profileBorder={this.state.patientInfo[3].showPlaceHolder ? borderStyles.patient4 : {}}
+                            profilePicture={{ uri: this.state.patientInfo[3].image }}
                             patientName={this.setDestinationArray(this.state.destination)[3].name}
                         />
                         <PatientPlaceHolder
-                            profileBorder={borderStyles.patient5}
-                            profilePicture={{ uri: this.state.patientImages[4].image }}
+                            profileBorder={this.state.patientInfo[4].showPlaceHolder ? borderStyles.patient5 : {} }
+                            profilePicture={{ uri: this.state.patientInfo[4].image }}
                             patientName={this.setDestinationArray(this.state.destination)[4].name}
                         />
                         <PatientPlaceHolder
