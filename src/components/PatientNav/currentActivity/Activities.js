@@ -420,6 +420,9 @@ export default class Activities extends Component {
     }
 
     handleEventChosen = (item) => {
+
+        this.handleFeedback();
+
         console.log('Event to save: ', item.name)
 
         var firebaseRef = firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats');
@@ -435,6 +438,7 @@ export default class Activities extends Component {
                     console.log('statsArray', statsArray)
 
                     // Need to make it actually filter out the non event stuff instead of popping()
+                    statsArray.pop();
                     statsArray.pop();
                     statsArray.pop();
                     statsArray.pop();
@@ -488,7 +492,6 @@ export default class Activities extends Component {
                             console.log('Error writing events to firebase ' , error)
                     })
 
-                    this.handleFeedback();
                     this.toggleModal();
                     this.props.navigation.navigate('FeedbackPage');
 
