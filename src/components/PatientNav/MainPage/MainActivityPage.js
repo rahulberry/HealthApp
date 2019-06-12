@@ -252,30 +252,30 @@ var LisbonData = [
     },
 ];
 
-const patientData = [
+var patientData = [
     {
         key: 1,
-        image: require('./Images/Profile/patient1.png'),
+        image: '',
         svg: { fill: '#E28A8A' },
     },
     {
         key: 2,
-        image: require('./Images/Profile/patient2.png'),
+        image: '',
         svg: { fill: '#E2D88A' },
     },
     {
         key: 3,
-        image: require('./Images/Profile/patient3.png'),
+        image: '',
         svg: { fill: '#8AE2AD' },
     },
     {
         key: 4,
-        image: require('./Images/Profile/patient4.png'),
+        image: '',
         svg: { fill: '#8AB6E2' },
     },
     {
         key: 5,
-        image: require('./Images/Profile/patient5.png'),
+        image: '',
         svg: { fill: '#C78AE2' },
     },
 ];
@@ -366,6 +366,7 @@ export default class MainActivityPage extends Component {
             reachedLisbon: false,
             percentageCompleted: 0,
             patientNames: [],
+            patientImages: [...patientData],
             LondonData: [...LondonData],
             BerlinData: [...BerlinData],
             RomeData: [...RomeData],
@@ -382,6 +383,7 @@ export default class MainActivityPage extends Component {
         this.populateLondonDistanceArray = this.populateLondonDistanceArray.bind(this);
         this.populateBerlinDistanceArray = this.populateBerlinDistanceArray.bind(this);
         this.populateNameFieldOfArray = this.populateNameFieldOfArray.bind(this);
+        this.updateDisplayImage = this.updateDisplayImage.bind(this);
     } 
 
     populateLondonDistanceArray = (distanceTravelledCity) => {
@@ -451,6 +453,32 @@ export default class MainActivityPage extends Component {
         })
     }
 
+
+    updateDisplayImage = (patientUID) => {
+
+        let displayImageOfPatient = ""
+        let displayImages = [...this.state.patientImages];
+
+        for (let i = 0; i < patientUID.length; i++) {
+
+            var firebaseRef = firebase.database().ref('/Patients/' + patientUID[i] + '/Account Details/display_image');
+            firebaseRef.on('value', (snapshot) => {
+                displayImageOfPatient = snapshot.val();
+                //console.log(displayImageOfPatient);
+
+                displayImages[i].image = displayImageOfPatient;
+
+                if (i === patientUID.length - 1) {
+                    this.setState({
+                        patientImages: displayImages
+                    })
+                }
+
+            })
+
+        }
+    }
+
     fetchPatientNames = (patientUID) => {
 
         var patientNameArray = [];
@@ -510,6 +538,7 @@ export default class MainActivityPage extends Component {
                 }
 
                 this.fetchPatientNames(patientUID);
+                this.updateDisplayImage(patientUID);
                 this.populateLondonDistanceArray(distanceTravelledLondonArray);
                 this.populateBerlinDistanceArray(distanceTravelledBerlinArray);
 
@@ -717,29 +746,29 @@ export default class MainActivityPage extends Component {
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginLeft: 5 }}>
                         <PatientPlaceHolder
                             profileBorder={borderStyles.patient1}
-                            profilePicture={patientData[0].image}
+                            profilePicture={{ uri: this.state.patientImages[0].image }}
                             patientName={this.setDestinationArray(this.state.destination)[0].name}
                         />
                         <PatientPlaceHolder
                             profileBorder={borderStyles.patient2}
-                            profilePicture={patientData[1].image}
+                            profilePicture={{ uri: this.state.patientImages[1].image }}
                             patientName={this.setDestinationArray(this.state.destination)[1].name}
                         />
                         <PatientPlaceHolder
                             profileBorder={borderStyles.patient3}
-                            profilePicture={patientData[2].image}
+                            profilePicture={{ uri: this.state.patientImages[2].image }}
                             patientName={this.setDestinationArray(this.state.destination)[2].name}
                         />
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 15, marginLeft: 5, marginBottom: 5 }}>
                         <PatientPlaceHolder
                             profileBorder={borderStyles.patient4}
-                            profilePicture={patientData[3].image}
+                            profilePicture={{ uri: this.state.patientImages[3].image }}
                             patientName={this.setDestinationArray(this.state.destination)[3].name}
                         />
                         <PatientPlaceHolder
                             profileBorder={borderStyles.patient5}
-                            profilePicture={patientData[4].image}
+                            profilePicture={{ uri: this.state.patientImages[4].image }}
                             patientName={this.setDestinationArray(this.state.destination)[4].name}
                         />
                         <PatientPlaceHolder

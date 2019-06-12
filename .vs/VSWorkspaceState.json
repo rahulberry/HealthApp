@@ -1,17 +1,13 @@
 {
   "ExpandedNodes": [
     "",
-    "\\android",
-    "\\android\\app",
-    "\\android\\app\\src",
-    "\\android\\app\\src\\main",
     "\\src",
     "\\src\\components",
     "\\src\\components\\PatientNav",
     "\\src\\components\\PatientNav\\currentActivity",
     "\\src\\components\\PatientNav\\MainPage",
-    "\\src\\components\\PatientNav\\Profile"
+    "\\src\\components\\PractitionerNav"
   ],
-  "SelectedNode": "\\src\\components\\PatientNav\\Profile\\Profile.js",
+  "SelectedNode": "\\src\\components\\PatientNav\\MainPage\\MainActivityPage.js",
   "PreviewInSolutionExplorer": false
 }

@@ -381,6 +381,7 @@ export default class Activities extends Component {
 
     _onPress() {
         this.openModal();
+        //this.props.navigation.navigate('FeedbackPage')
     }
 
     incrementBreaks() {

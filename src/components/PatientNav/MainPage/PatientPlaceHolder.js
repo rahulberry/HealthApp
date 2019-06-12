@@ -17,8 +17,8 @@ export default class GroupMemberList extends Component {
 
 const styles = StyleSheet.create({
     profilePicStyle: {
-        width: 75,
-        height: 75,
+        width: 80,
+        height: 80,
         borderRadius: 100,
         borderWidth: 5
     },
