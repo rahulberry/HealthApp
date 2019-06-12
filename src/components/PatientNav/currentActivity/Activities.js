@@ -83,6 +83,9 @@ export default class Activities extends Component {
             numberOfBreaks: 0,
             isModalVisible: false,
             eventsArray: [],
+
+            lastupdate: 0,
+            dataArray: [0],
         };
 
         this._onPress = this._onPress.bind(this);

@@ -37,7 +37,7 @@ export default class SliderFeedback extends Component {
             timestamp: "0",
 
             lastupdate: 0,
-            painArray: [0],
+            dataArray: [0],
 
         };
 
