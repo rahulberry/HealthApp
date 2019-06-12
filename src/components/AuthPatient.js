@@ -70,8 +70,8 @@ class AuthPatient extends Component {
           })
       firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/Stats/")
         .set({
-          'distanceArray': [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 11, 11, 11 ],
-            'painArray': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 11, 21, 31],
+          'distanceArray': [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+            'painArray': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             'eventCounter': 0,
             'totalDistanceTravelled': 0,
             'totalTimeElapsed': 0,

@@ -210,7 +210,7 @@ export class GroupStatsScreen extends React.Component<Props> {
                     </View>
                     <View style = {{alignItems : 'center'}}>
                         <View style={styles.distanceView} >
-                            <Text style={styles.distanceText}>{this.state.dataArray[this.state.day]} km</Text>
+                            <Text style={styles.distanceText}>{this.state.dataArray[this.state.day] * 4} km</Text>
                             <Text style={{color: 'black', fontWeight: 'bold', fontSize: 20}}>Distance {this.state.wording}</Text>
                         </View>
                     </View>
