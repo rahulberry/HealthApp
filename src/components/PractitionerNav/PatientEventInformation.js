@@ -93,9 +93,9 @@ export class EventInformationScreen extends React.Component<Props> {
         if (stats != null) {
             stats = stats.filter(item => item.uid.includes(thisuid));
 
-            return 'Average Pace: ' + stats[0].pace + ' m/s.';
+            return 'Breaks: ' + stats[0].numberOfBreaks;
         } else {
-            return 'Goal Pace: ' + pace + ' m/s.'; // See if we can get goal pace from firebase
+            return '  '; // See if we can get goal pace from firebase
         }
     }
 
