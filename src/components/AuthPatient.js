@@ -66,7 +66,7 @@ class AuthPatient extends Component {
           'name': this.state.name,
           'email': this.state.email,
           'group': 1,
-          'display_image': 'https://www.iconfinder.com/icons/628284/avatar_male_man_mature_old_person_user_icon'
+          'display_image': 'https://cdn4.iconfinder.com/data/icons/avatars-circle-2/72/142-512.png'
           })
       firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/Stats/")
         .set({

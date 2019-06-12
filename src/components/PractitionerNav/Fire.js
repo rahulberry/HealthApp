@@ -3,7 +3,6 @@ import firebase from 'firebase';
 class Fire {
   constructor() {
     this.init();
-    this.observeAuth();
   }
 
   init = () => {
@@ -19,18 +18,6 @@ class Fire {
     }
   };
 
-  observeAuth = () =>
-    firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
-
-  onAuthStateChanged = user => {
-    if (!user) {
-      try {
-        firebase.auth().signInAnonymously();
-      } catch ({ message }) {
-        alert(message);
-      }
-    }
-  };
 
   get uid() {
     return (firebase.auth().currentUser || {}).uid;
