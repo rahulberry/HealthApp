@@ -236,7 +236,7 @@ export class statsScreen extends React.Component<Props> {
                                   <Text style={{fontSize : 18, color: 'black'}}>{item.name}</Text>
                                   <Text style={{fontSize : 12, color: 'black'}}>{item.time}</Text>
                               </View>
-                                  <Text style={{fontSize : 24, color: 'black'}}>{/*item.distance*/}4.8 km</Text>
+                                  <Text style={{fontSize : 24, color: 'black'}}>{/*item.distance*/} </Text>
                           </TouchableOpacity>
                       </View>
                   )}
