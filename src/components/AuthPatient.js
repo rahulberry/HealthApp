@@ -57,11 +57,15 @@ class AuthPatient extends Component {
 
 
   onCreateAccountSuccess() {
+      var currentTime = Math.round((new Date()).getTime() / 1000);
+      var currentDay = currentTime - (currentTime % 86400);
+
+
       firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/Account Details/")
         .set({
           'name': this.state.name,
           'email': this.state.email,
-          'group': 1, 
+          'group': 1,
           'display_image': 'https://www.iconfinder.com/icons/628284/avatar_male_man_mature_old_person_user_icon'
           })
       firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/Stats/")
@@ -70,7 +74,8 @@ class AuthPatient extends Component {
             'painArray': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 11, 21, 31],
             'eventCounter': 0,
             'totalDistanceTravelled': 0,
-            'totalTimeElapsed': 0
+            'totalTimeElapsed': 0,
+            'lastupdate': currentDay
           })
         firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/DoctorInfo/")
           .set({
@@ -151,7 +156,7 @@ class AuthPatient extends Component {
     const formStyle = !visibleForm ? { height: 0 } : { marginTop: 40 };
 
     console.disableYellowBox = true;
-     
+
     return (
 
         <View style={styles.container}>

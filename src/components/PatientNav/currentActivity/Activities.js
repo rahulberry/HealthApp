@@ -290,7 +290,7 @@ export default class Activities extends Component {
                 newdistance.push(dayspassed);
               }
 
-              newdistance[27] = newdistance[27] + eventDistanceTravelled;
+              newdistance[27] = newdistance[27] + (eventDistanceTravelled/1000);
 
               firebase.database().ref("/Patients/" + firebase.auth().currentUser.uid + "/Stats/")
                 .update({
