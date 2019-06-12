@@ -85,6 +85,33 @@ export class EventInformationScreen extends React.Component<Props> {
         }
     }
 
+    getBreaks = (stats) => {
+        if (stats != null) {
+            stats = stats.filter(item => item.uid.includes());
+
+            return 'Average Pace: ' + stats[0].pace + ' m/s.';
+        } else {
+            return 'Goal Pace: ' + pace + ' m/s.'; // See if we can get goal pace from firebase
+        }
+    }
+
+    getDistanceTravelled = (stats, distance) => {
+        console.log('stats: ', stats)
+        if (stats != null) {
+            return 'Distance Travelled: ' + stats[0].distanceTravelled + ' m.';
+        } else {
+            return 'Goal distance: ' + distance + ' m.'; // See if we can get a goal distance from firebase
+        }
+    }
+
+    getAveragePace = (stats, pace) => {
+        if (stats != null) {
+            return 'Average Pace: ' + stats[0].pace + ' m/s.';
+        } else {
+            return 'Goal Pace: ' + pace + ' m/s.'; // See if we can get goal pace from firebase
+        }
+    }
+
     render() {
         const { navigation } = this.props;
         const test = navigation.getParam('item', {name : 'You should not see this'});
@@ -93,6 +120,9 @@ export class EventInformationScreen extends React.Component<Props> {
         const going = test.going;
         const unixTime = test.key;
         const coords = test.coords;
+        const stats = test.stats;
+        const pace = test.pace;
+        const distance = test.distance;
         const {goBack} = this.props.navigation;
         return (
             <View style={{paddingBottom: 0.25 * Dimensions.get('window').width}}>
@@ -124,7 +154,7 @@ export class EventInformationScreen extends React.Component<Props> {
                             </MapView>
                         </View>
                     </View>
-                    <Text style={styles.goingHeader}>{this.wentOrGoing(unixTime)}</Text>
+                    <Text style={styles.goingHeader}>{this.wentOrGoing(unixTime)} Yeeet</Text>
                     <FlatList
                         data={this.goingArray(going, unixTime)}
                         renderItem={({item}) => (

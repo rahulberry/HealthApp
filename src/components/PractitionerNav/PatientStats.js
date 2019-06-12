@@ -89,12 +89,6 @@ export class statsScreen extends React.Component<Props> {
         )
     };
 
-
-    getUser = () => {
-        console.log('User (current screen \'Events\'):', firebase.auth().currentUser.displayName)
-        return firebase.auth().currentUser.displayName;
-    }
-
     filterOutCurrent = (data) => {
         if (data != [] && data != null) {
             var currentTime = Math.round((new Date()).getTime() / 1000);
@@ -109,10 +103,18 @@ export class statsScreen extends React.Component<Props> {
         }
     }
 
-    onPress = (item) => {
-        this.props.navigation.navigate('EventsInformation', {item})
+    onPress = (passeditem) => {
+
+        const { navigation } = this.props;
+        const itemname = navigation.getParam('name', 'shiet')
+        const uid1 = navigation.getParam('uid', 69)
+
+
+        this.props.navigation.navigate('EventsInformation', {
+          uid: uid1,//item.name,
+          item: passeditem, })
     };
-    
+
     refreshData() {
         var firebaseRef = firebase.database().ref('Events/events');
         firebaseRef.once('value')
@@ -153,18 +155,20 @@ export class statsScreen extends React.Component<Props> {
 
     myCallback = (dataFromChild) => {
 
-      var firebaseRef = firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/');
-      firebaseRef.once('value')
-        .then((dataSnapshot) => {
-
-          this.setState({
-                            dataArray: dataSnapshot.val().distanceArray,
-                        });
-        }
-      )
 
         const { navigation } = this.props;
         const uid = navigation.getParam('uid', 69)
+
+        var firebaseRef = firebase.database().ref('/Patients/' + uid + '/Stats/');
+        firebaseRef.once('value')
+          .then((dataSnapshot) => {
+
+            this.setState({
+                              dataArray: dataSnapshot.val().distanceArray,
+                          });
+          }
+        )
+
 
 
         var date = new Date().getDate(); //Current Date
@@ -226,7 +230,7 @@ export class statsScreen extends React.Component<Props> {
                   <FlatList
                   onRefresh={() => this.refreshData()}
                   refreshing={this.state.isFetching}
-                  data={this.filterOutCurrent(this.filterGoing(this.state.account, this.state.eventsArray))}
+                  data={this.filterOutCurrent(this.filterGoing(itemname, this.state.eventsArray))}
                   renderItem={({item}) => (
                       <View>
                           <TouchableOpacity
