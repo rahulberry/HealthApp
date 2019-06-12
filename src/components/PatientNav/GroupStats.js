@@ -158,7 +158,6 @@ export class GroupStatsScreen extends React.Component<Props> {
     filterGoing = (name, events) => {
         if (events != [] && events != null) {
             var goingEvents = events.filter(item => item.going != null);
-            goingEvents = goingEvents.filter(item => item.going.includes(name));
             return goingEvents;
         } else {
             return [];
