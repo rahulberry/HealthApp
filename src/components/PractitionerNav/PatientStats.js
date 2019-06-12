@@ -9,6 +9,8 @@ import {
     Text,
     Dimensions,
     View,
+    FlatList,
+    TouchableOpacity,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
@@ -36,14 +38,16 @@ export class statsScreen extends React.Component<Props> {
 
     constructor(props) {
         super(props);
+        const { navigation } = this.props;
         this.state = {
-            account: this.getUser(),
+            account: navigation.getParam('name', 'shiet'),
             eventsArray: [],
             isFetching: false,
             day: 27,
             wording: 'Today',
             dataArray: [ 10, 10, 28, 60, 75, 68, 69, 24, 18, 28, 60, 75, 68, 69, 24, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 ],
         };
+        this.readEventData();
     };
 
 
@@ -75,11 +79,77 @@ export class statsScreen extends React.Component<Props> {
         ),
     };
 
+    readEventData() {
+        var firebaseRef = firebase.database().ref('Events/events');
+        return firebaseRef.once('value')
+            .then((dataSnapshot) => {
+                console.log('test1', dataSnapshot.val());
+                this.setState({ eventsArray: dataSnapshot.val() });
+            }
+        )
+    };
+
 
     getUser = () => {
         console.log('User (current screen \'Events\'):', firebase.auth().currentUser.displayName)
         return firebase.auth().currentUser.displayName;
     }
+
+    filterOutCurrent = (data) => {
+        if (data != [] && data != null) {
+            var currentTime = Math.round((new Date()).getTime() / 1000);
+            let filteredItems = data.filter(item => item.key <= currentTime);
+            var currentDay = currentTime - (currentTime % 86400);
+            currentDay = currentDay - (86400 * (27 - this.state.day))
+            var currentTommorrow = currentDay + 86400;
+            filteredItems = filteredItems.filter(item => (item.key < currentTommorrow) && (item.key > currentDay))
+            return filteredItems.reverse();
+        } else {
+            return [];
+        }
+    }
+
+    onPress = (item) => {
+        this.props.navigation.navigate('EventsInformation', {item})
+    };
+    
+    refreshData() {
+        var firebaseRef = firebase.database().ref('Events/events');
+        firebaseRef.once('value')
+            .then((dataSnapshot) => {
+                var data = dataSnapshot.val();
+                var sorted = this.filterByKey(data.sort((a, b) => (a.key > b.key) ? 1 : -1))
+                this.setState({ eventsArray: sorted })
+                this.setState({isFetching : false})
+            }
+        );
+    }
+
+    filterByKey = (data) => {
+        const result = [];
+        const map = new Map();
+        for (const item of data) {
+            if(!map.has(item.key)){
+                map.set(item.key, true);        // set any value to Map
+                result.push(item);
+            }
+        }
+        return result
+    }
+
+    onRefresh() {
+        this.setState({ isFetching: true }, function() { this.refreshData });
+    }
+
+    filterGoing = (name, events) => {
+        if (events != null) {
+            var goingEvents = events.filter(item => item.going != null);
+            goingEvents = goingEvents.filter(item => item.going.includes(name));
+            return goingEvents;
+        } else {
+            return [];
+        }
+    };
 
     myCallback = (dataFromChild) => {
 
@@ -153,6 +223,24 @@ export class statsScreen extends React.Component<Props> {
                           <Text style={{color: 'black', fontWeight: 'bold', fontSize: 20}}>Distance {this.props.name} {this.state.wording}</Text>
                       </View>
                   </View>
+                  <FlatList
+                  onRefresh={() => this.refreshData()}
+                  refreshing={this.state.isFetching}
+                  data={this.filterOutCurrent(this.filterGoing(this.state.account, this.state.eventsArray))}
+                  renderItem={({item}) => (
+                      <View>
+                          <TouchableOpacity
+                              style={styles.touchableCompleted}
+                              onPress={() => this.onPress(item)}>
+                              <View style={styles.touchableCompletedTextView}>
+                                  <Text style={{fontSize : 18, color: 'black'}}>{item.name}</Text>
+                                  <Text style={{fontSize : 12, color: 'black'}}>{item.time}</Text>
+                              </View>
+                                  <Text style={{fontSize : 24, color: 'black'}}>{/*item.distance*/}4.8 km</Text>
+                          </TouchableOpacity>
+                      </View>
+                  )}
+              />
               </View>
           </ScrollView>
           );
