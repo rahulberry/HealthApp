@@ -154,8 +154,8 @@ export class EventInformationScreen extends React.Component<Props> {
                         renderItem={({item}) => (
                             <View style={styles.goingListItem}>
                                 <Text style={styles.goingListItem1}>{item}</Text>
-                            </View> 
-                        )} 
+                            </View>
+                        )}
                     />
                 </View>
                 <Button
@@ -169,49 +169,49 @@ export class EventInformationScreen extends React.Component<Props> {
 
 const styles = StyleSheet.create({
     title: {
-        fontSize : 40, 
-        fontWeight : 'bold', 
-        padding : 20, 
+        fontSize : 40,
+        fontWeight : 'bold',
+        padding : 20,
         //backgroundColor : '#8ae2ad',
-        //color : 'white', 
+        //color : 'white',
     },
     timeHeader: {
-        fontSize : 28, 
-        fontWeight : 'bold', 
-        paddingLeft : 20 
+        fontSize : 28,
+        fontWeight : 'bold',
+        paddingLeft : 20
     },
     time: {
-        fontSize : 24, 
-        paddingLeft : 20 
+        fontSize : 24,
+        paddingLeft : 20
     },
     locationHeader: {
-        fontSize : 28, 
-        fontWeight : 'bold', 
-        paddingTop : 20,    
-        paddingLeft : 20 
+        fontSize : 28,
+        fontWeight : 'bold',
+        paddingTop : 20,
+        paddingLeft : 20
     },
     locationView: {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-around',
-        width: 0.8 * Dimensions.get('window').width, 
-        height: 0.8 * Dimensions.get('window').width, 
+        width: 0.8 * Dimensions.get('window').width,
+        height: 0.8 * Dimensions.get('window').width,
         backgroundColor: 'skyblue',
         alignItems : 'center'
     },
     goingHeader: {
-        fontSize : 28, 
-        fontWeight : 'bold', 
-        paddingTop : 20, 
+        fontSize : 28,
+        fontWeight : 'bold',
+        paddingTop : 20,
         paddingLeft : 20
     },
     goingListItem: {
-        flex: 1, 
-        flexDirection: 'row', 
+        flex: 1,
+        flexDirection: 'row',
         justifyContent: 'space-between'
     },
     goingListItem1: {
-        fontSize : 24, 
+        fontSize : 24,
         paddingLeft : 20
     },
     map: {

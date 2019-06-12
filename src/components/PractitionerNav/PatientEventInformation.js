@@ -86,8 +86,12 @@ export class EventInformationScreen extends React.Component<Props> {
     }
 
     getBreaks = (stats) => {
+
+        const { navigation } = this.props;
+        const thisuid = navigation.getParam('uid', 0);
+
         if (stats != null) {
-            stats = stats.filter(item => item.uid.includes());
+            stats = stats.filter(item => item.uid.includes(thisuid));
 
             return 'Average Pace: ' + stats[0].pace + ' m/s.';
         } else {
@@ -154,7 +158,10 @@ export class EventInformationScreen extends React.Component<Props> {
                             </MapView>
                         </View>
                     </View>
-                    <Text style={styles.goingHeader}>{this.wentOrGoing(unixTime)} Yeeet</Text>
+                    <Text style={styles.goingHeader}>{this.wentOrGoing(unixTime)}</Text>
+                    <Text style={styles.time}>{this.getDistanceTravelled(stats, distance)}</Text>
+                    <Text style={styles.time}>{this.getAveragePace(stats, pace)}</Text>
+                    <Text style={styles.time}>{this.getBreaks(stats, pace)}</Text>
                     <FlatList
                         data={this.goingArray(going, unixTime)}
                         renderItem={({item}) => (

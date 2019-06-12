@@ -40,7 +40,7 @@ export class statsScreen extends React.Component<Props> {
         super(props);
         const { navigation } = this.props;
         this.state = {
-            account: navigation.getParam('name', 'shiet'),
+            account: "aaa",
             eventsArray: [],
             isFetching: false,
             day: 27,
