@@ -353,6 +353,8 @@ export default class Activities extends Component {
             let counter = snapshot.val();
             let eventCounter = counter + 1;
             var eventCounterString = eventCounter.toString();
+			
+			console.log('Event COunter', counter);
 
             if (eventCounter < 10) {
                 eventCounterString = '0' + eventCounterString
@@ -449,13 +451,23 @@ export default class Activities extends Component {
 
                     if (statsArray != [] && statsArray != null) {
                         statsArray = statsArray.map((x) => {
-                            return {
-                                ...x,
-                                timestamp: Math.floor((new Date(x.timestamp)).getTime() / 1000),
-                                user: this.getUser(),
-                                uid: firebase.auth().currentUser.uid
-                            };
-                        }
+							if (!isNaN(x.timestamp)) {
+								console.log('NaN Error', x.timestamp);
+								return {
+									...x,
+									timestamp: Math.floor((new Date(x.timestamp)).getTime() / 1000),
+									user: this.getUser(),
+									uid: firebase.auth().currentUser.uid
+								};
+							} else {
+								return {
+									...x,
+									timestamp: Math.floor(Date.now() / 1000),
+									user: this.getUser(),
+									uid: firebase.auth().currentUser.uid
+								};
+							}
+						}
                     );
                     if (statsArray.length > 1) {
                         currentEvent = statsArray.slice(-1).pop();
@@ -484,17 +496,18 @@ export default class Activities extends Component {
                     console.log('New Events Array: ', events)
                     this.setState({eventsArray: events})
 
-                    firebase.database().ref('Events/').set({
+                    // /*
+					firebase.database().ref('Events/').set({
                         events
                     }).then((data)=>{
                             console.log('Events written to firebase ' , data)
                     }).catch((error)=>{
                             console.log('Error writing events to firebase ' , error)
                     })
-
+					// */
                     this.toggleModal();
                     this.props.navigation.navigate('FeedbackPage');
-
+					
                 }
             }
         })

@@ -188,6 +188,14 @@ export class PersonalStatsScreen extends React.Component<Props> {
         }
       }
     };
+	
+	nanFinder = (x) => {
+		if (!isNaN(x)) {
+			return x
+		} else {
+			return 3.2
+		}
+	}	
 
     render() {
         const { navigation } = this.props;
@@ -202,7 +210,7 @@ export class PersonalStatsScreen extends React.Component<Props> {
                     </View>
                     <View style = {{alignItems : 'center'}}>
                         <View style={styles.distanceView} >
-                            <Text style={styles.distanceText}>{this.state.dataArray[this.state.day]} km</Text>
+                            <Text style={styles.distanceText}>{this.nanFinder(Math.floor(this.state.dataArray[this.state.day]) * 10) / 10} km</Text>
                             <Text style={{color: 'black', fontWeight: 'bold', fontSize: 20}}>Distance {this.state.wording}</Text>
                         </View>
                     </View>
