@@ -22,7 +22,7 @@ interface Props {
     navigation: NavigationScreenProp<NavigationState>;
 }
 
-import ActivityGraph from './ActivityGraph'
+import ActivityGraph from './GroupActivityGraph'
 
 export class GroupStatsScreen extends React.Component<Props> {
     static navigationOptions = {
@@ -59,6 +59,7 @@ export class GroupStatsScreen extends React.Component<Props> {
                 day: 27,
                 wording: 'Today',
                 dataArray: [ 10, 10, 28, 60, 75, 68, 69, 24, 18, 28, 60, 75, 68, 69, 24, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 ],
+                distance: 0,
         };
         this.readEventData();
         this.realtimeEventsRefresh();
@@ -171,6 +172,28 @@ export class GroupStatsScreen extends React.Component<Props> {
 
       if ((this.state.day > dataFromChild) || (this.state.day < dataFromChild)){
         this.setState({ day: dataFromChild })
+
+
+        events = this.state.eventsArray;
+
+        var currentTime = Math.round((new Date()).getTime() / 1000);
+        let filteredItems = events.filter(item => item.key <= currentTime);
+        var currentDay = currentTime - (currentTime % 86400);
+        var currentDay1 = currentDay - (86400 * (27 - dataFromChild))
+        var currentTommorrow = currentDay1 + 86400;
+        var filteredItems1 = filteredItems.filter(item => (item.key < currentTommorrow) && (item.key > currentDay1));
+
+        var temp = 0;
+
+        for (var j = 0; j < filteredItems1.length; j++) {
+              temp = (filteredItems1[j].going.length * filteredItems1[j].distance)/1000;
+        }
+
+        this.setState({ distance: temp })
+
+
+
+
         if (dataFromChild == 27){
             this.setState({ wording: 'Today' })
         }
@@ -209,7 +232,7 @@ export class GroupStatsScreen extends React.Component<Props> {
                     </View>
                     <View style = {{alignItems : 'center'}}>
                         <View style={styles.distanceView} >
-                            <Text style={styles.distanceText}>{this.state.dataArray[this.state.day] * 4} km</Text>
+                            <Text style={styles.distanceText}>{this.state.distance} km</Text>
                             <Text style={{color: 'black', fontWeight: 'bold', fontSize: 20}}>Distance {this.state.wording}</Text>
                         </View>
                     </View>

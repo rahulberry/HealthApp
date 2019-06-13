@@ -14,6 +14,8 @@ import {
     NavigationScreenProp,
     NavigationState,
 } from 'react-navigation';
+
+import firebase from "firebase";
 import { Button } from '../commonComponents/ButtonWithMargin';
 
 import MapView, { Marker, AnimatedRegion } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
@@ -41,6 +43,7 @@ export class EventInformationScreen extends React.Component<Props> {
         super(props);
 
         this.state = {
+            feedbackArray: [],
             latitude: LATITUDE,
             longitude: LONGITUDE,
             routeCoordinates: [],
@@ -60,7 +63,20 @@ export class EventInformationScreen extends React.Component<Props> {
                 },
               }]
         };
+        this.readFeedbackData();
     }
+
+    readFeedbackData() {
+        const { navigation } = this.props;
+        const thisuid = navigation.getParam('uid', 0);
+
+        var firebaseRef = firebase.database().ref('/Patients/' + thisuid + '/Feedback');
+        firebaseRef.once('value')
+          .then((dataSnapshot) => {
+            this.setState({ feedbackArray: dataSnapshot.val() });
+          }
+        )
+    };
 
     wentOrGoing = (time) => {
         var currentTime = Math.round((new Date()).getTime() / 1000);
@@ -69,7 +85,9 @@ export class EventInformationScreen extends React.Component<Props> {
         } else {
             return "Going: ";
         }
-    }
+    };
+
+
 
     goingArray = (going, time) => {
         var currentTime = Math.round((new Date()).getTime() / 1000);
@@ -97,6 +115,17 @@ export class EventInformationScreen extends React.Component<Props> {
         } else {
             return '  '; // See if we can get goal pace from firebase
         }
+    }
+
+    getPainStats = (time) => {
+      const { navigation } = this.props;
+      const thisuid = navigation.getParam('uid', 0);
+
+      var feedback = this.state.feedbackArray
+      //var filteredEvents = feedback.filter(item => item.timestamp == time);
+
+
+      return ('Chest Pain:  false \nLeg Pain: true\nCompleted activity: false\nFatigue: true\nPain Intensity: 70' ) //+ JSON.stringify(feedback.Event1));
     }
 
     getDistanceTravelled = (stats, distance) => {
@@ -128,6 +157,9 @@ export class EventInformationScreen extends React.Component<Props> {
         const pace = test.pace;
         const distance = test.distance;
         const {goBack} = this.props.navigation;
+
+
+        const thisuid = navigation.getParam('uid', 0);
         return (
             <View style={{paddingBottom: 0.25 * Dimensions.get('window').width}}>
             <ScrollView>
@@ -159,9 +191,6 @@ export class EventInformationScreen extends React.Component<Props> {
                         </View>
                     </View>
                     <Text style={styles.goingHeader}>{this.wentOrGoing(unixTime)}</Text>
-                    <Text style={styles.time}>{this.getDistanceTravelled(stats, distance)}</Text>
-                    <Text style={styles.time}>{this.getAveragePace(stats, pace)}</Text>
-                    <Text style={styles.time}>{this.getBreaks(stats, pace)}</Text>
                     <FlatList
                         data={this.goingArray(going, unixTime)}
                         renderItem={({item}) => (
@@ -170,6 +199,11 @@ export class EventInformationScreen extends React.Component<Props> {
                             </View>
                         )}
                     />
+                    <Text style={styles.time}>{this.getDistanceTravelled(stats, distance)}</Text>
+                    <Text style={styles.time}>{this.getAveragePace(stats, pace)}</Text>
+                    <Text style={styles.time}>{this.getBreaks(stats, pace)}</Text>
+                    <Text style={styles.time}>{this.getPainStats(time)}</Text>
+
                 </View>
                 <Button
                     onPress={() => goBack()}

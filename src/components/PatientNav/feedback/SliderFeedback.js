@@ -164,7 +164,7 @@ export default class SliderFeedback extends Component {
         firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/eventCounter').once('value', (snapshot) => {
             counter = snapshot.val();
 
-            firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/Event' + counter + '/timestamp').once('value', (snapshot) => {
+            firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Stats/Event0' + counter + '/timestamp').once('value', (snapshot) => {
                 let timestamp = snapshot.val();
                 firebase.database().ref('/Patients/' + firebase.auth().currentUser.uid + '/Feedback/Event' + counter).set({
                     completedActivity,
@@ -172,7 +172,7 @@ export default class SliderFeedback extends Component {
                     chestPain,
                     fatigue,
                     painIntensity,
-                    timestamp
+                    timestamp,
                 }).then((data) => {
                 }).catch((error) => {
                     //error callback
